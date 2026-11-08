@@ -60,7 +60,7 @@ export default async function HomePage() {
               {site.tagline}
             </p>
             <h1 className="mt-3 max-w-2xl text-balance text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
-              If you had actually invested ৳10,000 — how much <span className="text-brand-600 dark:text-brand-400">lâbh</span> would you have now?
+              If you had actually invested ৳10,000 — how much <span className="text-brand-600 dark:text-brand-400">labh</span> would you have now?
             </h1>
             <p className="mt-4 max-w-xl text-lg leading-relaxed text-muted">
               Profithisab replays the published NAV
