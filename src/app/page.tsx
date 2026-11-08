@@ -63,7 +63,7 @@ export default async function HomePage() {
               If you had actually invested ৳10,000 — how much <span className="text-brand-600 dark:text-brand-400">lâbh</span> would you have now?
             </h1>
             <p className="mt-4 max-w-xl text-lg leading-relaxed text-muted">
-              Profithisab (<span className="underline decoration-dotted">লাভ-কতো?</span>) replays the published NAV
+              Profithisab replays the published NAV
               history of Bangladesh&apos;s open-end mutual funds and shows, in black and white, what real money
               would have become. One fixed 3-year window. Dividends reinvested. Zero sales talk.
             </p>
