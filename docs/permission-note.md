@@ -1,3 +1,25 @@
+# Permission policy — when a letter is needed
+
+**Current policy (2026-11-11):** Profithisab fetches NAV data directly from
+first-party public sources — each asset management company's own published NAV
+history, plus the LankaBangla Financial Portal's public weekly fund table. No
+signed permission exists because none is required for public first-party
+disclosures. The fetcher is polite (clear bot identity with a contact address,
+rate-limited, cached, stops on 403/429), and every source is listed in
+`data/sources.json`. This policy is recorded in `data/license.json`.
+
+**When a permission letter IS required:** any source that is not a public
+first-party disclosure — aggregators like ReturnKoto, paid feeds, or any site
+whose terms prohibit automated access. Until permission is granted in writing:
+
+- do not scrape or fetch that site;
+- do not import files obtained from it;
+- `data/license.json` must not claim their data.
+
+The template below is kept for that situation.
+
+---
+
 # Permission request — copy this message
 
 Send this to the ReturnKoto founder (or the person who owns the fund data). Fill

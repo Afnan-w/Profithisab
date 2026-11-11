@@ -203,10 +203,15 @@ export default function MethodologyPage() {
         <section>
           <h2 className="text-2xl font-bold tracking-tight">Sources &amp; credits</h2>
           <p className="mt-2 leading-7 text-fg-soft">
-            NAV and dividend rows come from the files committed under <code>/data</code>, whose source and permission
-            are recorded in <code>data/license.json</code>. Fee and size fields are whatever those files carry — when
-            absent, the site says so. Benchmarks are separate records with their own status labels. All arithmetic runs
-            in-house through the open formulas above.
+            NAV and dividend rows come from the files committed under <code>/data</code>. They are fetched directly from
+            the primary sources — each asset management company&apos;s own published NAV history — plus a weekly fund-universe
+            snapshot from the LankaBangla Financial Portal. Every source, its URL and the politeness rules for the
+            fetcher are listed in <code>data/sources.json</code>; the permission record and attribution wording live in{" "}
+            <code>data/license.json</code>. When a fund publishes more than one NAV figure, we use the standard quoted
+            NAV (“NAV at Fair Value” / “NAV Per Unit at Market Price”) and ignore NAV-at-cost and buy/sell prices,
+            because those embed fees and are not comparable across funds. Fee and size fields are whatever those files
+            carry — when absent, the site says so. Benchmarks are separate records with their own status labels. All
+            arithmetic runs in-house through the open formulas above.
           </p>
           <p className="mt-3 text-sm text-faint">
             Found a number that looks wrong? That is a data question, not a marketing one:{" "}

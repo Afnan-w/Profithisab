@@ -1,10 +1,32 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import fs from "node:fs";
+import path from "node:path";
 import { ALL_FUNDS, ATTRIBUTION, BENCHES, IS_DEMO, LICENSE, META, REVIEW, STATS, metricsFor } from "@/lib/returns";
 import { pageMeta, breadcrumbSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/jsonld";
 import { fullDate, pct, NOT_AVAILABLE } from "@/lib/format";
 import { QualityBadge } from "@/components/ui/badge";
+import { DATA_DIR } from "@/lib/data";
+
+interface RosterSnapshot {
+  schemaVersion: number;
+  asOf: string;
+  fundCount: number;
+  funds: Array<{ name: string; amc: string }>;
+}
+
+function loadRoster(): RosterSnapshot | null {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(DATA_DIR, "market-roster.json"), "utf8")) as RosterSnapshot;
+  } catch {
+    return null;
+  }
+}
+
+function normalize(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
 
 export const metadata: Metadata = pageMeta({
   title: "Data status — every fund, every gap",
@@ -63,6 +85,28 @@ export default function DataStatusPage() {
         <Summary label="Stale funds" value={String(stale.length)} sub="no NAV in 30+ days; excluded from rankings" />
         <Summary label="Licensed verification records" value={String(STATS.verified)} sub="only shown when a named check and licence exist" />
       </section>
+
+      {/* Fund universe (LankaBangla roster snapshot) */}
+      {(() => {
+        const roster = loadRoster();
+        if (!roster || !roster.funds?.length) return null;
+        const covered = new Set(ALL_FUNDS.map((f) => normalize(f.name)));
+        const matched = roster.funds.filter((r) => covered.has(normalize(r.name))).length;
+        return (
+          <section className="mt-4">
+            <div className="card card-pad !p-4 text-sm">
+              <h2 className="text-lg font-semibold">Fund universe</h2>
+              <p className="mt-2 leading-relaxed text-muted">
+                Bangladesh has <strong className="text-fg">{roster.fundCount} open-end funds</strong> in the LankaBangla
+                Financial Portal snapshot (as of {fullDate(roster.asOf)}). This site publishes returns for the{" "}
+                <strong className="text-fg">{matched}</strong> whose asset manager publishes a machine-readable NAV
+                history we can fetch. Coverage grows fund by fund; a fund absent from the tables is a fetch gap, not a
+                judgement.
+              </p>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* Per-fund table */}
       <section className="mt-8">
@@ -162,8 +206,9 @@ export default function DataStatusPage() {
             />
           </dl>
           <p className="mt-3 text-xs leading-relaxed text-faint">
-            Real data will not be published unless <code>data/license.json</code> records permission, the permitted
-            uses and the exact attribution wording. This is enforced by the build check, not by a promise.
+            No figure is published unless <code>data/license.json</code> records the source policy, the permitted uses
+            and the exact attribution wording. This is enforced by the build check, not by a promise. The full source
+            list — URLs, politeness rules and what each source provides — lives in <code>data/sources.json</code>.
           </p>
         </div>
 
