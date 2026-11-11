@@ -1,151 +1,176 @@
-# Profithisab 🇧🇩
+# Profithisab
 
-**Real returns of Bangladeshi mutual funds** — replayed from published NAV history, counted honestly, shown with the recipe attached. Built to be the site where a Bangladeshi investor asks the only question that matters:
+**Real returns of Bangladeshi mutual funds**, calculated from published NAV
+history — with the method attached.
 
-> লাভ কতো? (_how much did I actually make?_)
+The site answers one question: *how much did an investor actually make?* Every
+return, SIP XIRR, drawdown and ranking is computed from files in `/data`. There
+are no hand-typed performance numbers and no invented history.
+
+> **Current status:** the real catalogue is empty, so the site is serving a
+> clearly labelled **demo dataset** while the licensed export is arranged. The
+> yellow banner is deliberate. See `/data-status` for what is loaded and
+> `DATA-GUIDE.md` for how to replace it.
 
 ---
 
 ## Stack
 
 - **Next.js 15 (App Router) + TypeScript + React 19**
-- **Tailwind CSS 3.4** (dark/light via `next-themes`)
-- **Recharts not used** — all charts are hand-rolled **server-rendered SVG**: they work without JS, ship zero client bytes, and can't cause layout shift
-- No database, no CMS: content and data live in typed modules under `src/data/`
-- Host anywhere Node runs; Vercel-ready out of the box
+- **Tailwind CSS 3.4** with `next-themes` for dark/light
+- **No charting dependency** — charts are server-rendered SVG, with client
+  overlays only where the calculator needs them
+- **No database, no CMS** — validated JSON/CSV files in `/data` are the source
+  of truth
+- Vercel-ready; the free plan is enough
 
 ## Quick start
 
 ```bash
-npm install
+npm ci
 npm run dev        # http://localhost:3000
-npm run build && npm start   # production build
+npm run build      # validates /data first, then builds
+npm start          # serve the production build
 ```
 
-> Fonts (Inter + Noto Sans Bengali) download from Google Fonts at build time; first build needs network.
+Fonts download from Google Fonts at build time, so the first build needs network.
 
 ## Project map
 
 ```
 src/
-├─ app/                       # routes (all statically generated)
-│  ├─ page.tsx                # homepage: hero + honest replay calculator + FAQ (JSON-LD)
-│  ├─ funds/page.tsx          # directory: 38 funds, filters, grouped Growth/Balanced/Income/Shariah
-│  ├─ funds/[slug]/page.tsx   # fund page: ৳1,00,000 replay, NAV + total-return charts, SIP replay,
-│  │                          #   fees, dividend record, benchmarks, method notes, FAQ, related funds
-│  │  └─ opengraph-image.tsx  # per-fund OG card (auto-generated PNG)
-│  ├─ compare/page.tsx        # side-by-side table, shareable via ?funds=slug1,slug2,slug3
-│  ├─ guides/…                # learn hub + 6 guides (4 text-block guides, 2 data-computed)
-│  ├─ blog/…                  # dated posts with live ranking tables
-│  ├─ about | methodology | invest | privacy | not-found
-│  ├─ sitemap.ts | robots.ts | manifest.ts | opengraph-image.tsx | icon.svg
-├─ components/…               # site chrome, calculator (client), charts, cards, badges, SEO blocks
-├─ data/
-│  ├─ funds.ts                # ★ THE FUND CATALOG — 38 Bangladeshi open-end funds + anchors
-│  ├─ guides.ts | custom-guides.ts | posts.ts
+├─ app/                     routes
+│  ├─ page.tsx              homepage: computed chips, calculator, ranked bars
+│  ├─ funds/                directory + per-fund pages and OG images
+│  ├─ compare/              2–4 fund side-by-side table
+│  ├─ data-status/          every fund, freshness, licence and review queue
+│  ├─ methodology/          formulas, benchmark status, attribution
+│  ├─ guides/ | blog/       evergreen guides and dated notes
+│  └─ about | privacy | invest | sitemap | robots
+├─ components/              site chrome, calculator, SVG charts, cards, SEO
+├─ data/                    guides/posts only (not fund data)
 └─ lib/
-   ├─ engine.ts               # deterministic series builder (mulberry32; server = client output)
-   ├─ returns.ts              # total-return math, SIP+IRR, drawdown, beta, benchmark trails
-   ├─ benchmarks.ts           # Sanchayapatra / FDR / CPI / gold / DSEX reference instruments
-   ├─ seo.ts                  # metadata helper + all JSON-LD builders
-   ├─ format.ts               # ৳ lakh/crore formatting
-   └─ site.ts                 # brand, domain, as-of date, social-proof switch
+   ├─ schema.ts             Zod contract for every /data file
+   ├─ data.ts               loader, demo fallback, validation
+   ├─ calc.ts               lump sum, SIP/XIRR, drawdown, volatility
+   ├─ returns.ts            server adapter + headline metrics
+   ├─ date.ts | csv.ts      shared pure helpers
+   └─ format.ts | site.ts   currency/date formatting and site config
+
+data/
+├─ funds.json               real catalogue (empty until import)
+├─ nav/{slug}.csv            real NAV history
+├─ dividends/{slug}.json     real dividend history
+├─ amcs.json                 asset managers
+├─ benchmarks.json           cited or clearly approximate reference lines
+├─ license.json              permission + attribution (fill this in)
+├─ verification.json         named human checks (empty by default)
+├─ review-needed.json        suspicious rows held back
+├─ approved-deviations.json  reviewed big jumps
+├─ meta.json                 generated counts/freshness
+├─ templates/                copy-and-edit examples
+├─ incoming/                 drop new exports for the weekly workflow
+└─ demo/                     labelled demo dataset (fallback only)
 ```
 
-## The data model, honestly
+## The data contract
 
-Fund facts in `src/data/funds.ts` are the **published anchors** of each tracked open-end scheme, e.g.:
+`src/lib/schema.ts` defines the shape of every file. `npm run data:check` runs
+the same validation as the production build, so bad data fails the build instead
+of reaching the live site.
 
-```ts
-{ slug: "idlc-growth-fund", name: "IDLC Growth Fund", amc: "IDLC", type: "growth",
-  verified: true, inception: "2019-07", g3: 8.58, gSince: 7.87, worstFall: -12.0,
-  fee: 2.5, aumCr: 96, divAnnualPct: 4, divMonths: [1] }
+Rules enforced in code:
+
+- NAV must be greater than zero and must not be in the future.
+- Fund `id` and `slug` must be unique; slugs are lowercase-with-hyphens.
+- Missing values are `null`, never a guess. Empty NAV/dividend history is
+  allowed and shown as “Data not available”.
+- A fund with no NAV in 30 days is flagged **stale** and excluded from rankings.
+- A one-step NAV move over 15% goes to `data/review-needed.json` until approved.
+- A dividend more than 10 days from any NAV date goes to review.
+- A benchmark marked `approximate` says so where the number appears;
+  `unavailable` benchmarks are not drawn as if they were real.
+- A “source-verified” badge requires a real entry in `data/verification.json`
+  **and** `displayVerification: true` in `data/license.json`.
+- Investment history shorter than 90 days gets no annualised return; a SIP
+  shorter than 12 months gets “Not enough history”.
+
+## Data pipeline
+
+See **[`DATA-GUIDE.md`](DATA-GUIDE.md)** for the plain-English version. In short:
+
+```bash
+# Preview an export (CSV, JSON or XLSX; one file or a folder)
+npm run data:import -- "C:\path\to\export.xlsx" --dry-run
+
+# Import, then validate
+npm run data:import -- "C:\path\to\export.xlsx"
+npm run data:check
+
+# Promote reviewed rows after checking them
+npm run data:approve -- --dry-run
+npm run data:approve
+
+# Check freshness
+npm run data:staleness
 ```
 
-`lib/engine.ts` then reconstructs a **month-by-month NAV + dividend series** that compounds exactly to
-`g3` over the fixed 3-year window and to `gSince` over the tracked window, with its deepest drawdown shaped
-toward `worstFall` by a shared DSEX-style market factor. Consequences:
+The importer merges and appends; it never deletes existing history. Its column
+mapping, counts and coverage are written to `scripts/last-run.md`.
 
-- every displayed number is computed through the same documented formulas (no hardcoded display values);
-- server pages and the client calculator produce identical results (pure, seeded math — no hydration mismatch);
-- the dataset is an **anchored demo**: roster, AMCs, fees, AUMs, verification flags and headline anchors are
-  real (as of 29 Oct 2026); the intermediate monthly path is principled reconstruction, *not* verbatim history.
+### Weekly update
 
-`src/lib/site.ts` → `asOf` controls the single date everything claims ("Figures as of…"). Move it, update
-anchors, done.
+`.github/workflows/update-data.yml` runs every Monday at 03:17 UTC. It validates
+the data, imports files placed in `data/incoming/` **only when**
+`data/license.json` is complete, commits with `data: NAV update YYYY-MM-DD`, and
+opens an issue if the import fails or the newest NAV is more than 21 days old.
+It uses the built-in `GITHUB_TOKEN` with `contents: write` and `issues: write`;
+no extra secret is needed.
 
-## ★ Updating funds & data (the important part)
+### Benchmarks
 
-### 1) Swap in verbatim NAV history (recommended next step)
+`data/benchmarks.json` currently has Sanchayapatra, FDR and inflation lines
+marked `approximate`, and gold/DSEX marked `unavailable`. Update a rate only with
+a source and date; never turn an approximate line into a verified one without a
+citation.
 
-- Source monthly (or daily → resample month-end) NAV + dividend history per fund from the AMC's published
-  disclosures / fact sheets.
-- For each fund, add an optional `nav: { m: "YYYY-MM"; nav: number; div: number }[]` array to its catalog
-  entry (or place files in `src/data/nav/{slug}.json` — write a tiny loader in `engine.ts`).
-- **Delete the `g3 / gSince / worstFall` calibration**: once `nav` exists, `buildSeries` should short-circuit
-  to your verbatim series (the code path is already structured for this).
+## Scripts
 
-### 2) Add a brand-new fund
-
-1. Append an entry to `FUNDS` in `src/data/funds.ts` (choose `type`, `shariah`, `verified`, `fee`, `aumCr`,
-   `divAnnualPct`, `divMonths`, and the anchors `g3/gSince/worstFall` from the prospectus/NAV feed).
-2. That's it — directory card, fund page, calculator, compare, sitemap, OG card and JSON-LD are all generated
-   from the catalog. **Never** hand-edit generated pages.
-
-### 3) Update the as-of date
-
-- Bump `site.asOf` (`"2026-10-29"`) in `src/lib/site.ts` and align `MARKET_MONTHS`/anchors in `engine.ts`
-  to the new window. CI texts and pages will re-render with the new date everywhere.
-
-### 4) Benchmarks
-
-- `src/lib/benchmarks.ts` — certificate/FDR/CPA/gold rates are single-point constants with per-year CPI in
-  the `benchMonthlyLog` switch. Update rates there; methodology notes travel with each benchmark.
-
-### 5) AMC-Verified flags
-
-- Flip `verified: true` **only** after actually cross-checking that fund's NAV/dividend series with the asset
-  manager. The badge means something or it means nothing — our choice.
-
-## SEO implementation (already wired)
-
-- Per-page `Metadata` with unique titles/descriptions (fund pages include live ৳ outcomes), canonicals,
-  keywords, OG + Twitter cards (summary_large_image) with **auto-generated OG art** for home and every fund.
-- JSON-LD: `Organization`, `WebSite` (+`SearchAction` → `/funds?q=`), `BreadcrumbList` (every page),
-  `InvestmentFund` (fund pages), `FAQPage` (home, guides, fund FAQs), `ItemList` (directory, guides, blog),
-  `Article` (guides/posts).
-- Dynamic `sitemap.xml` + `robots.txt` + `manifest`; semantic heading hierarchy; internal linking between
-  funds ↔ compare ↔ guides everywhere; `?q=` search deep links for the SearchAction.
-- To add a Bangla (bn) version later: duplicate route groups with `bn` copy and set
-  `alternates.languages` + `hreflang` in `pageMeta` — the helper is the single place to extend.
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Local development server |
+| `npm run build` | Validate `/data`, then build for production |
+| `npm start` | Serve the production build |
+| `npm run data:check` | Validate all data, write `meta.json`, print warnings |
+| `npm run data:import -- <path>` | Import/merge a CSV, JSON or XLSX export |
+| `npm run data:approve` | Promote reviewed rows from the review queue |
+| `npm run data:staleness` | Report funds with no recent NAV |
+| `npm run test` | Run the arithmetic and importer unit tests |
 
 ## Environment variables
 
 | Variable | Effect |
 | --- | --- |
-| `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` | Set at build time (e.g. `Profithisab.com`) to enable cookie-free Plausible analytics. Unset = no analytics script is rendered at all (the default, as committed). |
+| `NEXT_PUBLIC_SITE_URL` | Canonical site URL. Defaults to `https://profithisab.vercel.app`. Set it after connecting a custom domain. |
+| `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` | Optional cookie-free analytics. Unset = no analytics script at all. |
 
-The privacy page discloses analytics as optional aggregate pageview counts — this gate keeps the
-build honest when the variable is absent.
+Copy `.env.example` to `.env.local` for local overrides. Never commit `.env*`
+files; only `.env.example` belongs in git.
 
-## Conventions
+## Deploy on Vercel
 
-- Title formulas live in page files, not a CMS: e.g. fund pages use
-  `"{Fund name} ({ACRONYM}) — Returns, NAV & Fee"`, guides use `"{Guide title}"`.
-- Currency formatting is centralised in `lib/format.ts` (৳ with lakh/crore words; `1,00,000` grouping).
-- Dark mode is class-based; both themes are first-class — check all pages in both before shipping copy changes.
+1. Push to `main` on `github.com/Afnan-w/Profithisab`.
+2. Vercel builds with `npm run build` (which runs `data:check` first).
+3. Set `NEXT_PUBLIC_SITE_URL` to the production domain.
+4. The build traces `/data` into the deployment so server pages can read it.
 
-## Scripts
+## Licence and stance
 
-| command          | what it does                     |
-|------------------|----------------------------------|
-| `npm run dev`    | local dev server                 |
-| `npm run build`  | static production build          |
-| `npm start`      | serve the production build       |
+Research tool. **Not investment advice.** Past NAVs describe the past, never the
+future. No ranking or badge is for sale.
 
-## License & stance
+Fund data is used only with the permission recorded in `data/license.json`.
+Attribution is shown in the footer, on `/methodology` and on `/data-status`.
+The permission request template is in `docs/permission-note.md`.
 
-Research tool. **Not investment advice.** Past NAVs describe the past, never the future. Partner referral
-fees (planned on `/invest`) never purchase rankings, badges or a single digit.
-
-© 2026 Profithisab.
+Site code © 2026 Profithisab.
