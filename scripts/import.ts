@@ -434,7 +434,7 @@ async function main() {
     name: license.sourceName || "Imported export",
     url: license.sourceUrl ?? null,
     asOf: today,
-    kind: "export" as const,
+    kind: license.automatedFetching ? ("public-disclosure" as const) : ("export" as const),
   };
 
   function ensureFund(row: Row, table: Table, rowNo: number): FundRecord | null {
@@ -663,12 +663,15 @@ async function main() {
       ).approved
     : [];
   const approvedKeys = new Set(approvedRaw.map((a) => `${a.fundId}|${a.date}`));
+  /** NAV legitimately differs across a publishing gap, so jump checks only apply
+   * between consecutive published dates. Long gaps are surfaced by data:check. */
+  const GAP_DAYS = 35;
   for (const [slug, navMap] of navByFund) {
     const dates = [...navMap.keys()].sort();
     let prev: NavRow | null = null;
     for (const date of dates) {
       const row: NavRow = { date, nav: navMap.get(date)! };
-      if (prev && suspiciousJump(prev, row) && !approvedKeys.has(`${slug}|${date}`)) {
+      if (prev && daysBetween(prev.date, date) <= GAP_DAYS && suspiciousJump(prev, row) && !approvedKeys.has(`${slug}|${date}`)) {
         review.push({
           file: "merged series",
           row: 0,

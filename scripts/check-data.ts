@@ -31,7 +31,9 @@ function main() {
   }
 
   if (license.automatedFetching) {
-    warnings.push("license.json says automatedFetching = true. Only run scripts/sources/returnkoto.ts, and only after the founder confirms the endpoint.");
+    warnings.push(
+      "license.json says automatedFetching = true. Fetching runs scripts/fetch-nav.ts against the sources listed in data/sources.json only — politely (clear UA, 2.5s delays, same-day cache, stops on 403/429). No other source (including ReturnKoto) may be fetched without written permission."
+    );
   }
 
   if (verification.length && !license.displayVerification) {
@@ -52,6 +54,12 @@ function main() {
       if (suspiciousJump(f.nav[i - 1], f.nav[i]) && ds.isDemo) {
         warnings.push(`${f.slug}: demo NAV jump over 15% at ${f.nav[i].date} (demo data is exempt).`);
         break;
+      }
+    }
+    for (let i = 1; i < f.nav.length; i++) {
+      const gap = daysBetween(f.nav[i - 1].date, f.nav[i].date);
+      if (gap > 45) {
+        warnings.push(`${f.slug}: ${gap}-day NAV gap between ${f.nav[i - 1].date} and ${f.nav[i].date} (the source did not publish these dates).`);
       }
     }
     for (const d of f.dividends) {

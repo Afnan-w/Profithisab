@@ -1,361 +1,82 @@
 {
-  "generatedAt": "2026-11-11T11:08:26.948Z",
-  "lastUpdated": "2026-11-10",
-  "latestNavDate": "2026-10-31",
-  "isDemo": true,
-  "sourceName": "Demo dataset — generated for layout testing, not published NAV history",
+  "generatedAt": "2026-11-11T11:40:35.335Z",
+  "lastUpdated": "2026-11-11",
+  "latestNavDate": "2026-11-10",
+  "isDemo": false,
+  "sourceName": "AMC-published NAV data (first-party)",
   "counts": {
-    "funds": 38,
+    "funds": 7,
     "amcs": 10,
-    "withNav": 38,
-    "complete": 38,
-    "partial": 0,
+    "withNav": 7,
+    "complete": 0,
+    "partial": 7,
     "missing": 0,
     "stale": 0,
     "verified": 0
   },
   "perFund": [
     {
-      "id": "ekush-growth-fund",
-      "slug": "ekush-growth-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 61,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "edge-bangladesh-mutual-fund",
-      "slug": "edge-bangladesh-mutual-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 99,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "edge-amc-growth-fund",
-      "slug": "edge-amc-growth-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 86,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "vipb-sebl-1st-unit-fund",
-      "slug": "vipb-sebl-1st-unit-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 99,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "vipb-nli-1st-unit-fund",
-      "slug": "vipb-nli-1st-unit-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 99,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "bcb-icl-growth-fund",
-      "slug": "bcb-icl-growth-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 99,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "vipb-growth-fund",
-      "slug": "vipb-growth-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 99,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "idlc-growth-fund",
-      "slug": "idlc-growth-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 88,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "cwt-emerging-bangladesh-first-growth-fund",
-      "slug": "cwt-emerging-bangladesh-first-growth-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 83,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "cwt-opportunities-fund",
-      "slug": "cwt-opportunities-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 65,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "esquire-icl-apparel-fund",
-      "slug": "esquire-icl-apparel-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 87,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "cwt-sadharan-bima-growth-fund",
-      "slug": "cwt-sadharan-bima-growth-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 74,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
       "id": "idlc-aml-shariah-fund",
       "slug": "idlc-aml-shariah-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 83,
+      "latestNavDate": "2026-11-10",
+      "completeness": "partial",
+      "rows": 532,
       "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "cwt-community-bank-shariah-fund",
-      "slug": "cwt-community-bank-shariah-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 37,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "ucb-taqwa-growth-fund",
-      "slug": "ucb-taqwa-growth-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 55,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "shanta-first-income-unit-fund",
-      "slug": "shanta-first-income-unit-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 99,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "shanta-amanah-shariah-fund",
-      "slug": "shanta-amanah-shariah-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 93,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "hfaml-shariah-unit-fund",
-      "slug": "hfaml-shariah-unit-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 56,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "hfaml-acme-employees-unit-fund",
-      "slug": "hfaml-acme-employees-unit-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 88,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "hfaml-unit-fund",
-      "slug": "hfaml-unit-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 88,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "ekush-first-unit-fund",
-      "slug": "ekush-first-unit-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 84,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
+      "source": "AMC-published NAV data (first-party)"
     },
     {
       "id": "idlc-balanced-fund",
       "slug": "idlc-balanced-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 88,
+      "latestNavDate": "2026-11-10",
+      "completeness": "partial",
+      "rows": 648,
       "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
+      "source": "AMC-published NAV data (first-party)"
     },
     {
-      "id": "vipb-balanced-fund",
-      "slug": "vipb-balanced-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 71,
+      "id": "idlc-growth-fund",
+      "slug": "idlc-growth-fund",
+      "latestNavDate": "2026-11-10",
+      "completeness": "partial",
+      "rows": 609,
       "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "icl-balanced-fund",
-      "slug": "icl-balanced-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 99,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "edge-al-amin-shariah-consumer-fund",
-      "slug": "edge-al-amin-shariah-consumer-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 50,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "lankabangla-1st-balanced-unit-fund",
-      "slug": "lankabangla-1st-balanced-unit-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 99,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "lb-gratuity-opportunities-fund",
-      "slug": "lb-gratuity-opportunities-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 71,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "ucb-aml-first-mutual-fund",
-      "slug": "ucb-aml-first-mutual-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 67,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "icl-inctl-shariah-fund",
-      "slug": "icl-inctl-shariah-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 35,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "lankabangla-al-arafah-shariah-unit-fund",
-      "slug": "lankabangla-al-arafah-shariah-unit-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 99,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "lb-gratuity-wealth-builder-fund",
-      "slug": "lb-gratuity-wealth-builder-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 63,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "ekush-stable-return-fund",
-      "slug": "ekush-stable-return-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 50,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "ucb-income-plus-fund",
-      "slug": "ucb-income-plus-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 40,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "shanta-fixed-income-fund",
-      "slug": "shanta-fixed-income-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 63,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
-    },
-    {
-      "id": "edge-high-quality-income-fund",
-      "slug": "edge-high-quality-income-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 57,
-      "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
+      "source": "AMC-published NAV data (first-party)"
     },
     {
       "id": "idlc-income-fund",
       "slug": "idlc-income-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 65,
+      "latestNavDate": "2026-11-10",
+      "completeness": "partial",
+      "rows": 457,
       "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
+      "source": "AMC-published NAV data (first-party)"
     },
     {
-      "id": "vipb-accelerated-income-unit-fund",
-      "slug": "vipb-accelerated-income-unit-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 99,
+      "id": "shanta-amanah-shariah-fund",
+      "slug": "shanta-amanah-shariah-fund",
+      "latestNavDate": "2026-11-10",
+      "completeness": "partial",
+      "rows": 1818,
       "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
+      "source": "AMC-published NAV data (first-party)"
     },
     {
-      "id": "vipb-fixed-income-fund",
-      "slug": "vipb-fixed-income-fund",
-      "latestNavDate": "2026-10-31",
-      "completeness": "complete",
-      "rows": 26,
+      "id": "shanta-first-income-unit-fund",
+      "slug": "shanta-first-income-unit-fund",
+      "latestNavDate": "2026-11-10",
+      "completeness": "partial",
+      "rows": 2152,
       "stale": false,
-      "source": "Demo dataset — generated for layout testing, not published NAV history"
+      "source": "AMC-published NAV data (first-party)"
+    },
+    {
+      "id": "shanta-fixed-income-fund",
+      "slug": "shanta-fixed-income-fund",
+      "latestNavDate": "2026-11-10",
+      "completeness": "partial",
+      "rows": 890,
+      "stale": false,
+      "source": "AMC-published NAV data (first-party)"
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "fundId": "shanta-amanah-shariah-fund",
+  "dividends": [
+    {
+      "recordDate": "2020-01-02",
+      "amount": 0.13
+    },
+    {
+      "recordDate": "2021-01-03",
+      "amount": 1.2
+    },
+    {
+      "recordDate": "2022-01-06",
+      "amount": 1
+    },
+    {
+      "recordDate": "2023-01-01",
+      "amount": 0.6
+    }
+  ]
+}

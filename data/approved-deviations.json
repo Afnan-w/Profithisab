@@ -1,1 +1,26 @@
-{"schemaVersion": 1, "approved": []}
+{
+  "schemaVersion": 1,
+  "approved": [
+    {
+      "fundId": "idlc-balanced-fund",
+      "date": "2022-07-17",
+      "nav": 10.22,
+      "reason": "idlc-balanced-fund 2022-07-17 NAV 10.22: verified against source. Published by IDLC AML’s official historic NAV endpoint; the 2022-07 drop matches the declared 18.50% cash dividend (Tk 1.85/unit) for FY ended June 2022, announced 18 July 2022.",
+      "approvedAt": "2026-11-11"
+    },
+    {
+      "fundId": "idlc-balanced-fund",
+      "date": "2022-07-21",
+      "nav": 10.17,
+      "reason": "idlc-balanced-fund 2022-07-21 NAV 10.17: verified against source. Published by IDLC AML’s official historic NAV endpoint; the 2022-07 drop matches the declared 18.50% cash dividend (Tk 1.85/unit) for FY ended June 2022, announced 18 July 2022.",
+      "approvedAt": "2026-11-11"
+    },
+    {
+      "fundId": "idlc-balanced-fund",
+      "date": "2022-07-28",
+      "nav": 10.11,
+      "reason": "idlc-balanced-fund 2022-07-28 NAV 10.11: verified against source. Published by IDLC AML’s official historic NAV endpoint; the 2022-07 drop matches the declared 18.50% cash dividend (Tk 1.85/unit) for FY ended June 2022, announced 18 July 2022.",
+      "approvedAt": "2026-11-11"
+    }
+  ]
+}

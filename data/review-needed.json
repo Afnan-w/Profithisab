@@ -1,5 +1,46 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "1970-01-01",
-  "items": []
+  "updatedAt": "2026-11-11",
+  "items": [
+    {
+      "file": "dividends",
+      "row": 0,
+      "reason": "shanta-amanah-shariah-fund: dividend 2024-01-04 is 38 days from the nearest NAV date. Needs your approval.",
+      "raw": {
+        "fund": "shanta-amanah-shariah-fund",
+        "date": "2024-01-04",
+        "amount": 0.45
+      }
+    },
+    {
+      "file": "dividends",
+      "row": 0,
+      "reason": "shanta-fixed-income-fund: dividend 2024-01-04 is 39 days from the nearest NAV date. Needs your approval.",
+      "raw": {
+        "fund": "shanta-fixed-income-fund",
+        "date": "2024-01-04",
+        "amount": 0.4
+      }
+    },
+    {
+      "file": "dividends",
+      "row": 0,
+      "reason": "shanta-fixed-income-fund: dividend 2025-01-02 is 403 days from the nearest NAV date. Needs your approval.",
+      "raw": {
+        "fund": "shanta-fixed-income-fund",
+        "date": "2025-01-02",
+        "amount": 0.52
+      }
+    },
+    {
+      "file": "dividends",
+      "row": 0,
+      "reason": "shanta-fixed-income-fund: dividend 2026-01-19 is 208 days from the nearest NAV date. Needs your approval.",
+      "raw": {
+        "fund": "shanta-fixed-income-fund",
+        "date": "2026-01-19",
+        "amount": 0.8
+      }
+    }
+  ]
 }

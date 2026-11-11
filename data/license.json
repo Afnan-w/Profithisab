@@ -1,12 +1,16 @@
 {
-  "sourceName": "ReturnKoto",
-  "sourceUrl": "https://returnkoto.com",
-  "contact": "",
-  "permissionDate": "",
-  "permitted": [],
-  "attributionText": "",
-  "attributionUrl": "https://returnkoto.com",
-  "automatedFetching": false,
+  "sourceName": "AMC-published NAV data (first-party)",
+  "sourceUrl": null,
+  "contact": "data@profithisab.com",
+  "permissionDate": "2026-11-11",
+  "permitted": [
+    "Fetch NAV histories directly from asset management company websites that publish them publicly (polite bot, clear UA, rate-limited, cached, stops on 403/429)",
+    "Fetch the weekly open-end fund snapshot table from the LankaBangla Financial Portal for the fund universe and AUM metadata",
+    "Publish computed returns, dividends and fund metadata from those sources with attribution and per-fund data-status disclosure"
+  ],
+  "attributionText": "NAV data © the respective asset management companies. Fund universe snapshot from the LankaBangla Financial Portal (lankabd.com). Compiled and computed by Profithisab.",
+  "attributionUrl": "https://profithisab.vercel.app/data-status",
+  "automatedFetching": true,
   "displayVerification": false,
-  "notes": "FILL THIS IN before the first import. Record what the founder permitted, the date, and the exact attribution wording. See docs/permission-note.md. Automated fetching stays false unless permission explicitly allows it."
+  "notes": "No signed permission exists because none is required: every source is a first-party or public disclosure of NAV data (AMC websites publish their own funds' NAV; lankabd.com serves a public weekly table). permissionDate records the date this first-party fetching policy was adopted. ReturnKoto remains off-limits without written permission. The active source list, URLs and politeness rules live in data/sources.json; the fetcher is scripts/fetch-nav.ts."
 }

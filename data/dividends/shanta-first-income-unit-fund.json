@@ -1,0 +1,25 @@
+{
+  "fundId": "shanta-first-income-unit-fund",
+  "dividends": [
+    {
+      "recordDate": "2018-07-05",
+      "amount": 0.5
+    },
+    {
+      "recordDate": "2019-07-04",
+      "amount": 0.8
+    },
+    {
+      "recordDate": "2021-07-01",
+      "amount": 2.05
+    },
+    {
+      "recordDate": "2022-07-07",
+      "amount": 1
+    },
+    {
+      "recordDate": "2023-07-06",
+      "amount": 0.6
+    }
+  ]
+}

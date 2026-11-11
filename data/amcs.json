@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "amcs": [
     {
-      "id": "ekush",
-      "name": "Ekush",
-      "shortName": "Ekush",
+      "id": "cwt",
+      "name": "CWT",
+      "shortName": "CWT",
       "website": null
     },
     {
@@ -14,15 +14,15 @@
       "website": null
     },
     {
-      "id": "cwt",
-      "name": "CWT",
-      "shortName": "CWT",
+      "id": "ekush",
+      "name": "Ekush",
+      "shortName": "Ekush",
       "website": null
     },
     {
-      "id": "vipb",
-      "name": "VIPB",
-      "shortName": "VIPB",
+      "id": "hfaml",
+      "name": "HF AML",
+      "shortName": "HF AML",
       "website": null
     },
     {
@@ -33,15 +33,9 @@
     },
     {
       "id": "idlc",
-      "name": "IDLC",
+      "name": "IDLC Asset Management Limited",
       "shortName": "IDLC",
-      "website": null
-    },
-    {
-      "id": "shanta",
-      "name": "Shanta",
-      "shortName": "Shanta",
-      "website": null
+      "website": "https://idlc.com/aml/nav.php"
     },
     {
       "id": "lankabangla",
@@ -50,15 +44,21 @@
       "website": null
     },
     {
+      "id": "shanta",
+      "name": "Shanta Asset Management Limited",
+      "shortName": "Shanta",
+      "website": "https://www.shanta-aml.com"
+    },
+    {
       "id": "ucb",
       "name": "UCB",
       "shortName": "UCB",
       "website": null
     },
     {
-      "id": "hfaml",
-      "name": "HF AML",
-      "shortName": "HF AML",
+      "id": "vipb",
+      "name": "VIPB",
+      "shortName": "VIPB",
       "website": null
     }
   ]

@@ -1,4 +1,138 @@
 {
   "schemaVersion": 1,
-  "funds": []
+  "funds": [
+    {
+      "id": "idlc-aml-shariah-fund",
+      "slug": "idlc-aml-shariah-fund",
+      "name": "IDLC AML Shariah Fund",
+      "acronym": "ISF",
+      "amcId": "idlc",
+      "type": "growth",
+      "shariah": true,
+      "launchDate": null,
+      "fee": null,
+      "fundSize": 99.9,
+      "minInvestment": 5000,
+      "source": {
+        "name": "AMC-published NAV data (first-party)",
+        "url": null,
+        "asOf": "2026-11-11",
+        "kind": "public-disclosure"
+      }
+    },
+    {
+      "id": "idlc-balanced-fund",
+      "slug": "idlc-balanced-fund",
+      "name": "IDLC Balanced Fund",
+      "acronym": "IBF",
+      "amcId": "idlc",
+      "type": "balanced",
+      "shariah": false,
+      "launchDate": null,
+      "fee": null,
+      "fundSize": 65.1,
+      "minInvestment": 5000,
+      "source": {
+        "name": "AMC-published NAV data (first-party)",
+        "url": null,
+        "asOf": "2026-11-11",
+        "kind": "public-disclosure"
+      }
+    },
+    {
+      "id": "idlc-growth-fund",
+      "slug": "idlc-growth-fund",
+      "name": "IDLC Growth Fund",
+      "acronym": "IGF",
+      "amcId": "idlc",
+      "type": "growth",
+      "shariah": false,
+      "launchDate": null,
+      "fee": null,
+      "fundSize": 94.2,
+      "minInvestment": 5000,
+      "source": {
+        "name": "AMC-published NAV data (first-party)",
+        "url": null,
+        "asOf": "2026-11-11",
+        "kind": "public-disclosure"
+      }
+    },
+    {
+      "id": "idlc-income-fund",
+      "slug": "idlc-income-fund",
+      "name": "IDLC Income Fund",
+      "acronym": "IIF",
+      "amcId": "idlc",
+      "type": "income",
+      "shariah": false,
+      "launchDate": null,
+      "fee": null,
+      "fundSize": 139.7,
+      "minInvestment": 5000,
+      "source": {
+        "name": "AMC-published NAV data (first-party)",
+        "url": null,
+        "asOf": "2026-11-11",
+        "kind": "public-disclosure"
+      }
+    },
+    {
+      "id": "shanta-amanah-shariah-fund",
+      "slug": "shanta-amanah-shariah-fund",
+      "name": "Shanta Amanah Shariah Fund",
+      "acronym": "SASF",
+      "amcId": "shanta",
+      "type": "growth",
+      "shariah": true,
+      "launchDate": null,
+      "fee": null,
+      "fundSize": 64,
+      "minInvestment": 5000,
+      "source": {
+        "name": "AMC-published NAV data (first-party)",
+        "url": null,
+        "asOf": "2026-11-11",
+        "kind": "public-disclosure"
+      }
+    },
+    {
+      "id": "shanta-first-income-unit-fund",
+      "slug": "shanta-first-income-unit-fund",
+      "name": "Shanta First Income Unit Fund",
+      "acronym": "SFIUF",
+      "amcId": "shanta",
+      "type": "income",
+      "shariah": false,
+      "launchDate": null,
+      "fee": null,
+      "fundSize": 83.9,
+      "minInvestment": 5000,
+      "source": {
+        "name": "AMC-published NAV data (first-party)",
+        "url": null,
+        "asOf": "2026-11-11",
+        "kind": "public-disclosure"
+      }
+    },
+    {
+      "id": "shanta-fixed-income-fund",
+      "slug": "shanta-fixed-income-fund",
+      "name": "Shanta Fixed Income Fund",
+      "acronym": "SFIF",
+      "amcId": "shanta",
+      "type": "income",
+      "shariah": false,
+      "launchDate": null,
+      "fee": null,
+      "fundSize": 302.6,
+      "minInvestment": 5000,
+      "source": {
+        "name": "AMC-published NAV data (first-party)",
+        "url": null,
+        "asOf": "2026-11-11",
+        "kind": "public-disclosure"
+      }
+    }
+  ]
 }

@@ -193,11 +193,13 @@ export function getDataset(): Dataset {
     }
 
     // Safe-by-default suspicious-move check (imported data only; demo is generated).
+    // NAV legitimately differs across a publishing gap, so the check only applies
+    // between consecutive published dates (long gaps are warned about in data:check).
     if (!isDemo && nav.length > 1) {
       const approved = approvedByFund.get(record.id) ?? new Set<string>();
       for (let i = 1; i < nav.length; i++) {
         const jump = nav[i].nav / nav[i - 1].nav - 1;
-        if (Math.abs(jump) > 0.15 && !approved.has(nav[i].date)) {
+        if (Math.abs(jump) > 0.15 && daysBetween(nav[i - 1].date, nav[i].date) <= 35 && !approved.has(nav[i].date)) {
           throw new Error(
             `${path.relative(ROOT, navFile)}: ${nav[i].date} moves ${(jump * 100).toFixed(1)}% in one step. ` +
               `Approve it with "npm run data:approve" (or remove the row) before it can be published.`
