@@ -1,0 +1,114 @@
+import assert from "node:assert/strict";
+import { test } from "node:test";
+import {
+  parseIdlcTable,
+  parseLankabdTable,
+  parseNavDate,
+  parseShantaPage,
+} from "../scripts/fetch-nav";
+
+/* ── parseNavDate ─────────────────────────────────────────────────────────── */
+
+test("parseNavDate handles full month names (IDLC style)", () => {
+  assert.equal(parseNavDate("November 10, 2026"), "2026-11-10");
+  assert.equal(parseNavDate("February 1, 2024"), "2024-02-01");
+});
+
+test("parseNavDate handles d-MMM-yy (Shanta style)", () => {
+  assert.equal(parseNavDate("8-Mar-18"), "2018-03-08");
+  assert.equal(parseNavDate("10-Nov-26"), "2026-11-10");
+});
+
+test("parseNavDate returns null for junk", () => {
+  assert.equal(parseNavDate("not a date"), null);
+  assert.equal(parseNavDate(""), null);
+});
+
+/* ── IDLC table ───────────────────────────────────────────────────────────── */
+
+const idlcHtml = `
+<table class='table table-bordered'>
+<thead><tr><td>Fund Name</td><td>NAV Date</td><td>NAV at Cost Value</td><td>NAV at Fair Value</td><td>Buy</td><td>Sale</td></tr></thead>
+<tbody><tr>
+<td>IDLC Growth Fund</td><td>November 10, 2026</td><td>12.48</td><td>12.88</td><td>12.88</td><td>12.88</td>
+</tr><tr>
+<td>IDLC Growth Fund</td><td>November 9, 2026</td><td>12.51</td><td>12.84</td><td>12.84</td><td>12.84</td>
+</tr></tbody></table>`;
+
+test("parseIdlcTable reads NAV at Fair Value (not cost)", () => {
+  const rows = parseIdlcTable(idlcHtml);
+  assert.equal(rows.length, 2);
+  assert.deepEqual(rows[0], { fund: "IDLC Growth Fund", date: "2026-11-10", nav: 12.88 });
+  assert.deepEqual(rows[1], { fund: "IDLC Growth Fund", date: "2026-11-09", nav: 12.84 });
+});
+
+/* ── Shanta __NEXT_DATA__ payload ─────────────────────────────────────────── */
+
+const shantaHtml = `<html><body><script id="__NEXT_DATA__" type="application/json" crossorigin="anonymous">
+{"props":{"pageProps":{"data":{"data":{"list":[
+ {"page_data":{"slug":"shanta-amanah-shariah-fund","title":"Shanta Amanah Shariah Fund"},
+  "performance":{"data":[{"Date":"4-Feb-19","Nav":10,"Dividend":0},{"Date":"10-Nov-26","Nav":10.581,"Dividend":0}]}},
+ {"page_data":{"slug":"shanta-fixed-income-fund","title":"Shanta Fixed Income Fund"},
+  "performance":{"data":[{"Date":"19-Aug-21","Nav":10}]}},
+ {"page_data":{"slug":"some-unmapped-fund"},"performance":{"data":[]}}
+]}},
+"dividendData":{"success":true,"data":[{"id":16,"date":"2020-01-02","fund_type":"sasf","value":"0.1300000"}]},
+"dseData":[{"date":"2026-11-11","dsex":"5445.05"}]}}}</script></body></html>`;
+
+test("parseShantaPage extracts NAV rows and dividends", () => {
+  const payload = parseShantaPage(shantaHtml);
+  assert.deepEqual(payload.fundSlugs.sort(), [
+    "shanta-amanah-shariah-fund",
+    "shanta-fixed-income-fund",
+    "some-unmapped-fund",
+  ]);
+  assert.equal(payload.navs.length, 3);
+  assert.ok(payload.navs.some((n) => n.fund === "shanta-fixed-income-fund" && n.date === "2021-08-19" && n.nav === 10));
+  assert.deepEqual(payload.dividends, [{ fund: "sasf", recordDate: "2020-01-02", amount: 0.13 }]);
+  assert.equal(payload.dseRowCount, 1);
+});
+
+test("parseShantaPage throws on layout change", () => {
+  assert.throws(() => parseShantaPage("<html><body>no payload</body></html>"));
+});
+
+/* ── LankaBangla roster table ─────────────────────────────────────────────── */
+
+const lankabdHtml = `
+<div>NAV Per Unit at Market Price is as on October 19, 2026</div>
+<table>
+<thead><tr><td>NAV Per Unit</td><td>Selling Price</td><td>Repurchase Price</td><td>Entry Load</td><td>Exit Load</td>
+<td>NAV Return YTD</td><td>NAV Return Previous Year</td><td>Weekly NAV Change</td><td>Latest Dividend</td>
+<td>Dividend to Selling Price</td><td>AUM in Million</td><td>Inception</td></tr></thead>
+<tbody>
+<tr><td>IDLC Asset Management Limited</td></tr>
+<tr><td><a href="/MF/Overview?mfid=2&mfname=IDLC%20GROWTH%20FUND">IDLC GROWTH FUND</a></td>
+<td> 12.88 </td><td> 12.88 </td><td> 12.88 </td><td> 0.00% </td><td> 0.00% </td><td> 3.00% </td>
+<td> -9.30% </td><td> -1.20% </td><td> 0.00% </td><td> 0.00% </td><td> 710 </td><td>Mar-19</td></tr>
+<tr><td><a href="/MF/Overview?mfid=3&mfname=SOME%20FUND">SOME FUND</a></td>
+<td> n/a </td><td> n/a </td><td> n/a </td><td> n/a </td><td> n/a </td><td> n/a </td>
+<td> n/a </td><td> n/a </td><td> n/a </td><td> n/a </td><td> n/a </td><td>n/a</td></tr>
+</tbody></table>`;
+
+test("parseLankabdTable groups funds under their AMC and parses n/a as null", () => {
+  const roster = parseLankabdTable(lankabdHtml, "2026-11-11");
+  assert.equal(roster.asOf, "2026-10-19");
+  assert.equal(roster.funds.length, 2);
+
+  const growth = roster.funds[0];
+  assert.equal(growth.amc, "IDLC Asset Management Limited");
+  assert.equal(growth.mfid, "2");
+  assert.equal(growth.name, "IDLC GROWTH FUND");
+  assert.equal(growth.nav, 12.88);
+  assert.equal(growth.repurchasePrice, 12.88);
+  assert.equal(growth.navReturnYtdPct, 3);
+  assert.equal(growth.navReturnPrevYearPct, -9.3);
+  assert.equal(growth.weeklyChangePct, -1.2);
+  assert.equal(growth.aumMillion, 710);
+  assert.equal(growth.inception, "Mar-19");
+
+  const missing = roster.funds[1];
+  assert.equal(missing.nav, null);
+  assert.equal(missing.aumMillion, null);
+  assert.equal(missing.inception, "n/a");
+});

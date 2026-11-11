@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "updated": "2026-11-11",
+  "navConvention": "We use the standard quoted NAV: \"NAV at Fair Value\" (IDLC) / \"NAV Per Unit at Market Price\" (LankaBangla, Shanta). NAV-at-cost and buy/sell prices are ignored because they embed fees and are not comparable across funds.",
+  "politeness": {
+    "userAgent": "ProfithisabDataBot/1.0 (https://profithisab.vercel.app; contact data@profithisab.com)",
+    "delayMs": 2500,
+    "cache": "data/raw/ (gitignored, same-day cache)",
+    "stopOn": [403, 429]
+  },
+  "sources": [
+    {
+      "id": "shanta",
+      "name": "Shanta Asset Management Limited",
+      "url": "https://www.shanta-aml.com/our-funds/shanta-amanah-shariah-fund",
+      "kind": "amc-website",
+      "role": "NAV history + dividends",
+      "note": "One fund page embeds the full daily NAV history since inception for all Shanta funds as JSON (__NEXT_DATA__), plus a DSE index series. Served by the AMC's own website."
+    },
+    {
+      "id": "idlc",
+      "name": "IDLC Asset Management Limited",
+      "url": "https://idlc.com/aml/nav.php",
+      "kind": "amc-website",
+      "role": "NAV history",
+      "note": "Historic NAV AJAX endpoint (admin/ajax_handle.php, request_type=historic_nav) returns the full available history per fund. Dividend history is not in this endpoint yet."
+    },
+    {
+      "id": "lankabd",
+      "name": "LankaBangla Financial Portal",
+      "url": "https://www.lankabd.com/MF/OpenEndMutualFund",
+      "kind": "portal",
+      "role": "fund universe snapshot (roster)",
+      "note": "Server-rendered weekly table of every open-end fund: latest NAV, prices, loads, AUM (in million BDT), inception month. Used for the roster and freshness/AUM metadata; its NAV archive API requires login, so NAV histories come from the AMCs directly."
+    }
+  ],
+  "funds": [
+    {
+      "slug": "idlc-balanced-fund",
+      "name": "IDLC Balanced Fund",
+      "acronym": "IBF",
+      "amc": "idlc",
+      "type": "balanced",
+      "shariah": false,
+      "sources": { "idlc": { "key": "1" } }
+    },
+    {
+      "slug": "idlc-growth-fund",
+      "name": "IDLC Growth Fund",
+      "acronym": "IGF",
+      "amc": "idlc",
+      "type": "growth",
+      "shariah": false,
+      "sources": { "idlc": { "key": "2" } }
+    },
+    {
+      "slug": "idlc-aml-shariah-fund",
+      "name": "IDLC AML Shariah Fund",
+      "acronym": "ISF",
+      "amc": "idlc",
+      "type": "growth",
+      "shariah": true,
+      "sources": { "idlc": { "key": "3" } }
+    },
+    {
+      "slug": "idlc-income-fund",
+      "name": "IDLC Income Fund",
+      "acronym": "IIF",
+      "amc": "idlc",
+      "type": "income",
+      "shariah": false,
+      "sources": { "idlc": { "key": "4" } }
+    },
+    {
+      "slug": "shanta-first-income-unit-fund",
+      "name": "Shanta First Income Unit Fund",
+      "acronym": "SFIUF",
+      "amc": "shanta",
+      "type": "income",
+      "shariah": false,
+      "sources": { "shanta": { "slug": "shanta-first-income-unit-fund", "dividendKey": "sfiuf" } }
+    },
+    {
+      "slug": "shanta-amanah-shariah-fund",
+      "name": "Shanta Amanah Shariah Fund",
+      "acronym": "SASF",
+      "amc": "shanta",
+      "type": "growth",
+      "shariah": true,
+      "sources": { "shanta": { "slug": "shanta-amanah-shariah-fund", "dividendKey": "sasf" } }
+    },
+    {
+      "slug": "shanta-fixed-income-fund",
+      "name": "Shanta Fixed Income Fund",
+      "acronym": "SFIF",
+      "amc": "shanta",
+      "type": "income",
+      "shariah": false,
+      "sources": { "shanta": { "slug": "shanta-fixed-income-fund", "dividendKey": "sfif" } }
+    }
+  ],
+  "fundMetaNotes": "type and shariah come from each fund's own name and published description; they are our classification, not an AMC certification. fundSize is fetched weekly from the LankaBangla roster (AUM converted from million BDT to crore)."
+}

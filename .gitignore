@@ -16,6 +16,10 @@ next-env.d.ts
 /.data-backup
 /staleness.json
 
+# fetched raw pages (cache) and regenerated import files — never committed
+/data/raw/
+/data/incoming/
+
 # misc
 .DS_Store
 *.pem

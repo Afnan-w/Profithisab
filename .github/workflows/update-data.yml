@@ -45,6 +45,11 @@ jobs:
             echo "stale=0" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Fetch NAV data from official sources
+        id: fetch
+        continue-on-error: true
+        run: npm run data:fetch
+
       - name: Import new files from data/incoming (when licensed)
         id: import
         continue-on-error: true
@@ -94,7 +99,7 @@ jobs:
           if gh issue list --state open --search "$TITLE in:title" --json number --jq 'length' | grep -q '^0$'; then
             gh issue create \
               --title "$TITLE" \
-              --body "The weekly data check found that the newest NAV is more than 21 days old. Add a licensed export to \`data/incoming\` and run the importer, or update the source. See \`DATA-GUIDE.md\` and \`/data-status\`."
+              --body "The weekly data check found that the newest NAV is more than 21 days old. Run \`npm run data:fetch\` (or check whether the sources in \`data/sources.json\` are reachable), import with \`npm run data:import -- data/incoming\`, or add a new export to \`data/incoming\`. See \`DATA-GUIDE.md\` and \`/data-status\`."
           else
             echo "An open issue already exists."
           fi
