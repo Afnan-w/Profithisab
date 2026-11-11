@@ -4,8 +4,8 @@ import { GUIDES } from "@/data/guides";
 import { CUSTOM_GUIDES } from "@/data/custom-guides";
 import { pageMeta, breadcrumbSchema, itemListSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/jsonld";
-import { longDate } from "@/lib/format";
-import { site } from "@/lib/site";
+import { fullDate, longDate } from "@/lib/format";
+import { META } from "@/lib/returns";
 
 export const metadata: Metadata = pageMeta({
   title: "Learn mutual funds in Bangladesh — plain-language guides",
@@ -70,8 +70,8 @@ export default function GuidesIndex() {
       </div>
 
       <p className="mt-10 pb-14 text-xs text-faint">
-        Guides reflect data as of {site.asOfLong}. Rates and tax treatment are reiterated respectfully: verify the
-        current year&apos;s Finance Act or a tax professional before acting.
+        Figures on the data-driven guides use the latest NAV in this build: {fullDate(META.latestNavDate)}. Rates and
+        tax treatment change: verify the current year&apos;s Finance Act or a tax professional before acting.
       </p>
     </div>
   );

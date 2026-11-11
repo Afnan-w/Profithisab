@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
 import { site } from "@/lib/site";
+import { fullDate } from "@/lib/format";
+import { META } from "@/lib/returns";
 
 export const metadata: Metadata = pageMeta({
   title: "Privacy — what Profithisab collects (almost nothing)",
@@ -23,13 +25,13 @@ export default function PrivacyPage() {
         <li><strong>No user accounts.</strong> There is nothing to sign into, so there is nothing to leak.</li>
         <li><strong>No tracking cookies by us.</strong> Your theme preference lives in your browser&apos;s local storage.</li>
         <li><strong>Aggregate analytics.</strong> If enabled, traffic analytics (e.g. Plausible) count pageviews without collecting personal identifiers or fingerprinting.</li>
-        <li><strong>Share links.</strong> Compare selections live in the URL; share whatever you like, we store what you paste.</li>
+        <li><strong>Share links.</strong> Calculator and compare selections live in the URL. They are not sent to us or stored on a server.</li>
         <li><strong>Email.</strong> If you write to us, we use your email to reply, not to list you into anything.</li>
         <li><strong>No money, ever.</strong> We never take payments or hold client funds, so we don&apos;t ask for financial details.</li>
       </ul>
       <p className="mt-6 leading-7 text-fg-soft">
-        Data corrections: <a className="underline decoration-dotted hover:text-fg" href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>. Last review of
-        this page: {site.asOfLong}.
+        Data corrections: <a className="underline decoration-dotted hover:text-fg" href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>. Last data
+        refresh referenced here: {fullDate(META.lastUpdated)}.
       </p>
     </div>
   );

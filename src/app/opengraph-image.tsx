@@ -1,13 +1,16 @@
 import { ImageResponse } from "next/og";
-import { ALL_FUNDS, TOTAL_AUM_CR } from "@/lib/returns";
+import { IS_DEMO, META, STATS, metricsFor, rankedFunds } from "@/lib/returns";
 import { site } from "@/lib/site";
+import { fullDate, pct } from "@/lib/format";
 
 export const alt = "Profithisab — real returns of Bangladeshi mutual funds";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default function OgImage() {
-  const leaders = ALL_FUNDS.filter((f) => f.verified).slice(0, 3);
+  const leaders = rankedFunds("3y").slice(0, 3);
+  const host = new URL(site.url).host;
+
   return new ImageResponse(
     (
       <div
@@ -34,8 +37,13 @@ export default function OgImage() {
             If you had invested ৳10,000 — how much?
           </div>
           <div style={{ fontSize: 26, color: "#94a59d", marginTop: 18, maxWidth: 900 }}>
-            {`${ALL_FUNDS.length} open-end funds replayed from published NAV history · one fixed 3-year window · dividends reinvested`}
+            {`${STATS.funds} funds in this build · NAV data through ${fullDate(META.latestNavDate)} · every gap shown`}
           </div>
+          {IS_DEMO ? (
+            <div style={{ marginTop: 14, display: "flex", fontSize: 20, color: "#fbbf24" }}>
+              Demo data — not published fund history
+            </div>
+          ) : null}
         </div>
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
@@ -43,15 +51,11 @@ export default function OgImage() {
             {leaders.map((f) => (
               <div key={f.slug} style={{ display: "flex", flexDirection: "column", fontSize: 16, color: "#c4d2cc", border: "1px solid #29433a", borderRadius: 12, padding: "10px 16px" }}>
                 <span style={{ color: "#eaf3ef" }}>{f.acronym}</span>
-                <span style={{ color: "#6ee7b7" }}>{`${f.fee.toFixed(2)}% fee · verified`}</span>
+                <span style={{ color: "#6ee7b7" }}>{pct(metricsFor(f.slug).g3)} · 3-yr / yr</span>
               </div>
             ))}
-            <div style={{ display: "flex", flexDirection: "column", fontSize: 16, color: "#c4d2cc", border: "1px solid #29433a", borderRadius: 12, padding: "10px 16px" }}>
-              <span>Tracked assets</span>
-              <span style={{ color: "#6ee7b7" }}>{`৳${Math.round(TOTAL_AUM_CR)} cr`}</span>
-            </div>
           </div>
-          <div style={{ fontSize: 18, color: "#6b7d75" }}>{`Profithisab.com · figures as of ${site.asOfLong}`}</div>
+          <div style={{ fontSize: 18, color: "#6b7d75" }}>{`${host} · latest NAV ${fullDate(META.latestNavDate)}`}</div>
         </div>
       </div>
     ),

@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ALL_FUNDS, fundGroups, AMCs, TOTAL_AUM_CR, VERIFIED_COUNT, metricsFor } from "@/lib/returns";
+import { ALL_FUNDS, AMC_LIST, META, STATS, fundGroups, metricsFor } from "@/lib/returns";
 import { FundCard } from "@/components/funds/fund-card";
 import { DirectoryControls } from "@/components/funds/directory-controls";
-import { cr } from "@/lib/format";
-import { site } from "@/lib/site";
 import { pageMeta, itemListSchema, breadcrumbSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/jsonld";
-import { longDate } from "@/lib/format";
+import { fullDate } from "@/lib/format";
 
 export const metadata: Metadata = pageMeta({
-  title: "Bangladeshi open-end mutual funds — real 3-year returns",
-  description: `All ${ALL_FUNDS.length} open-end funds Profithisab tracks — growth, balanced, income and Shariah — with the same 3-year window for every fund, AMC-verified flags, fees and worst falls. Figures as of ${site.asOfLong}.`,
+  title: "Bangladeshi open-end mutual funds — tracked NAV history",
+  description: `The ${STATS.funds} open-end funds in this Profithisab build — growth, balanced, income and Shariah — with 1/3/5-year and since-launch figures, fees, worst falls, latest NAV dates and data-completeness flags. Latest NAV ${fullDate(META.latestNavDate)}.`,
   path: "/funds",
   keywords: [
     "open end mutual fund Bangladesh",
@@ -21,34 +19,35 @@ export const metadata: Metadata = pageMeta({
   ],
 });
 
-const GROUPS: Array<{ id: string; title: string; blurb: string; funds: typeof ALL_FUNDS }> = [
-  {
-    id: "growth",
-    title: "Growth funds",
-    blurb: "Equity-first portfolios. Winner-take-the-market, and the market in Bangladesh has not been gently upward.",
-    funds: fundGroups.growth,
-  },
-  {
-    id: "balanced",
-    title: "Balanced funds",
-    blurb: "A bet both ways — part equity, part fixed income. Smoother than growth funds, duller in a bull run.",
-    funds: fundGroups.balanced,
-  },
-  {
-    id: "income",
-    title: "Income funds",
-    blurb: "Fixed-income boxes. The question is less “what will it earn” and more “what will the manager sack it with in fees”.",
-    funds: fundGroups.income,
-  },
-  {
-    id: "shariah",
-    title: "Shariah-compliant funds",
-    blurb: "Halal-screened portfolios. They also appear under their own Growth, Balanced or Income category above.",
-    funds: fundGroups.shariah,
-  },
-];
-
 export default function FundsPage() {
+  const groups = fundGroups();
+  const GROUPS: Array<{ id: string; title: string; blurb: string; funds: typeof ALL_FUNDS }> = [
+    {
+      id: "growth",
+      title: "Growth funds",
+      blurb: "Equity-first portfolios. Winner-take-the-market, and the market in Bangladesh has not been gently upward.",
+      funds: groups.growth,
+    },
+    {
+      id: "balanced",
+      title: "Balanced funds",
+      blurb: "A bet both ways — part equity, part fixed income. Smoother than growth funds, duller in a bull run.",
+      funds: groups.balanced,
+    },
+    {
+      id: "income",
+      title: "Income funds",
+      blurb: "Fixed-income boxes. The question is less “what will it earn” and more “what will the manager charge”.",
+      funds: groups.income,
+    },
+    {
+      id: "shariah",
+      title: "Shariah-compliant funds",
+      blurb: "Shariah-screened portfolios. They also appear under their own Growth, Balanced or Income category above.",
+      funds: groups.shariah,
+    },
+  ];
+
   return (
     <div className="mx-auto max-w-6xl px-4 pt-10 sm:px-6">
       <JsonLd
@@ -72,20 +71,24 @@ export default function FundsPage() {
       <header className="max-w-3xl">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Bangladeshi open-end mutual funds</h1>
         <p className="mt-3 text-muted">
-          Profithisab tracks {ALL_FUNDS.length} of Bangladesh&apos;s 100+ open-end funds: the ones whose NAV
-          history and dividends are published consistently enough to replay honestly.
+          This build contains {STATS.funds} funds from {STATS.amcs} asset managers. It is the roster whose NAV and
+          dividend history is present in our data files — not a claim to have every fund in Bangladesh.
         </p>
         <div className="mt-4 flex flex-wrap gap-2 text-xs">
-          <span className="chip"><strong className="text-fg">{VERIFIED_COUNT}</strong> AMC-Verified</span>
-          <span className="chip"><strong className="text-fg">{cr(TOTAL_AUM_CR)}</strong> managed between them</span>
-          <span className="chip">One fixed 3-yr window for every fund</span>
-          <span className="chip">Dividends reinvested</span>
+          <span className="chip"><strong className="text-fg">{STATS.withNav}</strong> with NAV history</span>
+          <span className="chip"><strong className="text-fg">{STATS.complete}</strong> complete datasets</span>
+          <span className="chip"><strong className="text-fg">{STATS.stale}</strong> stale, excluded from rankings</span>
+          <span className="chip">Latest NAV {fullDate(META.latestNavDate)}</span>
         </div>
-        <p className="mt-3 text-xs text-faint">Figures as of {site.asOfLong} · Data status & method: <Link className="underline decoration-dotted hover:text-fg" href="/methodology">methodology</Link></p>
+        <p className="mt-3 text-xs text-faint">
+          Every card names its latest NAV date. Data status &amp; method:{" "}
+          <Link className="underline decoration-dotted hover:text-fg" href="/data-status">data status</Link> ·{" "}
+          <Link className="underline decoration-dotted hover:text-fg" href="/methodology">methodology</Link>
+        </p>
       </header>
 
       <div className="mt-8">
-        <DirectoryControls amcs={AMCs} total={ALL_FUNDS.length} />
+        <DirectoryControls amcs={AMC_LIST} total={ALL_FUNDS.length} />
       </div>
 
       <div id="fund-directory" className="mt-8 space-y-12">
@@ -98,28 +101,35 @@ export default function FundsPage() {
                 </h2>
                 <p className="mt-1 max-w-2xl text-sm text-muted">{g.blurb}</p>
               </div>
-              <span className="text-[11px] text-faint">as of {longDate(site.asOf)}</span>
+              <span className="text-[11px] text-faint">as of {fullDate(META.latestNavDate)}</span>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {g.funds
-                .slice()
-                .sort((a, b) => (metricsG3(b.slug) ?? -99) - (metricsG3(a.slug) ?? -99))
-                .map((f) => (
-                  <div
-                    key={f.slug}
-                    data-fund-id={f.slug}
-                    data-fund-name={f.name}
-                    data-fund-amc={f.amc}
-                    data-fund-amc-slug={f.amcSlug}
-                    data-fund-type={f.type}
-                    data-fund-shariah={f.shariah ? "1" : "0"}
-                    data-fund-verified={f.verified ? "1" : "0"}
-                    data-fund-acronym={f.acronym}
-                  >
-                    <FundCard fund={f} />
-                  </div>
-                ))}
-            </div>
+            {g.funds.length ? (
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {g.funds
+                  .slice()
+                  .sort((a, b) => (metricsG3(b.slug) ?? -99) - (metricsG3(a.slug) ?? -99))
+                  .map((f) => (
+                    <div
+                      key={f.slug}
+                      data-fund-id={f.slug}
+                      data-fund-name={f.name}
+                      data-fund-amc={f.amc}
+                      data-fund-amc-slug={f.amcSlug}
+                      data-fund-type={f.type}
+                      data-fund-shariah={f.shariah ? "1" : "0"}
+                      data-fund-quality={f.completeness}
+                      data-fund-stale={f.isStale ? "1" : "0"}
+                      data-fund-acronym={f.acronym}
+                    >
+                      <FundCard fund={f} />
+                    </div>
+                  ))}
+              </div>
+            ) : (
+              <p className="rounded-xl border border-line bg-raised p-4 text-sm text-muted">
+                No funds in this category in the current dataset. This is an empty state, not a hidden list.
+              </p>
+            )}
           </section>
         ))}
       </div>
@@ -128,23 +138,23 @@ export default function FundsPage() {
         <h2 className="text-lg font-semibold">How to read this list</h2>
         <div className="prose prose-sm mt-3 max-w-none text-muted prose-lab">
           <p>
-            Big number = annualized total return over the <strong>same</strong> three-year window for every
-            fund (one-time investment, dividends reinvested). “Worst fall” is the deepest NAV drawdown — the
-            part of the ride that tests your sleep. “Fee” is the recurring annual fee from the prospectus;
-            over a decade a 2.5% fee eats roughly a quarter of your compounding.
+            The big number is annualised total return over the <strong>same</strong> stated window for every fund
+            (one-time investment, dividends reinvested). “Worst fall” is the deepest NAV drawdown — the part of the
+            ride that tests your sleep. “Fee” is the recurring annual fee where the data file has one; a dash means
+            we do not have it.
           </p>
           <p>
-            And the label your eye should hunt for first: <strong>AMC-Verified</strong> — for these funds the
-            NAV/dividend series was cross-checked with the asset manager itself. The rest are sourced from
-            published NAV feeds and marked un-verified until we finish the rounds (see{" "}
-            <Link href="/methodology">methodology</Link>).
+            The quality chip is the one to read first: <strong>Complete</strong> means NAV, fee, size and launch date
+            are present and the latest NAV is recent. <strong>Partial data</strong> means something material is
+            missing. <strong>Stale</strong> means no NAV in the last 30 days; stale funds are excluded from rankings.
+            A source link is shown when the data file carries one.
           </p>
         </div>
       </section>
 
-      <div className="mt-10 flex flex-wrap gap-3">
+      <div className="mt-10 flex flex-wrap gap-3 pb-14">
         <Link href="/compare" className="btn-cta">Compare side by side →</Link>
-        <Link href="/guides/best-mutual-funds-bangladesh" className="btn-quiet">See the 3-year leaderboard →</Link>
+        <Link href="/guides/best-mutual-funds-bangladesh" className="btn-quiet">See the leaderboard →</Link>
       </div>
     </div>
   );

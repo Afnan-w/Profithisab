@@ -1,36 +1,20 @@
-export type FundType = "growth" | "balanced" | "income";
+import type { DividendRow, NavRow } from "@/lib/schema";
+import type { PeriodId } from "@/lib/config";
 
-/** Raw catalog entry — anchors come from published NAV history of the fund (see README). */
-export interface FundSeed {
-  slug: string;
+export type { DividendRow, NavRow } from "@/lib/schema";
+export type { PeriodId } from "@/lib/config";
+
+export type FundType = "growth" | "balanced" | "income";
+export type Completeness = "complete" | "partial" | "missing";
+
+export interface FundSource {
   name: string;
-  acronym: string;
-  amc: string;
-  amcSlug: string;
-  type: FundType;
-  shariah: boolean;
-  /** AMC verified = NAV/dividend history cross-checked with the AMC. */
-  verified: boolean;
-  /** Published inception, first public NAV month. */
-  inception: string; // "YYYY-MM"
-  /** 3-year annualized total return (one-time, dividends reinvested), as published. null if <3y history. */
-  g3: number | null;
-  /** Annualized since launch (published). */
-  gSince: number | null;
-  /** Worst NAV fall (max drawdown) as published. null if not published. */
-  worstFall: number | null;
-  /** Total fee % per year (management + recurring), from the prospectus / fact sheet. */
-  fee: number;
-  /** AUM in ৳ crore. */
-  aumCr: number;
-  /** Annual cash dividend as % of NAV (0 = pays no regular dividend). */
-  divAnnualPct: number;
-  /** Months (1-12) when dividends are paid. */
-  divMonths: number[];
-  /** Typical minimum application. */
-  minTaka?: number;
+  url?: string | null;
+  asOf?: string | null;
+  kind: "export" | "demo" | "manual" | "public-disclosure";
 }
 
+/** A monthly point used by the SVG charts (kept small for the fund page). */
 export interface NavPoint {
   /** ISO month key "YYYY-MM" */
   m: string;
@@ -41,37 +25,112 @@ export interface NavPoint {
 }
 
 export interface Fund {
+  id: string;
   slug: string;
   name: string;
   acronym: string;
+  amcId: string;
   amc: string;
   amcSlug: string;
   type: FundType;
   shariah: boolean;
+  /** True only when a real entry exists in verification.json AND the licence permits badges. */
   verified: boolean;
-  inception: string;
-  fee: number;
-  aumCr: number;
-  minTaka: number;
+  launchDate: string | null;
+  /** "YYYY-MM" for compact copy. */
+  inception: string | null;
+  fee: number | null;
+  fundSize: number | null;
+  minTaka: number | null;
+  source: FundSource;
+  completeness: Completeness;
+  isStale: boolean;
+  latestNavDate: string | null;
+  /** Full NAV history (daily or weekly as supplied). */
+  nav: NavRow[];
+  dividends: DividendRow[];
+  /** Month-end series for charts. */
   series: NavPoint[];
+}
+
+export interface PeriodReturn {
+  /** Annualised total return as a fraction (0.12 = 12%). */
+  cagr: number;
+  startDate: string;
+  endDate: string;
+  days: number;
+  /** Final value of ৳1 invested. */
+  growth: number;
+}
+
+export interface SipResult {
+  /** Money-weighted annual return as a fraction. */
+  xirr: number;
+  final: number;
+  invested: number;
+  months: number;
+  startDate: string;
+  endDate: string;
+}
+
+export interface Drawdown {
+  /** Negative fraction (-0.23 = a 23% fall). */
+  value: number;
+  peakDate: string | null;
+  troughDate: string | null;
 }
 
 /** Computed headline metrics shared across pages. */
 export interface FundMetrics {
-  asOf: string; // ISO month of latest NAV
   latestNav: number;
-  months: number; // tracked history length
-  g1: number | null; // 1y annualized total return
+  latestNavDate: string;
+  /** ISO month of latest NAV, kept for chart labels. */
+  asOf: string;
+  rows: number;
+  g1: number | null;
   g3: number | null;
   g5: number | null;
-  gMax: number | null; // within tracked window
+  gMax: number | null;
+  returns: Record<PeriodId, PeriodReturn | null>;
   worstFall: number;
-  vol: number; // annualized volatility
-  beta: number; // vs DSEX
-  positiveMonths3y: number | null; // consistency
+  drawdown: Drawdown;
+  vol: number | null;
+  beta: number | null;
+  positiveMonths3y: number | null;
   sip: {
-    irr3: number | null; // annualized SIP return for ৳5,000/mo over 3y
-    final3: number | null; // resulting value
+    irr1: number | null;
+    irr3: number | null;
+    irr5: number | null;
+    final3: number | null;
+    invested3: number | null;
+    /** Full result objects for the compare/detail pages. */
+    runs: Partial<Record<PeriodId, SipResult | null>>;
   };
-  divPaid3y: number; // total cash dividend per unit over 3y (৳)
+  /** Total cash dividend per unit over the trailing 3 years. */
+  divPaid3y: number;
+  /** Share of months with a dividend declaration in the last 3 years. */
+  dividendCount3y: number;
 }
+
+/** Everything the browser calculator needs for one fund. */
+export interface CalcFund {
+  id: string;
+  slug: string;
+  name: string;
+  acronym: string;
+  amc: string;
+  type: FundType;
+  shariah: boolean;
+  fee: number | null;
+  fundSize: number | null;
+  launchDate: string | null;
+  latestNav: number;
+  latestNavDate: string;
+  months: NavRow[];
+  dividends: DividendRow[];
+  completeness: Completeness;
+  isStale: boolean;
+}
+
+export type CalculatorMode = "sip" | "lump";
+export type DividendMode = "reinvest" | "cash";

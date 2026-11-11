@@ -1,6 +1,4 @@
-import Link from "next/link";
-import { CheckCircle2 } from "lucide-react";
-import type { FundType } from "@/lib/types";
+import type { Completeness, FundType } from "@/lib/types";
 
 export function Badge({
   children,
@@ -41,11 +39,13 @@ export function TypeBadge({ type, shariah }: { type: FundType; shariah?: boolean
   );
 }
 
-export function VerifiedBadge({ href }: { href?: string }) {
-  const cls = (
-    <Badge tone="amber" className="whitespace-nowrap">
-      <CheckCircle2 size={11} aria-hidden="true" /> AMC-Verified
-    </Badge>
-  );
-  return href ? <Link href={href}>{cls}</Link> : cls;
+/**
+ * Data-quality chip. This replaces the old "AMC-Verified" badge: a badge is
+ * only shown when verification.json has a real, licensed entry.
+ */
+export function QualityBadge({ completeness, stale }: { completeness: Completeness; stale?: boolean }) {
+  if (stale) return <Badge tone="amber">Stale · no NAV in 30+ days</Badge>;
+  if (completeness === "complete") return <Badge tone="brand">Complete</Badge>;
+  if (completeness === "partial") return <Badge tone="amber">Partial data</Badge>;
+  return <Badge tone="red">Missing NAV</Badge>;
 }

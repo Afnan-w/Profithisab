@@ -1,12 +1,13 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/lib/site";
-import { ALL_FUNDS } from "@/lib/returns";
+import { ALL_FUNDS, META } from "@/lib/returns";
 import { GUIDES } from "@/data/guides";
 import { CUSTOM_GUIDES } from "@/data/custom-guides";
 import { POSTS } from "@/data/posts";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = site.url;
+  const dataDate = new Date(META.latestNavDate ?? META.lastUpdated);
 
   const statics: MetadataRoute.Sitemap = ([
     { url: base, changeFrequency: "weekly", priority: 1 },
@@ -15,14 +16,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/guides`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/blog`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/methodology`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/data-status`, changeFrequency: "weekly", priority: 0.6 },
     { url: `${base}/about`, changeFrequency: "yearly", priority: 0.5 },
     { url: `${base}/invest`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/privacy`, changeFrequency: "yearly", priority: 0.3 },
-  ] as const).map((e) => ({ ...e, lastModified: new Date(site.asOf) }));
+  ] as const).map((e) => ({ ...e, lastModified: dataDate }));
 
   const funds: MetadataRoute.Sitemap = ALL_FUNDS.map((f) => ({
     url: `${base}/funds/${f.slug}`,
-    lastModified: new Date(site.asOf),
+    lastModified: f.latestNavDate ? new Date(f.latestNavDate) : dataDate,
     changeFrequency: "weekly",
     priority: 0.7,
   }));

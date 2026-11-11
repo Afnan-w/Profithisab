@@ -18,7 +18,7 @@ export function DirectoryControls({ amcs, total }: FilterMeta) {
   const [amc, setAmc] = useState("");
   const [type, setType] = useState<"" | "growth" | "balanced" | "income">("");
   const [shariah, setShariah] = useState(false);
-  const [verified, setVerified] = useState(false);
+  const [completeOnly, setCompleteOnly] = useState(false);
   const [count, setCount] = useState(total);
   const rootRef = useRef<HTMLDivElement | null>(null);
 
@@ -41,13 +41,13 @@ export function DirectoryControls({ amcs, total }: FilterMeta) {
       const okAmc = !amc || el.dataset.fundAmcSlug === amc;
       const okType = !type || el.dataset.fundType === type;
       const okSh = !shariah || el.dataset.fundShariah === "1";
-      const okVf = !verified || el.dataset.fundVerified === "1";
-      const show = okQ && okAmc && okType && okSh && okVf;
+      const okComplete = !completeOnly || (el.dataset.fundQuality === "complete" && el.dataset.fundStale !== "1");
+      const show = okQ && okAmc && okType && okSh && okComplete;
       el.toggleAttribute("hidden", !show);
       if (show) visible += 1;
     });
     setCount(visible);
-  }, [q, amc, type, shariah, verified]);
+  }, [q, amc, type, shariah, completeOnly]);
 
   useEffect(() => {
     if (!rootRef.current) return;
@@ -96,8 +96,8 @@ export function DirectoryControls({ amcs, total }: FilterMeta) {
           Shariah only
         </label>
         <label className="inline-flex cursor-pointer select-none items-center gap-1.5 rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-medium">
-          <input type="checkbox" checked={verified} onChange={(e) => setVerified(e.target.checked)} className="h-3.5 w-3.5 accent-brand-600" />
-          AMC-Verified only
+          <input type="checkbox" checked={completeOnly} onChange={(e) => setCompleteOnly(e.target.checked)} className="h-3.5 w-3.5 accent-brand-600" />
+          Complete &amp; current only
         </label>
         <span className="ml-auto text-xs text-muted" aria-live="polite">
           Showing <strong className="text-fg">{count}</strong> of {total} funds

@@ -1,4 +1,4 @@
-import { linePath } from "@/lib/returns";
+import { linePath } from "@/lib/chart";
 import { monthLabel } from "@/lib/format";
 
 export interface ChartSeries {
@@ -51,7 +51,7 @@ export function MultiLineChart({
   return (
     <figure className="w-full">
       {title ? <figcaption className="mb-2 text-sm font-medium text-muted">{title}</figcaption> : null}
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={title ?? "Chart"}>
+      <svg viewBox={`0 0 ${W} ${H}`} className="block w-full" style={{ aspectRatio: `${W} / ${H}` }} role="img" aria-label={title ?? "Chart"}>
         {/* y grid */}
         <line x1={padL} y1={yOf(yMax)} x2={W - padR} y2={yOf(yMax)} stroke="var(--line)" strokeWidth="1" />
         <line x1={padL} y1={yOf(yMin)} x2={W - padR} y2={yOf(yMin)} stroke="var(--line)" strokeWidth="1" />

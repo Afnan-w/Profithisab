@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ALL_FUNDS, getFund, fundSeed, metricsFor, lumpPath, benchTrail } from "@/lib/returns";
-import { BENCHES } from "@/lib/benchmarks";
+import { ALL_FUNDS, BENCHES, getFund, lumpPath, metricsFor, benchTrail } from "@/lib/returns";
 import { MultiLineChart } from "@/components/charts/line-chart";
 import { BenchBars } from "@/components/charts/bench-bars";
-import { TypeBadge, VerifiedBadge, Badge } from "@/components/ui/badge";
+import { TypeBadge, QualityBadge, Badge } from "@/components/ui/badge";
 import { CopyButton } from "@/components/ui/copy-button";
-import { taka, takaExact, cr, pct, longDate } from "@/lib/format";
+import { taka, takaExact, cr, pct, longDate, fullDate, NOT_AVAILABLE, NOT_ENOUGH_HISTORY } from "@/lib/format";
 import { site } from "@/lib/site";
 import { pageMeta, investmentFundSchema, breadcrumbSchema, faqPageSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/jsonld";
@@ -23,11 +22,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return pageMeta({ title: "Fund not found | Profithisab", description: "That fund is not on Profithisab.", path: `/funds/${slug}` });
   }
   const m = metricsFor(slug);
-  const became = taka(100000 * Math.pow(1 + (m.g3 ?? m.gMax ?? 0), (m.g3 !== null ? 3 : (fund.series.length - 1) / 12)));
+  const headline = m.g3 ?? m.gMax;
+  const fee = fund.fee === null ? "fee not available" : `${fund.fee.toFixed(2)}% fee`;
   const desc =
-    `৳1,00,000 became ${became} in ${fund.name} (${fund.acronym}, managed by ${fund.amc}) — ${pct(m.g3 ?? m.gMax ?? 0)} ` +
-    `per year, dividends reinvested, over a fixed 3-year window ending ${site.asOfLong}. NAV history, ` +
-    `৳5,000/month SIP replay, worst fall ${pct(m.worstFall, { signed: false })} and the ${fund.fee.toFixed(2)}% fee.`;
+    `${fund.name} (${fund.acronym}, managed by ${fund.amc}) — ${headline === null ? "not enough history for a return figure" : `${pct(headline)} per year`}, ` +
+    `dividends reinvested. NAV history, ৳5,000/month SIP replay, worst fall, ${fee} and latest NAV ${fullDate(fund.latestNavDate)}.`;
 
   return pageMeta({
     title: `${fund.name} (${fund.acronym}) — Returns, NAV & Fee`,
@@ -48,41 +47,43 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
   const fund = getFund(slug);
   if (!fund) notFound();
   const m = metricsFor(slug);
-  const has3y = fund.series.length > 37;
+  const has3y = m.g3 !== null;
+  const headline = m.g3 ?? m.gMax;
+  const headlineLabel = has3y ? "3-year, per year" : headline === null ? NOT_ENOUGH_HISTORY : "since launch, per year";
 
-  // Hero replay: exactly the window the headline names (3 years when available).
-  const heroMonths = has3y ? 36 : fund.series.length - 1;
-  const lump = lumpPath(slug, 100000, heroMonths);
-
-  // Chart replays the FULL tracked window vs sanchayapatra & DSEX.
-  const lumpFull = lumpPath(slug, 100000, fund.series.length - 1);
-  const lLabels = lumpFull.map((p) => p.m);
-  const lVals = lumpFull.map((p) => p.v);
-  const sanchTrail = benchTrail(BENCHES[0].slug, fund).map((p) => p.v * 100000);
-  const dsexTrail = benchTrail(BENCHES[4].slug, fund).map((p) => p.v * 100000);
-  const g100kLump = lump.length ? lump[lump.length - 1].v / 100000 - 1 : 0;
+  const lumpMonths = has3y ? 36 : Math.max(0, fund.series.length - 1);
+  const lump = lumpPath(slug, 100000, lumpMonths);
+  const lumpFull = lumpPath(slug, 100000, Math.max(0, fund.series.length - 1));
+  const labels = lumpFull.map((p) => p.date.slice(0, 7));
+  const values = lumpFull.map((p) => p.value);
+  const sanch = BENCHES.find((b) => b.slug === "sanchayapatra");
+  const sanchTrail = sanch ? benchTrail(sanch.slug, fund).map((p) => p.value * 100000) : [];
+  const became = lump.length ? lump[lump.length - 1].value : null;
+  const totalReturn = lump.length ? lump[lump.length - 1].value / 100000 - 1 : null;
 
   const sipFinal3 = m.sip.final3;
-  const sipInvested3 = 180000;
+  const sipInvested3 = m.sip.invested3 ?? 180000;
 
   const dividends = fund.series.filter((p) => p.div > 0).slice(-6).reverse();
-  const g3Target = m.g3 ?? m.gMax ?? 0;
   const related = ALL_FUNDS.filter((x) => x.slug !== fund.slug && x.type === fund.type)
-    .map((x) => ({ x, d: Math.abs((metricsFor(x.slug).g3 ?? metricsFor(x.slug).gMax ?? 0) - g3Target) }))
+    .map((x) => ({ x, d: Math.abs((metricsFor(x.slug).g3 ?? metricsFor(x.slug).gMax ?? 0) - (headline ?? 0)) }))
     .sort((a, b) => a.d - b.d)
     .slice(0, 3)
     .map((e) => e.x);
 
-  const benchmarksBars = [
-    { label: fund.acronym, value: g3Target * 100, highlight: true },
-    { label: "Sanchayapatra", value: BENCHES[0].ann.g3, color: "#6366f1" },
-    { label: "Bank FDR", value: BENCHES[1].ann.g3, color: "#0ea5e9" },
-    { label: "Inflation", value: BENCHES[2].ann.g3, color: "#f59e0b" },
-    { label: "Gold (৳)", value: BENCHES[3].ann.g3, color: "#eab308" },
+  const benchmarkBars = [
+    ...(headline !== null
+      ? [{ label: fund.acronym, value: headline * 100, color: "#059669", highlight: true }]
+      : []),
+    ...BENCHES.filter((b) => b.status !== "unavailable" && b.annualRate !== null).map((b) => ({
+      label: b.short,
+      value: b.annualRate as number,
+      color: b.color,
+    })),
   ];
 
   const faqs = fundFaqs(fund, m);
-  const became = lump.length ? lump[lump.length - 1].v : 100000;
+  const feeText = fund.fee === null ? NOT_AVAILABLE : `${fund.fee.toFixed(2)}%`;
 
   return (
     <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
@@ -99,11 +100,13 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
             manager: fund.amc,
             category: `${fund.type}${fund.shariah ? ", Shariah-compliant" : ""}`,
             currency: "BDT",
-            minInvestment: fund.minTaka,
+            minInvestment: fund.minTaka ?? 0,
             description:
-              `Bangladeshi ${fund.type} open-end mutual fund managed by ${fund.amc}. Tracked total return ` +
-              `${pct(g3Target)} per year over a fixed 3-year window, dividends reinvested.`,
-            rateOfReturn: g3Target * 100,
+              `Bangladeshi ${fund.type} open-end mutual fund managed by ${fund.amc}. ` +
+              (headline === null
+                ? "Not enough published NAV history for an annualised return figure."
+                : `Tracked total return ${pct(headline)} per year, dividends reinvested.`),
+            rateOfReturn: headline === null ? undefined : headline * 100,
             isShariah: fund.shariah,
           }),
           faqPageSchema(faqs),
@@ -120,32 +123,40 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
       <header className="card !p-5 sm:!p-8">
         <div className="flex flex-wrap items-center gap-2">
           <TypeBadge type={fund.type} shariah={fund.shariah} />
-          {fund.verified ? <VerifiedBadge /> : <Badge tone="slate">Sourced: published NAV feeds</Badge>}
+          <QualityBadge completeness={fund.completeness} stale={fund.isStale} />
           <Badge tone="neutral">{fund.acronym}</Badge>
         </div>
         <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">{fund.name}</h1>
         <p className="mt-1 text-sm text-muted">
-          {fund.amc} Asset Management · Inception {longDate(fund.inception)} · Latest NAV{" "}
-          <strong className="tnum text-fg">৳{m.latestNav.toFixed(2)}</strong> ({m.asOf})
+          {fund.amc} · Inception {fund.inception ? longDate(fund.inception) : NOT_AVAILABLE} · Latest NAV{" "}
+          <strong className="tnum text-fg">{m.latestNav ? `৳${m.latestNav.toFixed(2)}` : NOT_AVAILABLE}</strong>{" "}
+          ({fullDate(fund.latestNavDate)})
         </p>
 
-        <p className="mt-6 text-xl font-semibold leading-relaxed sm:text-2xl">
-          ৳1,00,000 invested {has3y ? "3 years ago" : `at our window's start (${longDate(fund.series[0].m)})`} became{" "}
-          <span className="whitespace-nowrap text-brand-600 dark:text-brand-400">{takaExact(became)}</span>{" "}
-          <span className="text-sm font-normal text-muted">({pct(g100kLump)} total · dividends reinvested)</span>
-        </p>
+        {became !== null && totalReturn !== null ? (
+          <p className="mt-6 text-xl font-semibold leading-relaxed sm:text-2xl">
+            ৳1,00,000 invested {has3y ? "3 years ago" : `at the start of this window (${longDate(labels[0])})`} became{" "}
+            <span className="whitespace-nowrap text-brand-600 dark:text-brand-400">{takaExact(became)}</span>{" "}
+            <span className="text-sm font-normal text-muted">({pct(totalReturn)} total · dividends reinvested)</span>
+          </p>
+        ) : (
+          <p className="mt-6 rounded-xl border border-line bg-raised p-4 text-sm text-muted">
+            {NOT_ENOUGH_HISTORY} for a ৳1,00,000 replay. This fund has {fund.nav.length} published NAV observation
+            {fund.nav.length === 1 ? "" : "s"} in the data file; at least two, at least 90 days apart, are required.
+          </p>
+        )}
 
         <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-          <Metric label="3 yr / yr" value={pct(m.g3)} accent={m.g3 !== null} />
+          <Metric label={has3y ? "3 yr / yr" : "Per year"} value={pct(headline)} accent={headline !== null} />
           <Metric label="1 yr / yr" value={pct(m.g1)} />
           <Metric label="SIP ৳5k/mo·3 yr" value={pct(m.sip.irr3)} sub="per year" />
           <Metric label="Worst fall" value={pct(m.worstFall, { signed: false })} tone="bad" />
-          <Metric label="Assets" value={cr(fund.aumCr)} />
-          <Metric label="Fee / year" value={`${fund.fee.toFixed(2)}%`} />
+          <Metric label="Reported size" value={fund.fundSize === null ? NOT_AVAILABLE : cr(fund.fundSize)} />
+          <Metric label="Fee / year" value={feeText} />
         </div>
 
         <div className="mt-6 flex flex-wrap gap-2">
-          <Link href={`/compare?funds=${fund.slug},ekush-first-unit-fund&amount=100000`} className="btn-cta text-sm">Compare this fund →</Link>
+          <Link href={`/compare?funds=${fund.slug}`} className="btn-cta text-sm">Compare this fund →</Link>
           <CopyButton text={`${site.url}/funds/${fund.slug}`} label="Copy link" />
           <Link href="#method" className="btn-quiet text-sm">How every figure is built</Link>
         </div>
@@ -154,26 +165,35 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
       {/* Charts */}
       <section className="mt-8 grid gap-6 lg:grid-cols-2">
         <div className="card card-pad">
-          <MultiLineChart
-            title={`What ৳1,00,000 did across the full tracked window — total return`}
-            labels={lLabels}
-            series={[
-              { name: `${fund.acronym}`, values: lVals, color: "#059669", area: true },
-              { name: "Sanchayapatra (3-yr, par)", values: sanchTrail, color: "#6366f1", dashed: true },
-              { name: "DSEX price index", values: dsexTrail, color: "#8b5cf6", dashed: true },
-            ]}
-            formatTick={(v) => taka(v)}
-            note={`Ends ${m.asOf}`}
-          />
+          {values.length >= 2 ? (
+            <MultiLineChart
+              title="What ৳1,00,000 did across the tracked window — total return"
+              labels={labels}
+              series={[
+                { name: fund.acronym, values, color: "#059669", area: true },
+                ...(sanchTrail.length
+                  ? [{ name: `${sanch!.short} at ${sanch!.annualRate?.toFixed(2)}%/yr (approx.)`, values: sanchTrail, color: sanch!.color, dashed: true }]
+                  : []),
+              ]}
+              formatTick={(v) => taka(v)}
+              note={`Ends ${fullDate(fund.latestNavDate)}`}
+            />
+          ) : (
+            <p className="text-sm text-muted">Not enough NAV history to draw a total-return chart.</p>
+          )}
         </div>
         <div className="card card-pad">
-          <MultiLineChart
-            title="NAV per unit — the published price alone"
-            labels={fund.series.map((p) => p.m)}
-            series={[{ name: "NAV (৳/unit)", values: fund.series.map((p) => p.nav), color: "#0f766e", area: true }]}
-            formatTick={(v) => `৳${v.toFixed(0)}`}
-            note={`Latest ৳${m.latestNav.toFixed(2)} · monthly NAVs`}
-          />
+          {fund.series.length >= 2 ? (
+            <MultiLineChart
+              title="NAV per unit — the published price alone"
+              labels={fund.series.map((p) => p.m)}
+              series={[{ name: "NAV (৳/unit)", values: fund.series.map((p) => p.nav), color: "#0f766e", area: true }]}
+              formatTick={(v) => `৳${v.toFixed(2)}`}
+              note={`Latest ৳${m.latestNav.toFixed(2)} · month-end NAVs`}
+            />
+          ) : (
+            <p className="text-sm text-muted">No NAV series is available for this fund yet.</p>
+          )}
         </div>
       </section>
 
@@ -184,22 +204,24 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
           <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 text-sm sm:grid-cols-3">
             <KV k="1-year" v={pct(m.g1)} />
             <KV k="3-year (per year)" v={pct(m.g3)} accent />
-            <KV k="5-year (per year)" v={m.g5 === null ? "—" : pct(m.g5)} />
-            <KV k={`Since ${longDate(fund.series[0].m)}`} v={pct(m.gMax)} sub="our window" />
-            <KV k="SIP ৳5k×3 yr → value" v={sipFinal3 === null ? "—" : takaExact(sipFinal3)} />
+            <KV k="5-year (per year)" v={pct(m.g5)} />
+            <KV k="Since launch (per year)" v={pct(m.gMax)} sub="where history allows" />
+            <KV k="SIP ৳5k×3 yr → value" v={sipFinal3 === null ? NOT_AVAILABLE : takaExact(sipFinal3)} />
             <KV k="SIP per year" v={pct(m.sip.irr3)} accent />
             <KV k="Worst NAV fall" v={pct(m.worstFall, { signed: false })} tone="bad" />
-            <KV k="Volatility / yr" v={`${m.vol.toFixed(1)}%`} />
-            <KV k="Beta vs DSEX" v={m.beta.toFixed(2)} />
-            <KV k="Positive months (3 yr)" v={m.positiveMonths3y === null ? "—" : `${Math.round((m.positiveMonths3y as number) * 100)}%`} />
-            <KV k="Dividends (3 yr)" v={taka(m.divPaid3y)} sub="per unit" />
-            <KV k="Latest NAV" v={`৳${m.latestNav.toFixed(2)}`} />
+            <KV k="Volatility / yr" v={m.vol === null ? NOT_AVAILABLE : `${(m.vol * 100).toFixed(1)}%`} />
+            <KV k="Positive months (3 yr)" v={m.positiveMonths3y === null ? NOT_AVAILABLE : `${Math.round(m.positiveMonths3y * 100)}%`} />
+            <KV k="Dividends (3 yr)" v={fund.dividends.length ? taka(m.divPaid3y) : NOT_AVAILABLE} sub="per unit" />
+            <KV k="Latest NAV" v={m.latestNav ? `৳${m.latestNav.toFixed(2)}` : NOT_AVAILABLE} />
+            <KV k="NAV observations" v={String(fund.nav.length)} />
           </div>
 
           <div className="mt-6 border-t border-line pt-5">
             <h3 className="text-sm font-semibold">Against the usual rivals</h3>
-            <p className="mb-3 text-xs text-faint">Annualized % — the same 3-year clock as the headline.</p>
-            <BenchBars items={benchmarksBars} />
+            <p className="mb-3 text-xs text-faint">
+              Annualised % — the same window as the headline. Benchmark rates are working approximations, not quoted product rates.
+            </p>
+            {benchmarkBars.length ? <BenchBars items={benchmarkBars} /> : <p className="text-sm text-muted">No benchmark rate is loaded.</p>}
           </div>
         </div>
 
@@ -207,9 +229,9 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
           <div className="card card-pad">
             <h2 className="text-lg font-semibold">Fees, minimums, exits</h2>
             <dl className="mt-3 grid gap-y-2.5 text-sm">
-              <Row k="Fee (management + recurring)" v={`${fund.fee.toFixed(2)}% a year`} />
-              <Row k="Exit loads / lock-ups" v="As per the prospectus — typically nil after the first months. We only publish prospectus terms, never guesses." />
-              <Row k="Minimum first application" v={takaExact(fund.minTaka)} />
+              <Row k="Fee (management + recurring)" v={fund.fee === null ? NOT_AVAILABLE : `${fund.fee.toFixed(2)}% a year`} />
+              <Row k="Exit loads / lock-ups" v="As per the prospectus. This build does not store exit-load terms, so it does not quote them." />
+              <Row k="Minimum first application" v={fund.minTaka === null ? NOT_AVAILABLE : takaExact(fund.minTaka)} />
               <Row k="How to buy" v="With the AMC, an authorised agent or an investing app — measured steps in the invest guide." />
             </dl>
           </div>
@@ -235,18 +257,24 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
               </table>
             ) : (
               <p className="mt-2 text-sm text-muted">
-                No cash dividends in the tracked window — this fund&apos;s story lives and dies by its NAV
-                (the usual growth-style arrangement; income funds are the mirror image).
+                No cash dividends are recorded in the committed data for this fund. That is a data statement, not a
+                promise that none were ever paid.
               </p>
             )}
           </div>
 
           <div className="card card-pad">
-            <h2 className="text-lg font-semibold">Holdings &amp; allocation</h2>
-            <p className="mt-2 text-sm text-muted">
-              Portfolios go up only when an AMC discloses them in a citable format — never scraped, never guessed.
-              For {fund.name} this build has no verified portfolio snapshot yet; it arrives with the{" "}
-              <span className="font-medium">AMC-Verified</span> badge, and not before.
+            <h2 className="text-lg font-semibold">Dataset for this fund</h2>
+            <dl className="mt-2 grid gap-y-2 text-xs">
+              <Row k="Completeness" v={fund.completeness} />
+              <Row k="Stale flag" v={fund.isStale ? "Yes — excluded from rankings" : "No"} />
+              <Row k="Source" v={fund.source.name} />
+              <Row k="Source URL" v={fund.source.url ? <a className="underline decoration-dotted" href={fund.source.url} target="_blank" rel="noopener noreferrer">Open source ↗</a> : NOT_AVAILABLE} />
+              <Row k="Latest NAV date" v={fullDate(fund.latestNavDate)} />
+            </dl>
+            <p className="mt-3 text-xs leading-relaxed text-faint">
+              Portfolio holdings are not stored in this build, so they are not shown.{" "}
+              <Link href="/data-status" className="underline decoration-dotted hover:text-fg">See all fund data status →</Link>
             </p>
           </div>
         </div>
@@ -257,10 +285,16 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
         <div>
           <p className="text-sm font-semibold">The ৳5,000-a-month question, answered</p>
           <p className="mt-1 max-w-xl text-sm text-muted">
-            Buying {takaExact(5000)} worth of {fund.name} at each month-end across the last 3 years (dividends
-            reinvested) would stand at{" "}
-            <strong className="tnum text-fg">{sipFinal3 === null ? "—" : takaExact(sipFinal3)}</strong>, from{" "}
-            {takaExact(sipInvested3)} in instalments.
+            {sipFinal3 === null ? (
+              <>This fund does not have enough history for a 36-month SIP replay yet.</>
+            ) : (
+              <>
+                Buying {takaExact(5000)} of {fund.name} at each month-end across the last 3 years (dividends
+                reinvested) would stand at{" "}
+                <strong className="tnum text-fg">{takaExact(sipFinal3)}</strong>, from {takaExact(sipInvested3)} in
+                instalments.
+              </>
+            )}
           </p>
         </div>
         <Link href="/" className="btn-quiet text-xs">Run your own amount →</Link>
@@ -273,43 +307,43 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
           <details className="card px-4 py-3" open>
             <summary className="cursor-pointer list-none font-medium">Total return (the headline)</summary>
             <p className="mt-2 text-sm leading-relaxed text-muted">
-              One unit, bought at the window&apos;s first published NAV. Each month the holding moves by that
-              month&apos;s published NAV; declared dividends buy more units at that month&apos;s NAV. End value ÷
-              start value, annualized. That chain of NAVs and dividends is the only machinery.
+              Units are bought at the window&apos;s first published NAV. The holding moves with each published NAV.
+              A declared dividend buys more units at the first published NAV on or after the record date. End value
+              ÷ start value, annualised geometrically. That chain of NAVs and dividends is the only machinery.
             </p>
           </details>
           <details className="card px-4 py-3">
-            <summary className="cursor-pointer list-none font-medium">The 3-year window</summary>
+            <summary className="cursor-pointer list-none font-medium">Windows and missing history</summary>
             <p className="mt-2 text-sm leading-relaxed text-muted">
-              Fixed: the trailing 36 published months ({site.asOfLong} is the last). Funds with under 3 years of NAV
-              history show their since-inception figure, marked as such — also on cards and in compare.
+              Headline 1/3/5-year figures use the trailing 12/36/60 months ending {fullDate(fund.latestNavDate)}.
+              A window is shown only when the fund has NAV history covering it. Otherwise the page says
+              &ldquo;Not enough history&rdquo; — it does not substitute a shorter, flattering period.
             </p>
           </details>
           <details className="card px-4 py-3">
-            <summary className="cursor-pointer list-none font-medium">Worst fall, volatility, beta</summary>
+            <summary className="cursor-pointer list-none font-medium">Worst fall, volatility, consistency</summary>
             <p className="mt-2 text-sm leading-relaxed text-muted">
-              Worst fall: the largest peak-to-trough drop of the NAV line (dividends not smoothing it) — closest to
-              what a statement experiences. Volatility: annualized st. dev. of monthly NAV moves. Beta: co-movement
-              against the DSEX price index over the same 36 months.
+              Worst fall is the largest peak-to-trough drop of the NAV line (dividends do not cushion it).
+              Volatility is annualised standard deviation of monthly NAV moves. Positive months is the share of
+              trailing months where NAV rose or held. Beta versus DSEX is deliberately not shown: no cited DSEX
+              history is loaded.
             </p>
           </details>
           <details className="card px-4 py-3">
             <summary className="cursor-pointer list-none font-medium">SIP arithmetic</summary>
             <p className="mt-2 text-sm leading-relaxed text-muted">
-              ৳5,000 bought at each of 36 consecutive month-end NAVs, dividends reinvested, value marked at the
-              latest NAV. The &quot;per year&quot; figure is the money-weighted IRR of those flows — a SIP and a
-              lump sum can land on very different annual numbers, and both are shown for the same fund.
+              ৳5,000 buys units at each of 36 consecutive month-end NAVs, dividends reinvested, value marked at the
+              latest NAV. The &ldquo;per year&rdquo; figure is the money-weighted IRR of those flows — a SIP and a
+              lump sum can land on different annual numbers.
             </p>
           </details>
           <details className="card px-4 py-3">
             <summary className="cursor-pointer list-none font-medium">Data status</summary>
             <p className="mt-2 text-sm leading-relaxed text-muted">
-              This build ships an anchored demo dataset: month-by-month paths replay to match each fund&apos;s
-              published anchors (3-yr, since-launch, worst fall).{" "}
-              {fund.verified
-                ? `${fund.amc} has confirmed the ${fund.name} series — hence AMC-Verified.`
-                : `The ${fund.amc} series isn't AMC-verified yet.`}{" "}
-              Full details: <Link className="underline decoration-dotted hover:text-fg" href="/methodology#data-status">data status</Link>.
+              This fund&apos;s NAV file has {fund.nav.length} observation{fund.nav.length === 1 ? "" : "s"}, latest{" "}
+              {fullDate(fund.latestNavDate)}. Completeness is <strong>{fund.completeness}</strong>.
+              {fund.isStale ? " It is stale and therefore excluded from rankings." : " It is included in rankings where the window allows."}{" "}
+              Full details: <Link className="underline decoration-dotted hover:text-fg" href="/data-status">data status</Link>.
             </p>
           </details>
         </div>
@@ -330,9 +364,9 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
 
       {/* Related */}
       <section className="mt-10">
-        <h2 className="text-xl font-bold tracking-tight">Close cousins, same window</h2>
+        <h2 className="text-xl font-bold tracking-tight">Close cousins, same data rules</h2>
         <p className="mt-1 text-sm text-muted">
-          Same {fund.type} category, nearest 3-year total returns. For differences side by side, the{" "}
+          Same {fund.type} category, nearest headline returns. For differences side by side, the{" "}
           <Link className="underline decoration-dotted hover:text-fg" href="/compare">compare tool</Link> goes deeper.
         </p>
         <div className="mt-4 grid gap-4 sm:grid-cols-3">
@@ -340,10 +374,10 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
             <Link key={rf.slug} href={`/funds/${rf.slug}`} className="card card-pad transition hover:border-brand-500">
               <div className="flex flex-wrap items-center gap-1.5">
                 <TypeBadge type={rf.type} shariah={rf.shariah} />
-                {rf.verified ? <VerifiedBadge /> : null}
+                <QualityBadge completeness={rf.completeness} stale={rf.isStale} />
               </div>
               <p className="mt-2 font-semibold leading-snug">{rf.name}</p>
-              <p className="mt-1 text-xs text-muted">{rf.amc} · 3-yr {pct(g3Of(rf.slug))}</p>
+              <p className="mt-1 text-xs text-muted">{rf.amc} · {pct(g3Of(rf.slug))}</p>
             </Link>
           ))}
         </div>
@@ -377,7 +411,7 @@ function Metric({ label, value, accent, tone, sub }: { label: string; value: str
   );
 }
 
-function Row({ k, v }: { k: string; v: string }) {
+function Row({ k, v }: { k: string; v: React.ReactNode }) {
   return (
     <div className="flex flex-wrap justify-between gap-2 border-b border-line pb-2.5">
       <dt className="text-muted">{k}</dt>
@@ -399,29 +433,33 @@ function KV({ k, v, accent, tone, sub }: { k: string; v: string; accent?: boolea
 }
 
 function fundFaqs(fund: NonNullable<ReturnType<typeof getFund>>, m: ReturnType<typeof metricsFor>): Array<{ q: string; a: string }> {
-  const gT = m.g3 ?? m.gMax ?? 0;
-  const has3y = fund.series.length > 37;
+  const headline = m.g3 ?? m.gMax;
+  const has3y = m.g3 !== null;
   return [
     {
       q: `How did ৳1,00,000 do in ${fund.name}?`,
-      a: `৳${new Intl.NumberFormat("en-IN").format(Math.round(100000 * Math.pow(1 + gT, has3y ? 3 : (fund.series.length - 1) / 12)))} by the latest NAV window ${has3y ? "over three years" : `over ${Math.floor((fund.series.length - 1) / 12)} years`}, dividends reinvested; ${pct(gT)} annualized.`,
+      a:
+        headline === null
+          ? `There is not enough published NAV history in our data file to answer that honestly yet. The fund has ${fund.nav.length} NAV observation${fund.nav.length === 1 ? "" : "s"}, latest ${fullDate(fund.latestNavDate)}.`
+          : `A ৳1,00,000 one-time investment over ${has3y ? "the last three years" : "the tracked since-launch window"} is worth ${takaExact(100000 * Math.pow(1 + headline, has3y ? 3 : Math.max(1, (fund.series.length - 1) / 12)))} with dividends reinvested — ${pct(headline)} annualised.`,
     },
     {
       q: `What does a ৳5,000 monthly SIP in ${fund.acronym} return per year?`,
-      a: `Over the tracked 3 years: ${taka(m.sip.final3 ?? 0)} from ৳1,80,000 of instalments (${m.sip.irr3 === null ? "no IRR estimate possible" : pct(m.sip.irr3) + " money-weighted per year"}). Your own dates shift the answer — this is history's, not a forecast.`,
+      a:
+        m.sip.irr3 === null || m.sip.final3 === null
+          ? "Not enough history for a 36-month SIP replay. We would rather say that than invent a number."
+          : `Over the tracked 3 years: ${taka(m.sip.final3)} from ৳1,80,000 of instalments (${pct(m.sip.irr3)} money-weighted per year). Your own dates would shift the answer; this is history, not a forecast.`,
     },
     {
       q: `What fees does ${fund.name} charge?`,
-      a: `${fund.fee.toFixed(2)}% of assets per year per the prospectus — ${fund.fee > 1.5 ? "on the higher side among Bangladesh open-end funds" : "reasonable for its category"}. Fees are the most predictable part of any return statement, usually in the wrong direction.`,
+      a:
+        fund.fee === null
+          ? "The fee is not present in our data file, so we show “Data not available” rather than a guessed percentage."
+          : `${fund.fee.toFixed(2)}% of assets per year in the committed data. Confirm the current prospectus before acting: fee structures can change.`,
     },
     {
-      q: `Is ${fund.acronym} good for 2026?`,
-      a: `Profithisab doesn't do prophecies. The record: ${has3y ? `${pct(g3Target(fund.slug))} per year over a fixed 3-year window` : `${pct(gT)} per year since our window opens`}, worst NAV fall ${pct(m.worstFall, { signed: false })}, dividends ${taka(m.divPaid3y)}/unit over 3 years. Stack it honestly against Sanchayapatra, FDR and inflation on this page.`,
+      q: `Is ${fund.acronym} a good fund for 2026?`,
+      a: `Profithisab does not make forecasts. The record: ${headline === null ? "not enough history for an annualised figure" : `${pct(headline)} per year over the stated window`}, worst NAV fall ${pct(m.worstFall, { signed: false })}, dividends ${fund.dividends.length ? `${taka(m.divPaid3y)}/unit over three years` : "not recorded in this build"}. Stack it against the certificate, FDR and inflation on this page — then decide with your own constraints.`,
     },
   ];
-}
-
-function g3Target(slug: string): number {
-  const m = metricsFor(slug);
-  return m.g3 ?? m.gMax ?? 0;
 }

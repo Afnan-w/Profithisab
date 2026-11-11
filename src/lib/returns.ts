@@ -1,25 +1,43 @@
-import type { Fund, FundSeed, FundMetrics, NavPoint } from "@/lib/types";
-import { FUNDS, DATA_WINDOW_START } from "@/data/funds";
-import { buildSeries, MARKET_MONTHS, MARKET_LOG_R } from "@/lib/engine";
-import { BENCHES, type BenchSlug } from "@/lib/benchmarks";
+import { getDataset, availableBenchmarks } from "@/lib/data";
+import {
+  annualisedVolatility,
+  dividendsBetween,
+  latestNav,
+  lumpSum,
+  maxDrawdown,
+  monthEndSeries,
+  positiveMonths,
+  sipRun as sipCalc,
+  type ValuePoint,
+} from "@/lib/calc";
+import { addDays, addMonths, endOfMonthKey } from "@/lib/date";
+import { linePath } from "@/lib/chart";
+import type { Fund, FundMetrics, FundType, PeriodReturn, SipResult } from "@/lib/types";
 
-/* ── Data access ─────────────────────────────────────────────────────────── */
+/**
+ * Server-side view over the committed dataset. Never import this module from a
+ * `"use client"` component: it reads the filesystem through src/lib/data.ts.
+ * The browser calculator receives precomputed monthly data as props instead.
+ */
 
-export const ALL_FUNDS: Fund[] = FUNDS.map((s) => ({
-  slug: s.slug,
-  name: s.name,
-  acronym: s.acronym,
-  amc: s.amc,
-  amcSlug: s.amcSlug,
-  type: s.type,
-  shariah: s.shariah,
-  verified: s.verified,
-  inception: s.inception,
-  fee: s.fee,
-  aumCr: s.aumCr,
-  minTaka: s.minTaka ?? 5000,
-  series: buildSeries(s, DATA_WINDOW_START, "2026-10").points,
-}));
+const ds = getDataset();
+
+export const ALL_FUNDS: Fund[] = ds.funds;
+export const META = ds.meta;
+export const IS_DEMO = ds.isDemo;
+export const LICENSE = ds.license;
+export const ATTRIBUTION = ds.attribution;
+export const AMCS = ds.amcs;
+export const REVIEW = ds.review;
+
+export const TOTAL_AUM_CR = ALL_FUNDS.reduce((sum, f) => sum + (f.fundSize ?? 0), 0);
+export const FUNDS_WITH_SIZE = ALL_FUNDS.filter((f) => f.fundSize !== null).length;
+export const VERIFIED_COUNT = ALL_FUNDS.filter((f) => f.verified).length;
+export const SHARIAH_COUNT = ALL_FUNDS.filter((f) => f.shariah).length;
+export const WITH_NAV_COUNT = ALL_FUNDS.filter((f) => f.nav.length > 0).length;
+export const STALE_COUNT = ALL_FUNDS.filter((f) => f.isStale).length;
+
+
 
 const BY_SLUG = new Map(ALL_FUNDS.map((f) => [f.slug, f]));
 
@@ -27,241 +45,205 @@ export function getFund(slug: string): Fund | undefined {
   return BY_SLUG.get(slug);
 }
 
-export function fundSeed(slug: string): FundSeed | undefined {
-  return FUNDS.find((f) => f.slug === slug);
-}
-
-export const fundGroups = {
-  growth: ALL_FUNDS.filter((f) => f.type === "growth"),
-  balanced: ALL_FUNDS.filter((f) => f.type === "balanced"),
-  income: ALL_FUNDS.filter((f) => f.type === "income"),
-  shariah: ALL_FUNDS.filter((f) => f.shariah),
-};
-
-export const AMCs: Array<{ slug: string; name: string; count: number }> = (() => {
-  const map = new Map<string, { name: string; count: number }>();
-  for (const f of ALL_FUNDS) {
-    const e = map.get(f.amcSlug) ?? { name: f.amc, count: 0 };
-    e.count += 1;
-    map.set(f.amcSlug, e);
-  }
-  return [...map.entries()]
-    .map(([slug, v]) => ({ slug, name: v.name, count: v.count }))
-    .sort((a, b) => b.count - a.count);
-})();
-
-export const TOTAL_AUM_CR = ALL_FUNDS.reduce((a, f) => a + f.aumCr, 0);
-export const VERIFIED_COUNT = ALL_FUNDS.filter((f) => f.verified).length;
-
-/* ── Return math (total return = NAV + dividends reinvested) ─────────────── */
-
-export interface TRPoint {
-  m: string;
-  /** Value of the base amount at this month. */
-  v: number;
-}
-
-/** Value path for ৳1 invested at index `startIdx`, dividends reinvested. */
-function trFrom(series: NavPoint[], startIdx: number, base = 1): TRPoint[] {
-  let units = base / series[startIdx].nav;
-  const out: TRPoint[] = [];
-  for (let i = startIdx; i < series.length; i++) {
-    const p = series[i];
-    if (i > startIdx && p.div > 0) units += units * (p.div / p.nav);
-    out.push({ m: p.m, v: units * p.nav });
-  }
-  return out;
-}
-
-export function windowCagrPath(tr: TRPoint[], months: number): number | null {
-  if (tr.length < months + 1 || months < 1) return null;
-  const start = tr[tr.length - 1 - months].v;
-  const end = tr[tr.length - 1].v;
-  return Math.pow(end / start, 12 / months) - 1;
-}
-
-export function maxDrawdown(series: NavPoint[]): number {
-  let peak = series[0]?.nav ?? 0;
-  let worst = 0;
-  for (const p of series) {
-    if (p.nav > peak) peak = p.nav;
-    const dd = p.nav / peak - 1;
-    if (dd < worst) worst = dd;
-  }
-  return worst;
-}
-
-/** Monthly SIP over `months` months at the given per-month amount. */
-export function sipRun(fund: Fund, perMonth: number, months: number) {
-  const s = fund.series;
-  const n = s.length;
-  if (n < months) return null;
-  let units = 0;
-  const values: TRPoint[] = [];
-  const first = n - months; // invest at month-ends s[first..n-2], value at n-1
-  for (let i = 0; i < months; i++) {
-    const k = first + i;
-    const p = s[k];
-    units += perMonth / p.nav;
-    if (i > 0 && p.div > 0) units += units * (p.div / p.nav);
-    const navVal = i === months - 1 ? s[n - 1].nav : s[k].nav;
-    values.push({ m: p.m, v: units * navVal });
-  }
-  const invested = perMonth * months;
-  const final = values[values.length - 1].v;
-  const irrMonthly = solveIrr(perMonth, final, months);
+export function fundGroups(): Record<FundType | "shariah", Fund[]> {
   return {
-    invested,
-    final,
-    values,
-    irr: irrMonthly === null ? null : Math.pow(1 + irrMonthly, 12) - 1,
+    growth: ALL_FUNDS.filter((f) => f.type === "growth"),
+    balanced: ALL_FUNDS.filter((f) => f.type === "balanced"),
+    income: ALL_FUNDS.filter((f) => f.type === "income"),
+    shariah: ALL_FUNDS.filter((f) => f.shariah),
   };
 }
 
-/** IRR of -A at t=0..months-1 and +V at t=months-1 (monthly), via bisection. */
-function solveIrr(a: number, v: number, months: number): number | null {
-  const f = (r: number) => {
-    let npv = 0;
-    for (let t = 0; t < months; t++) npv -= a / Math.pow(1 + r, t);
-    npv += v / Math.pow(1 + r, months - 1);
-    return npv;
-  };
-  let lo = -0.03, hi = 0.05;
-  if (f(lo) * f(hi) > 0) return null;
-  for (let i = 0; i < 80; i++) {
-    const mid = (lo + hi) / 2;
-    if (f(lo) * f(mid) <= 0) hi = mid;
-    else lo = mid;
-  }
-  return (lo + hi) / 2;
+export const AMC_LIST: Array<{ slug: string; name: string; count: number }> = ds.amcs
+  .map((a) => ({
+    slug: a.id,
+    name: a.shortName,
+    count: ALL_FUNDS.filter((f) => f.amcId === a.id).length,
+  }))
+  .filter((a) => a.count > 0)
+  .sort((a, b) => b.count - a.count);
+
+/** Older pages used `AMCs`; keep one name while they are migrated. */
+export const AMCs = AMC_LIST;
+
+/**
+ * Display counts are always computed from the committed data. No editorial
+ * number is typed into a page.
+ */
+export const STATS = {
+  funds: ALL_FUNDS.length,
+  amcs: AMC_LIST.length,
+  withNav: WITH_NAV_COUNT,
+  complete: META.counts.complete,
+  partial: META.counts.partial,
+  missing: META.counts.missing,
+  stale: META.counts.stale,
+  shariah: SHARIAH_COUNT,
+  verified: VERIFIED_COUNT,
+  withSize: FUNDS_WITH_SIZE,
+  totalSizeCr: FUNDS_WITH_SIZE ? TOTAL_AUM_CR : null,
+  latestNavDate: META.latestNavDate,
+  lastUpdated: META.lastUpdated,
+} as const;
+
+/* ── Benchmark views ──────────────────────────────────────────────────────── */
+
+export interface Bench {
+  slug: string;
+  name: string;
+  short: string;
+  color: string;
+  annualRate: number | null;
+  status: "verified" | "approximate" | "unavailable";
+  note: string;
+  source: { name: string; url: string | null; asOf: string | null };
 }
 
-/* ── Per-fund metric cache ───────────────────────────────────────────────── */
+export const BENCHES: Bench[] = ds.benchmarks.map((b) => ({
+  slug: b.id,
+  name: b.name,
+  short: b.shortName,
+  color: b.color,
+  annualRate: b.annualRate,
+  status: b.status,
+  note: b.note,
+  source: { name: b.source.name, url: b.source.url ?? null, asOf: b.source.asOf ?? null },
+}));
 
-interface Payload {
-  tr: TRPoint[]; // full-window per-৳1 total-return path
-  metrics: FundMetrics;
+export const AVAILABLE_BENCHES = BENCHES.filter((b) => b.status !== "unavailable" && b.annualRate !== null);
+
+export function benchBySlug(slug: string): Bench | undefined {
+  return BENCHES.find((b) => b.slug === slug);
 }
-const CACHE = new Map<string, Payload>();
+
+/* ── Metrics ──────────────────────────────────────────────────────────────── */
+
+const METRICS = new Map<string, FundMetrics>();
+const LUMP_PATHS = new Map<string, ValuePoint[]>();
+
+function seriesFor(fund: Fund) {
+  return { nav: fund.nav, dividends: fund.dividends };
+}
+
+function returnOf(fund: Fund, years: number | null): PeriodReturn | null {
+  return lumpSum(seriesFor(fund), 1, years, "reinvest")?.result ?? null;
+}
+
+function sipOf(fund: Fund, years: number | null): SipResult | null {
+  return sipCalc(seriesFor(fund), 5000, years, "reinvest")?.result ?? null;
+}
 
 export function metricsFor(slug: string): FundMetrics {
-  return payloadFor(slug).metrics;
-}
-
-export function payloadFor(slug: string): Payload {
-  const hit = CACHE.get(slug);
+  const hit = METRICS.get(slug);
   if (hit) return hit;
   const fund = getFund(slug);
-  if (!fund) throw new Error(`Unknown fund ${slug}`);
-  const s = fund.series;
-  const n = s.length;
-  const tr = trFrom(s, 0);
-
-  let beta = 0;
-  let vol = 0;
-  if (n > 25) {
-    const rets: number[] = [];
-    const mkt: number[] = [];
-    for (let i = Math.max(1, n - 36); i < n; i++) {
-      rets.push(Math.log(s[i].nav / s[i - 1].nav));
-      const mi = MARKET_MONTHS.indexOf(s[i].m);
-      mkt.push(mi > 0 ? MARKET_LOG_R[mi] : 0);
-    }
-    const mm = mean(mkt), rm = mean(rets);
-    let cov = 0, varm = 0;
-    for (let i = 0; i < rets.length; i++) {
-      cov += (mkt[i] - mm) * (rets[i] - rm);
-      varm += (mkt[i] - mm) * (mkt[i] - mm);
-    }
-    beta = varm > 0 ? cov / varm : 0;
-    let acc = 0;
-    for (const r of rets) acc += Math.pow(r - rm, 2);
-    vol = Math.sqrt(acc / rets.length) * Math.sqrt(12);
+  if (!fund) throw new Error(`Unknown fund: ${slug}`);
+  const end = latestNav(fund.nav);
+  if (!end) {
+    const empty: FundMetrics = {
+      latestNav: 0,
+      latestNavDate: "",
+      asOf: "",
+      rows: 0,
+      g1: null,
+      g3: null,
+      g5: null,
+      gMax: null,
+      returns: { "1y": null, "3y": null, "5y": null, max: null },
+      worstFall: 0,
+      drawdown: { value: 0, peakDate: null, troughDate: null },
+      vol: null,
+      beta: null,
+      positiveMonths3y: null,
+      sip: { irr1: null, irr3: null, irr5: null, final3: null, invested3: null, runs: {} },
+      divPaid3y: 0,
+      dividendCount3y: 0,
+    };
+    METRICS.set(slug, empty);
+    return empty;
   }
 
-  let positiveMonths3y: number | null = null;
-  if (n > 37) {
-    let pos = 0, tot = 0;
-    for (let i = n - 36; i < n; i++) if (s[i].nav >= s[i - 1].nav) pos += 1;
-    positiveMonths3y = pos / 36;
-  }
-
-  const sip3 = sipRun(fund, 5000, 36);
-
-  let divPaid3y = 0;
-  for (let i = Math.max(1, n - 36); i < n; i++) divPaid3y += s[i].div;
-
-  const tr3 = s.length > 37;
-
-  // worstFall is a published fact: when the catalog anchors it, trust the anchor
-  // exactly (the reconstructed NAV series merely approximates its shape). Fall
-  // back to the series' own max drawdown when the catalog doesn't state one.
-  const seedFall = fundSeed(slug)?.worstFall ?? null;
+  const r1 = returnOf(fund, 1);
+  const r3 = returnOf(fund, 3);
+  const r5 = returnOf(fund, 5);
+  const rMax = returnOf(fund, null);
+  const s1 = sipOf(fund, 1);
+  const s3 = sipOf(fund, 3);
+  const s5 = sipOf(fund, 5);
+  const sMax = sipCalc(seriesFor(fund), 5000, null, "reinvest")?.result ?? null;
+  const dd = maxDrawdown(fund.nav);
+  const threeYearStart = addMonths(end.date, -36);
 
   const metrics: FundMetrics = {
-    asOf: s[n - 1].m,
-    latestNav: s[n - 1].nav,
-    months: n,
-    g1: n > 13 ? windowCagrPath(tr, 12) : null,
-    g3: n > 37 ? windowCagrPath(tr, 36) : null,
-    g5: n > 61 ? windowCagrPath(tr, 60) : null,
-    gMax: n > 13 ? windowCagrPath(tr, n - 1) : null,
-    worstFall: seedFall !== null ? seedFall / 100 : n > 2 ? maxDrawdown(s) : 0,
-    vol,
-    beta,
-    positiveMonths3y,
-    sip: { irr3: sip3?.irr ?? null, final3: sip3?.final ?? null },
-    divPaid3y: tr3 ? divPaid3y : 0,
+    latestNav: end.nav,
+    latestNavDate: end.date,
+    asOf: end.date.slice(0, 7),
+    rows: fund.nav.length,
+    g1: r1?.cagr ?? null,
+    g3: r3?.cagr ?? null,
+    g5: r5?.cagr ?? null,
+    gMax: rMax?.cagr ?? null,
+    returns: { "1y": r1, "3y": r3, "5y": r5, max: rMax },
+    worstFall: dd.value,
+    drawdown: dd,
+    vol: annualisedVolatility(fund.nav),
+    beta: null, // requires a cited DSEX history; deliberately not fabricated
+    positiveMonths3y: positiveMonths(fund.nav),
+    sip: {
+      irr1: s1?.xirr ?? null,
+      irr3: s3?.xirr ?? null,
+      irr5: s5?.xirr ?? null,
+      final3: s3?.final ?? null,
+      invested3: s3?.invested ?? null,
+      runs: { "1y": s1, "3y": s3, "5y": s5, max: sMax },
+    },
+    divPaid3y: dividendsBetween(fund.dividends, threeYearStart, end.date),
+    dividendCount3y: fund.dividends.filter((d) => d.recordDate > threeYearStart && d.recordDate <= end.date).length,
   };
-  CACHE.set(slug, { tr, metrics });
-  return CACHE.get(slug)!;
+  METRICS.set(slug, metrics);
+  return metrics;
 }
 
-/** Value path of `amount` invested `months` ago (0 = launch), reinvested. */
-export function lumpPath(slug: string, amount: number, months: number): TRPoint[] {
+/** A fund only enters a ranking when it has a usable metric and is not stale. */
+export function isRankable(fund: Fund, metric: "1y" | "3y" | "5y" | "max" = "3y"): boolean {
+  if (fund.isStale || fund.completeness === "missing") return false;
+  return metricsFor(fund.slug).returns[metric] !== null;
+}
+
+export function rankedFunds(metric: "1y" | "3y" | "5y" | "max" = "3y"): Fund[] {
+  return ALL_FUNDS.filter((f) => isRankable(f, metric)).sort(
+    (a, b) => (metricsFor(b.slug).returns[metric]?.cagr ?? -99) - (metricsFor(a.slug).returns[metric]?.cagr ?? -99)
+  );
+}
+
+/* ── Chart paths ──────────────────────────────────────────────────────────── */
+
+export function lumpPath(slug: string, amount: number, months: number | null): ValuePoint[] {
   const fund = getFund(slug);
   if (!fund) return [];
-  const tr = lumpPathCache(slug) ?? lumpPathBuild(fund);
-  const n = tr.length;
-  const start = Math.max(0, n - 1 - months);
-  const base = tr[start].v;
-  return tr.slice(start).map((p) => ({ m: p.m, v: (p.v / base) * amount }));
+  const years = months === null ? null : months / 12;
+  return lumpSum(seriesFor(fund), amount, years, "reinvest")?.path ?? [];
 }
 
-const LUMP_CACHE = new Map<string, TRPoint[]>();
-function lumpPathBuild(fund: Fund): TRPoint[] {
-  let units = 1 / fund.series[0].nav;
-  const out: TRPoint[] = [];
-  for (let i = 0; i < fund.series.length; i++) {
-    const p = fund.series[i];
-    if (i > 0 && p.div > 0) units += units * (p.div / p.nav);
-    out.push({ m: p.m, v: units * p.nav });
-  }
-  LUMP_CACHE.set(fund.slug, out);
-  return out;
-}
-function lumpPathCache(slug: string): TRPoint[] | null {
-  return LUMP_CACHE.get(slug) ?? null;
+/** Flat-rate benchmark trail aligned to the fund's month-end series (per ৳1). */
+export function benchTrail(benchSlug: string, fund: Fund): ValuePoint[] {
+  const b = BENCHES.find((x) => x.slug === benchSlug);
+  if (!b || b.annualRate === null || b.status === "unavailable") return [];
+  const rM = Math.pow(1 + b.annualRate / 100, 1 / 12) - 1;
+  let value = 1;
+  return fund.series.map((p, i) => {
+    if (i > 0) value *= 1 + rM;
+    return { date: endOfMonthKey(p.m), value };
+  });
 }
 
-/* ── Chart helpers ───────────────────────────────────────────────────────── */
+/** Benchmark values in ৳, index-aligned to the fund's month-end series. */
+export function benchValues(benchSlug: string, fund: Fund, amount: number): number[] {
+  return benchTrail(benchSlug, fund).map((p) => p.value * amount);
+}
 
 /** SVG polyline path for a numeric series. */
-export function linePath(values: number[], w: number, h: number): string {
-  if (values.length < 2) return "";
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const pad = 2;
-  const span = max - min || 1;
-  const step = (w - pad * 2) / (values.length - 1);
-  let d = "";
-  for (let i = 0; i < values.length; i++) {
-    const x = (pad + i * step).toFixed(1);
-    const y = (h - pad - ((values[i] - min) / span) * (h - pad * 2)).toFixed(1);
-    d += `${i === 0 ? "M" : "L"}${x} ${y} `;
-  }
-  return d.trim();
-}
+export { linePath };
 
 export function sparkPath(slug: string, w = 96, h = 30): string {
   const fund = getFund(slug);
@@ -274,35 +256,29 @@ export function fundSparkPoints(slug: string): number[] {
   return fund ? fund.series.slice(-36).map((p) => p.nav) : [];
 }
 
-/* ── Benchmark trails (per-৳1, aligned to fund series months) ─────────────── */
+/* ── Browser payload ─────────────────────────────────────────────────────── */
 
-import { benchMonthlyLog } from "@/lib/benchmarks";
-
-export function benchTrail(slug: BenchSlug, fund: Fund): TRPoint[] {
-  if (slug === "dsex") {
-    const out: TRPoint[] = [];
-    let v = 1;
-    for (let i = 0; i < fund.series.length; i++) {
-      if (i > 0) {
-        const mi = MARKET_MONTHS.indexOf(fund.series[i].m);
-        v *= Math.exp(mi > 0 ? MARKET_LOG_R[mi] : 0);
-      }
-      out.push({ m: fund.series[i].m, v });
-    }
-    return out;
-  }
-  const out: TRPoint[] = [];
-  let v = 1;
-  for (let i = 0; i < fund.series.length; i++) {
-    if (i > 0) v *= Math.exp(benchMonthlyLog(slug, MARKET_MONTHS.indexOf(fund.series[i].m), MARKET_MONTHS));
-    out.push({ m: fund.series[i].m, v });
-  }
-  return out;
+/** Compact, serialisable fund history for the client calculator. */
+export function calculatorFunds() {
+  return ALL_FUNDS.filter((f) => !f.isStale && f.completeness !== "missing").map((f) => ({
+    id: f.id,
+    slug: f.slug,
+    name: f.name,
+    acronym: f.acronym,
+    amc: f.amc,
+    type: f.type,
+    shariah: f.shariah,
+    fee: f.fee,
+    fundSize: f.fundSize,
+    launchDate: f.launchDate,
+    latestNav: metricsFor(f.slug).latestNav,
+    latestNavDate: f.latestNavDate ?? "",
+    months: monthEndSeries(f.nav),
+    dividends: f.dividends,
+    completeness: f.completeness,
+    isStale: f.isStale,
+  }));
 }
 
-export { BENCHES };
-
-function mean(xs: number[]): number {
-  if (!xs.length) return 0;
-  return xs.reduce((a, b) => a + b, 0) / xs.length;
-}
+export { availableBenchmarks, addDays };
+export type { ValuePoint };

@@ -4,6 +4,7 @@ import { ThemeProvider } from "next-themes";
 import Script from "next/script";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
+import { DataBanner } from "@/components/site/data-banner";
 import { site } from "@/lib/site";
 import { JsonLd } from "@/components/seo/jsonld";
 import { orgSchema, websiteSchema } from "@/lib/seo";
@@ -60,7 +61,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const themeScript = `(function(){try{var t=localStorage.getItem("next-theme")||"system";if(t==="dark"||(t==="system"&&matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.classList.add("dark")}}catch(e){}})()`;
+const themeScript = `(function(){try{var t=localStorage.getItem("theme")||"system";if(t==="dark"||(t==="system"&&matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.classList.add("dark")}}catch(e){}})()`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -74,6 +75,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:m-2 focus:rounded-lg focus:bg-brand-600 focus:px-3 focus:py-2 focus:text-white">
             Skip to main content
           </a>
+          <DataBanner />
           <SiteHeader />
           <main id="main" className="flex-1">
             {children}
