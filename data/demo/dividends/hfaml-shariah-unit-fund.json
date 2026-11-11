@@ -1,0 +1,21 @@
+{
+  "fundId": "hfaml-shariah-unit-fund",
+  "dividends": [
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.273
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.3
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.287
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.231
+    }
+  ]
+}

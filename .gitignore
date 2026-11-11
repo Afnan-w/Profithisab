@@ -10,6 +10,11 @@ next-env.d.ts
 
 # production
 /build
+/dist
+
+# importer backup + weekly workflow scratch
+/.data-backup
+/staleness.json
 
 # misc
 .DS_Store

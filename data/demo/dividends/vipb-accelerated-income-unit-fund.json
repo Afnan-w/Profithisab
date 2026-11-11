@@ -1,0 +1,69 @@
+{
+  "fundId": "vipb-accelerated-income-unit-fund",
+  "dividends": [
+    {
+      "recordDate": "2019-01-31",
+      "amount": 0.482
+    },
+    {
+      "recordDate": "2019-07-31",
+      "amount": 0.489
+    },
+    {
+      "recordDate": "2020-01-31",
+      "amount": 0.495
+    },
+    {
+      "recordDate": "2020-07-31",
+      "amount": 0.421
+    },
+    {
+      "recordDate": "2021-01-31",
+      "amount": 0.456
+    },
+    {
+      "recordDate": "2021-07-31",
+      "amount": 0.475
+    },
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.475
+    },
+    {
+      "recordDate": "2022-07-31",
+      "amount": 0.469
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.462
+    },
+    {
+      "recordDate": "2023-07-31",
+      "amount": 0.423
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.432
+    },
+    {
+      "recordDate": "2024-07-31",
+      "amount": 0.426
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.423
+    },
+    {
+      "recordDate": "2025-07-31",
+      "amount": 0.405
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.412
+    },
+    {
+      "recordDate": "2026-07-31",
+      "amount": 0.399
+    }
+  ]
+}

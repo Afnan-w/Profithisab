@@ -1,0 +1,21 @@
+{
+  "fundId": "vipb-fixed-income-fund",
+  "dividends": [
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.402
+    },
+    {
+      "recordDate": "2025-07-31",
+      "amount": 0.416
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.448
+    },
+    {
+      "recordDate": "2026-07-31",
+      "amount": 0.473
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "fundId": "ucb-aml-first-mutual-fund",
+  "dividends": [
+    {
+      "recordDate": "2021-07-31",
+      "amount": 0.223
+    },
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.231
+    },
+    {
+      "recordDate": "2022-07-31",
+      "amount": 0.231
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.219
+    },
+    {
+      "recordDate": "2023-07-31",
+      "amount": 0.186
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.186
+    },
+    {
+      "recordDate": "2024-07-31",
+      "amount": 0.189
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.203
+    },
+    {
+      "recordDate": "2025-07-31",
+      "amount": 0.182
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.182
+    },
+    {
+      "recordDate": "2026-07-31",
+      "amount": 0.198
+    }
+  ]
+}

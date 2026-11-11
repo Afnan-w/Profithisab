@@ -1,0 +1,33 @@
+{
+  "fundId": "esquire-icl-apparel-fund",
+  "dividends": [
+    {
+      "recordDate": "2020-01-31",
+      "amount": 0.46
+    },
+    {
+      "recordDate": "2021-01-31",
+      "amount": 0.587
+    },
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.554
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.482
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.532
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.62
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.637
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "fundId": "example-fund",
+  "dividends": [
+    {
+      "recordDate": "2025-06-30",
+      "amount": 0.5
+    }
+  ]
+}

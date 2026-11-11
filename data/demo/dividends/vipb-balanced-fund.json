@@ -1,0 +1,53 @@
+{
+  "fundId": "vipb-balanced-fund",
+  "dividends": [
+    {
+      "recordDate": "2021-01-31",
+      "amount": 0.3
+    },
+    {
+      "recordDate": "2021-07-31",
+      "amount": 0.342
+    },
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.354
+    },
+    {
+      "recordDate": "2022-07-31",
+      "amount": 0.311
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.318
+    },
+    {
+      "recordDate": "2023-07-31",
+      "amount": 0.319
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.345
+    },
+    {
+      "recordDate": "2024-07-31",
+      "amount": 0.346
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.352
+    },
+    {
+      "recordDate": "2025-07-31",
+      "amount": 0.37
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.413
+    },
+    {
+      "recordDate": "2026-07-31",
+      "amount": 0.409
+    }
+  ]
+}

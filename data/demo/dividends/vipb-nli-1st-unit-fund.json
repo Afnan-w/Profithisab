@@ -1,0 +1,37 @@
+{
+  "fundId": "vipb-nli-1st-unit-fund",
+  "dividends": [
+    {
+      "recordDate": "2019-01-31",
+      "amount": 0.506
+    },
+    {
+      "recordDate": "2020-01-31",
+      "amount": 0.603
+    },
+    {
+      "recordDate": "2021-01-31",
+      "amount": 0.586
+    },
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.694
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.723
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.721
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.727
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.812
+    }
+  ]
+}

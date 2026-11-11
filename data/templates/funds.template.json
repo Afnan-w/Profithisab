@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "funds": [
+    {
+      "id": "example-fund",
+      "slug": "example-fund",
+      "name": "Example Growth Fund",
+      "acronym": "EGF",
+      "amcId": "example-amc",
+      "type": "growth",
+      "shariah": false,
+      "launchDate": "2019-07-01",
+      "fee": 2.5,
+      "fundSize": 96.4,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Example AMC monthly fact sheet",
+        "url": "https://example.com/factsheet",
+        "asOf": "2026-10-31",
+        "kind": "export"
+      },
+      "notes": "Delete this sample row. `fee` is percent per year, `fundSize` is crore taka, `minInvestment` is taka."
+    }
+  ]
+}

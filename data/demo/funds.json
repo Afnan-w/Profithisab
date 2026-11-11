@@ -1,0 +1,765 @@
+{
+  "schemaVersion": 1,
+  "funds": [
+    {
+      "id": "ekush-growth-fund",
+      "slug": "ekush-growth-fund",
+      "name": "Ekush Growth Fund",
+      "acronym": "EGF",
+      "amcId": "ekush",
+      "type": "growth",
+      "shariah": false,
+      "launchDate": "2021-10-01",
+      "fee": 2.5,
+      "fundSize": 33,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "edge-bangladesh-mutual-fund",
+      "slug": "edge-bangladesh-mutual-fund",
+      "name": "EDGE Bangladesh Mutual Fund",
+      "acronym": "EDGEBDMF",
+      "amcId": "edge",
+      "type": "growth",
+      "shariah": false,
+      "launchDate": "2018-08-01",
+      "fee": 2.5,
+      "fundSize": 22,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "edge-amc-growth-fund",
+      "slug": "edge-amc-growth-fund",
+      "name": "EDGE AMC Growth Fund",
+      "acronym": "EDGEAMCGF",
+      "amcId": "edge",
+      "type": "growth",
+      "shariah": false,
+      "launchDate": "2019-09-01",
+      "fee": 2.5,
+      "fundSize": 48,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "vipb-sebl-1st-unit-fund",
+      "slug": "vipb-sebl-1st-unit-fund",
+      "name": "VIPB SEBL 1st Unit Fund",
+      "acronym": "VIPBSEBL1",
+      "amcId": "vipb",
+      "type": "growth",
+      "shariah": false,
+      "launchDate": "2011-05-01",
+      "fee": 2.5,
+      "fundSize": 81,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "vipb-nli-1st-unit-fund",
+      "slug": "vipb-nli-1st-unit-fund",
+      "name": "VIPB NLI 1st Unit Fund",
+      "acronym": "VIPBNLI1",
+      "amcId": "vipb",
+      "type": "growth",
+      "shariah": false,
+      "launchDate": "2012-02-01",
+      "fee": 2.5,
+      "fundSize": 53,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "bcb-icl-growth-fund",
+      "slug": "bcb-icl-growth-fund",
+      "name": "BCB ICL Growth Fund",
+      "acronym": "BCBICLGF",
+      "amcId": "icl",
+      "type": "growth",
+      "shariah": false,
+      "launchDate": "2018-04-01",
+      "fee": 2.5,
+      "fundSize": 19,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "vipb-growth-fund",
+      "slug": "vipb-growth-fund",
+      "name": "VIPB Growth Fund",
+      "acronym": "VIPBGF",
+      "amcId": "vipb",
+      "type": "growth",
+      "shariah": false,
+      "launchDate": "2018-03-01",
+      "fee": 2.5,
+      "fundSize": 19,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "idlc-growth-fund",
+      "slug": "idlc-growth-fund",
+      "name": "IDLC Growth Fund",
+      "acronym": "IGF",
+      "amcId": "idlc",
+      "type": "growth",
+      "shariah": false,
+      "launchDate": "2019-07-01",
+      "fee": 2.5,
+      "fundSize": 96,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "cwt-emerging-bangladesh-first-growth-fund",
+      "slug": "cwt-emerging-bangladesh-first-growth-fund",
+      "name": "CWT Emerging Bangladesh First Growth Fund",
+      "acronym": "CWTEBFGF",
+      "amcId": "cwt",
+      "type": "growth",
+      "shariah": false,
+      "launchDate": "2019-12-01",
+      "fee": 2.5,
+      "fundSize": 5,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "cwt-opportunities-fund",
+      "slug": "cwt-opportunities-fund",
+      "name": "CWT Opportunities Fund",
+      "acronym": "CWTOF",
+      "amcId": "cwt",
+      "type": "growth",
+      "shariah": false,
+      "launchDate": "2021-06-01",
+      "fee": 2.5,
+      "fundSize": 5,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "esquire-icl-apparel-fund",
+      "slug": "esquire-icl-apparel-fund",
+      "name": "Esquire ICL Apparel Fund",
+      "acronym": "EICLAF",
+      "amcId": "icl",
+      "type": "growth",
+      "shariah": false,
+      "launchDate": "2019-08-01",
+      "fee": 2.5,
+      "fundSize": 6,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "cwt-sadharan-bima-growth-fund",
+      "slug": "cwt-sadharan-bima-growth-fund",
+      "name": "CWT Sadharan Bima Growth Fund",
+      "acronym": "CWTSBGF",
+      "amcId": "cwt",
+      "type": "growth",
+      "shariah": false,
+      "launchDate": "2020-09-01",
+      "fee": 2.5,
+      "fundSize": 7,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "idlc-aml-shariah-fund",
+      "slug": "idlc-aml-shariah-fund",
+      "name": "IDLC AML Shariah Fund",
+      "acronym": "IAMLSF",
+      "amcId": "idlc",
+      "type": "growth",
+      "shariah": true,
+      "launchDate": "2019-12-01",
+      "fee": 2.5,
+      "fundSize": 87,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "cwt-community-bank-shariah-fund",
+      "slug": "cwt-community-bank-shariah-fund",
+      "name": "CWT Community Bank Shariah Fund",
+      "acronym": "CWTCBSF",
+      "amcId": "cwt",
+      "type": "growth",
+      "shariah": true,
+      "launchDate": "2023-10-01",
+      "fee": 2.5,
+      "fundSize": 6,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "ucb-taqwa-growth-fund",
+      "slug": "ucb-taqwa-growth-fund",
+      "name": "UCB Taqwa Growth Fund",
+      "acronym": "UCBTGF",
+      "amcId": "ucb",
+      "type": "growth",
+      "shariah": true,
+      "launchDate": "2022-04-01",
+      "fee": 2.5,
+      "fundSize": 17,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "shanta-first-income-unit-fund",
+      "slug": "shanta-first-income-unit-fund",
+      "name": "Shanta First Income Unit Fund",
+      "acronym": "SFIUF",
+      "amcId": "shanta",
+      "type": "growth",
+      "shariah": false,
+      "launchDate": "2018-03-01",
+      "fee": 2.5,
+      "fundSize": 82,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "shanta-amanah-shariah-fund",
+      "slug": "shanta-amanah-shariah-fund",
+      "name": "Shanta Amanah Shariah Fund",
+      "acronym": "SASF",
+      "amcId": "shanta",
+      "type": "growth",
+      "shariah": true,
+      "launchDate": "2019-02-01",
+      "fee": 2.5,
+      "fundSize": 62,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "hfaml-shariah-unit-fund",
+      "slug": "hfaml-shariah-unit-fund",
+      "name": "HFAML Shariah Unit Fund",
+      "acronym": "HFSUF",
+      "amcId": "hfaml",
+      "type": "growth",
+      "shariah": true,
+      "launchDate": "2022-03-01",
+      "fee": 2.5,
+      "fundSize": 18,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "hfaml-acme-employees-unit-fund",
+      "slug": "hfaml-acme-employees-unit-fund",
+      "name": "HFAML-ACME Employees' Unit Fund",
+      "acronym": "HFACMEUF",
+      "amcId": "hfaml",
+      "type": "growth",
+      "shariah": false,
+      "launchDate": "2019-07-01",
+      "fee": 2.5,
+      "fundSize": 13,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "hfaml-unit-fund",
+      "slug": "hfaml-unit-fund",
+      "name": "HFAML Unit Fund",
+      "acronym": "HFUF",
+      "amcId": "hfaml",
+      "type": "growth",
+      "shariah": false,
+      "launchDate": "2019-07-01",
+      "fee": 2.5,
+      "fundSize": 16,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "ekush-first-unit-fund",
+      "slug": "ekush-first-unit-fund",
+      "name": "Ekush First Unit Fund",
+      "acronym": "EFUF",
+      "amcId": "ekush",
+      "type": "balanced",
+      "shariah": false,
+      "launchDate": "2019-11-01",
+      "fee": 2.5,
+      "fundSize": 37,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "idlc-balanced-fund",
+      "slug": "idlc-balanced-fund",
+      "name": "IDLC Balanced Fund",
+      "acronym": "IBF",
+      "amcId": "idlc",
+      "type": "balanced",
+      "shariah": false,
+      "launchDate": "2019-07-01",
+      "fee": 2.5,
+      "fundSize": 60,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "vipb-balanced-fund",
+      "slug": "vipb-balanced-fund",
+      "name": "VIPB Balanced Fund",
+      "acronym": "VIPBBF",
+      "amcId": "vipb",
+      "type": "balanced",
+      "shariah": false,
+      "launchDate": "2020-12-01",
+      "fee": 2.5,
+      "fundSize": 11,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "icl-balanced-fund",
+      "slug": "icl-balanced-fund",
+      "name": "ICL Balanced Fund",
+      "acronym": "ICLBF",
+      "amcId": "icl",
+      "type": "balanced",
+      "shariah": false,
+      "launchDate": "2016-08-01",
+      "fee": 2.5,
+      "fundSize": 16,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "edge-al-amin-shariah-consumer-fund",
+      "slug": "edge-al-amin-shariah-consumer-fund",
+      "name": "EDGE Al-Amin Shariah Consumer Fund",
+      "acronym": "EDGEALAMIN",
+      "amcId": "edge",
+      "type": "balanced",
+      "shariah": true,
+      "launchDate": "2022-09-01",
+      "fee": 2.5,
+      "fundSize": 13,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "lankabangla-1st-balanced-unit-fund",
+      "slug": "lankabangla-1st-balanced-unit-fund",
+      "name": "LankaBangla 1st Balanced Unit Fund",
+      "acronym": "LB1stBUF",
+      "amcId": "lankabangla",
+      "type": "balanced",
+      "shariah": false,
+      "launchDate": "2016-11-01",
+      "fee": 2.5,
+      "fundSize": 37,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "lb-gratuity-opportunities-fund",
+      "slug": "lb-gratuity-opportunities-fund",
+      "name": "LB Gratuity Opportunities Fund",
+      "acronym": "LBGOF",
+      "amcId": "lankabangla",
+      "type": "balanced",
+      "shariah": false,
+      "launchDate": "2020-12-01",
+      "fee": 2.5,
+      "fundSize": 10,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "ucb-aml-first-mutual-fund",
+      "slug": "ucb-aml-first-mutual-fund",
+      "name": "UCB AML First Mutual Fund",
+      "acronym": "UCBAFML1",
+      "amcId": "ucb",
+      "type": "balanced",
+      "shariah": false,
+      "launchDate": "2021-04-01",
+      "fee": 2.5,
+      "fundSize": 22,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "icl-inctl-shariah-fund",
+      "slug": "icl-inctl-shariah-fund",
+      "name": "ICL INCTL Shariah Fund",
+      "acronym": "ICLINCTL",
+      "amcId": "icl",
+      "type": "balanced",
+      "shariah": true,
+      "launchDate": "2023-12-01",
+      "fee": 2.5,
+      "fundSize": 8,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "lankabangla-al-arafah-shariah-unit-fund",
+      "slug": "lankabangla-al-arafah-shariah-unit-fund",
+      "name": "LankaBangla Al-Arafah Shariah Unit Fund",
+      "acronym": "LBASUF",
+      "amcId": "lankabangla",
+      "type": "balanced",
+      "shariah": true,
+      "launchDate": "2018-04-01",
+      "fee": 2.5,
+      "fundSize": 29,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "lb-gratuity-wealth-builder-fund",
+      "slug": "lb-gratuity-wealth-builder-fund",
+      "name": "LB Gratuity Wealth Builder Fund",
+      "acronym": "LBGWBF",
+      "amcId": "lankabangla",
+      "type": "balanced",
+      "shariah": false,
+      "launchDate": "2021-08-01",
+      "fee": 2.5,
+      "fundSize": 7,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "ekush-stable-return-fund",
+      "slug": "ekush-stable-return-fund",
+      "name": "Ekush Stable Return Fund",
+      "acronym": "ESRF",
+      "amcId": "ekush",
+      "type": "income",
+      "shariah": false,
+      "launchDate": "2022-09-01",
+      "fee": 2.5,
+      "fundSize": 80,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "ucb-income-plus-fund",
+      "slug": "ucb-income-plus-fund",
+      "name": "UCB Income Plus Fund",
+      "acronym": "UCBIPF",
+      "amcId": "ucb",
+      "type": "income",
+      "shariah": false,
+      "launchDate": "2023-07-01",
+      "fee": 0.7,
+      "fundSize": 377,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "shanta-fixed-income-fund",
+      "slug": "shanta-fixed-income-fund",
+      "name": "Shanta Fixed Income Fund",
+      "acronym": "SFIF",
+      "amcId": "shanta",
+      "type": "income",
+      "shariah": false,
+      "launchDate": "2021-08-01",
+      "fee": 2.5,
+      "fundSize": 360,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "edge-high-quality-income-fund",
+      "slug": "edge-high-quality-income-fund",
+      "name": "EDGE High Quality Income Fund",
+      "acronym": "EDGEHQIF",
+      "amcId": "edge",
+      "type": "income",
+      "shariah": false,
+      "launchDate": "2022-02-01",
+      "fee": 1,
+      "fundSize": 94,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "idlc-income-fund",
+      "slug": "idlc-income-fund",
+      "name": "IDLC Income Fund",
+      "acronym": "IIF",
+      "amcId": "idlc",
+      "type": "income",
+      "shariah": false,
+      "launchDate": "2021-06-01",
+      "fee": 0.7,
+      "fundSize": 102,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "vipb-accelerated-income-unit-fund",
+      "slug": "vipb-accelerated-income-unit-fund",
+      "name": "VIPB Accelerated Income Unit Fund",
+      "acronym": "VIPBAIF",
+      "amcId": "vipb",
+      "type": "income",
+      "shariah": false,
+      "launchDate": "2016-07-01",
+      "fee": 2.5,
+      "fundSize": 32,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    },
+    {
+      "id": "vipb-fixed-income-fund",
+      "slug": "vipb-fixed-income-fund",
+      "name": "VIPB Fixed Income Fund",
+      "acronym": "VIPBFI",
+      "amcId": "vipb",
+      "type": "income",
+      "shariah": false,
+      "launchDate": "2024-09-01",
+      "fee": 2.5,
+      "fundSize": 30,
+      "minInvestment": 5000,
+      "source": {
+        "name": "Demo dataset — generated for layout testing, not published NAV history",
+        "url": null,
+        "asOf": "2026-10-31",
+        "kind": "demo"
+      },
+      "notes": "Migrated from the previous calibrated demo engine. Replace with a real export."
+    }
+  ]
+}

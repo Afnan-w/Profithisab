@@ -1,0 +1,21 @@
+{
+  "fundId": "ucb-taqwa-growth-fund",
+  "dividends": [
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.355
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.375
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.377
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.387
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "fundId": "edge-amc-growth-fund",
+  "dividends": [
+    {
+      "recordDate": "2020-01-31",
+      "amount": 0.233
+    },
+    {
+      "recordDate": "2021-01-31",
+      "amount": 0.229
+    },
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.264
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.276
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.295
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.314
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.297
+    }
+  ]
+}

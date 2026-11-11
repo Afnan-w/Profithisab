@@ -1,0 +1,33 @@
+{
+  "fundId": "idlc-growth-fund",
+  "dividends": [
+    {
+      "recordDate": "2020-01-31",
+      "amount": 0.319
+    },
+    {
+      "recordDate": "2021-01-31",
+      "amount": 0.312
+    },
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.307
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.344
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.315
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.299
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.334
+    }
+  ]
+}

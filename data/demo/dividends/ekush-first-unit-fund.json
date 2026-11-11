@@ -1,0 +1,61 @@
+{
+  "fundId": "ekush-first-unit-fund",
+  "dividends": [
+    {
+      "recordDate": "2020-01-31",
+      "amount": 0.19
+    },
+    {
+      "recordDate": "2020-07-31",
+      "amount": 0.198
+    },
+    {
+      "recordDate": "2021-01-31",
+      "amount": 0.214
+    },
+    {
+      "recordDate": "2021-07-31",
+      "amount": 0.223
+    },
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.227
+    },
+    {
+      "recordDate": "2022-07-31",
+      "amount": 0.236
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.266
+    },
+    {
+      "recordDate": "2023-07-31",
+      "amount": 0.287
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.305
+    },
+    {
+      "recordDate": "2024-07-31",
+      "amount": 0.302
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.312
+    },
+    {
+      "recordDate": "2025-07-31",
+      "amount": 0.342
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.314
+    },
+    {
+      "recordDate": "2026-07-31",
+      "amount": 0.354
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "benchmarks": [
+    {
+      "id": "sanchayapatra",
+      "name": "Sanchayapatra (3-year certificate, at par)",
+      "shortName": "Sanchayapatra",
+      "color": "#6366f1",
+      "annualRate": 11.28,
+      "status": "approximate",
+      "source": {
+        "name": "Editorial working average — replace with an official Bangladesh Bank / National Savings Directorate citation",
+        "url": null,
+        "asOf": null
+      },
+      "note": "Approximate flat annual rate. Real certificates pay a fixed rate at purchase and carry source tax on interest. Not yet cited to an official circular."
+    },
+    {
+      "id": "fdr",
+      "name": "Bank fixed deposit (working average)",
+      "shortName": "FDR",
+      "color": "#0ea5e9",
+      "annualRate": 10,
+      "status": "approximate",
+      "source": {
+        "name": "Editorial working average — replace with a Bangladesh Bank rate citation",
+        "url": null,
+        "asOf": null
+      },
+      "note": "Approximate flat rate. Scheduled-bank FDR rates change and differ by bank and tenor; this is not a quoted product rate."
+    },
+    {
+      "id": "inflation",
+      "name": "Inflation (CPI, working average)",
+      "shortName": "Inflation",
+      "color": "#f59e0b",
+      "annualRate": 9.1,
+      "status": "approximate",
+      "source": {
+        "name": "Editorial working average — replace with a Bangladesh Bureau of Statistics release",
+        "url": null,
+        "asOf": null
+      },
+      "note": "Approximate average CPI. The real path moves month to month and differs by basket; a flat rate is a simplification."
+    },
+    {
+      "id": "gold",
+      "name": "Gold (৳ per tola)",
+      "shortName": "Gold",
+      "color": "#eab308",
+      "annualRate": null,
+      "status": "unavailable",
+      "source": {
+        "name": "No cited gold price series supplied",
+        "url": null,
+        "asOf": null
+      },
+      "note": "Hidden until a dated, citable BAJUS price series is added to benchmarks.json."
+    },
+    {
+      "id": "dsex",
+      "name": "DSEX (market index)",
+      "shortName": "DSEX",
+      "color": "#8b5cf6",
+      "annualRate": null,
+      "status": "unavailable",
+      "source": {
+        "name": "No cited DSEX level series supplied",
+        "url": null,
+        "asOf": null
+      },
+      "note": "Beta and market overlays are disabled until a real, dated DSEX history is added. The previous DSEX path was generated and has been removed."
+    }
+  ]
+}

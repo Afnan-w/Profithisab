@@ -1,0 +1,37 @@
+{
+  "fundId": "edge-al-amin-shariah-consumer-fund",
+  "dividends": [
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.131
+    },
+    {
+      "recordDate": "2023-07-31",
+      "amount": 0.129
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.121
+    },
+    {
+      "recordDate": "2024-07-31",
+      "amount": 0.121
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.123
+    },
+    {
+      "recordDate": "2025-07-31",
+      "amount": 0.124
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.139
+    },
+    {
+      "recordDate": "2026-07-31",
+      "amount": 0.138
+    }
+  ]
+}

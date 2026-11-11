@@ -1,0 +1,69 @@
+{
+  "fundId": "lankabangla-al-arafah-shariah-unit-fund",
+  "dividends": [
+    {
+      "recordDate": "2019-01-31",
+      "amount": 0.226
+    },
+    {
+      "recordDate": "2019-07-31",
+      "amount": 0.23
+    },
+    {
+      "recordDate": "2020-01-31",
+      "amount": 0.236
+    },
+    {
+      "recordDate": "2020-07-31",
+      "amount": 0.224
+    },
+    {
+      "recordDate": "2021-01-31",
+      "amount": 0.234
+    },
+    {
+      "recordDate": "2021-07-31",
+      "amount": 0.241
+    },
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.265
+    },
+    {
+      "recordDate": "2022-07-31",
+      "amount": 0.263
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.256
+    },
+    {
+      "recordDate": "2023-07-31",
+      "amount": 0.229
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.215
+    },
+    {
+      "recordDate": "2024-07-31",
+      "amount": 0.216
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.212
+    },
+    {
+      "recordDate": "2025-07-31",
+      "amount": 0.21
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.215
+    },
+    {
+      "recordDate": "2026-07-31",
+      "amount": 0.204
+    }
+  ]
+}

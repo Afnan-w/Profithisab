@@ -1,0 +1,69 @@
+{
+  "fundId": "icl-balanced-fund",
+  "dividends": [
+    {
+      "recordDate": "2019-01-31",
+      "amount": 0.137
+    },
+    {
+      "recordDate": "2019-07-31",
+      "amount": 0.154
+    },
+    {
+      "recordDate": "2020-01-31",
+      "amount": 0.146
+    },
+    {
+      "recordDate": "2020-07-31",
+      "amount": 0.138
+    },
+    {
+      "recordDate": "2021-01-31",
+      "amount": 0.159
+    },
+    {
+      "recordDate": "2021-07-31",
+      "amount": 0.182
+    },
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.183
+    },
+    {
+      "recordDate": "2022-07-31",
+      "amount": 0.185
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.184
+    },
+    {
+      "recordDate": "2023-07-31",
+      "amount": 0.185
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.182
+    },
+    {
+      "recordDate": "2024-07-31",
+      "amount": 0.188
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.205
+    },
+    {
+      "recordDate": "2025-07-31",
+      "amount": 0.216
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.218
+    },
+    {
+      "recordDate": "2026-07-31",
+      "amount": 0.204
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "fundId": "lb-gratuity-wealth-builder-fund",
+  "dividends": [
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.248
+    },
+    {
+      "recordDate": "2022-07-31",
+      "amount": 0.24
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.237
+    },
+    {
+      "recordDate": "2023-07-31",
+      "amount": 0.233
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.233
+    },
+    {
+      "recordDate": "2024-07-31",
+      "amount": 0.214
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.188
+    },
+    {
+      "recordDate": "2025-07-31",
+      "amount": 0.18
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.2
+    },
+    {
+      "recordDate": "2026-07-31",
+      "amount": 0.202
+    }
+  ]
+}

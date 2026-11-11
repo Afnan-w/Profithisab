@@ -1,0 +1,37 @@
+{
+  "fundId": "edge-bangladesh-mutual-fund",
+  "dividends": [
+    {
+      "recordDate": "2019-01-31",
+      "amount": 0.32
+    },
+    {
+      "recordDate": "2020-01-31",
+      "amount": 0.324
+    },
+    {
+      "recordDate": "2021-01-31",
+      "amount": 0.354
+    },
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.396
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.386
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.438
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.438
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.505
+    }
+  ]
+}

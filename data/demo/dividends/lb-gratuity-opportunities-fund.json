@@ -1,0 +1,53 @@
+{
+  "fundId": "lb-gratuity-opportunities-fund",
+  "dividends": [
+    {
+      "recordDate": "2021-01-31",
+      "amount": 0.206
+    },
+    {
+      "recordDate": "2021-07-31",
+      "amount": 0.193
+    },
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.198
+    },
+    {
+      "recordDate": "2022-07-31",
+      "amount": 0.215
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.239
+    },
+    {
+      "recordDate": "2023-07-31",
+      "amount": 0.231
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.21
+    },
+    {
+      "recordDate": "2024-07-31",
+      "amount": 0.19
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.188
+    },
+    {
+      "recordDate": "2025-07-31",
+      "amount": 0.19
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.192
+    },
+    {
+      "recordDate": "2026-07-31",
+      "amount": 0.205
+    }
+  ]
+}

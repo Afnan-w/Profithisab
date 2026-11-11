@@ -1,0 +1,25 @@
+{
+  "fundId": "cwt-opportunities-fund",
+  "dividends": [
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.212
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.216
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.203
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.258
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.263
+    }
+  ]
+}

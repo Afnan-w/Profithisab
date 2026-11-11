@@ -1,0 +1,33 @@
+{
+  "fundId": "hfaml-unit-fund",
+  "dividends": [
+    {
+      "recordDate": "2020-01-31",
+      "amount": 0.4
+    },
+    {
+      "recordDate": "2021-01-31",
+      "amount": 0.394
+    },
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.384
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.374
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.34
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.322
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.289
+    }
+  ]
+}

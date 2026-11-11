@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "amcs": [
+    {
+      "id": "ekush",
+      "name": "Ekush",
+      "shortName": "Ekush",
+      "website": null
+    },
+    {
+      "id": "edge",
+      "name": "EDGE",
+      "shortName": "EDGE",
+      "website": null
+    },
+    {
+      "id": "cwt",
+      "name": "CWT",
+      "shortName": "CWT",
+      "website": null
+    },
+    {
+      "id": "vipb",
+      "name": "VIPB",
+      "shortName": "VIPB",
+      "website": null
+    },
+    {
+      "id": "icl",
+      "name": "ICL",
+      "shortName": "ICL",
+      "website": null
+    },
+    {
+      "id": "idlc",
+      "name": "IDLC",
+      "shortName": "IDLC",
+      "website": null
+    },
+    {
+      "id": "shanta",
+      "name": "Shanta",
+      "shortName": "Shanta",
+      "website": null
+    },
+    {
+      "id": "lankabangla",
+      "name": "LankaBangla",
+      "shortName": "LankaBangla",
+      "website": null
+    },
+    {
+      "id": "ucb",
+      "name": "UCB",
+      "shortName": "UCB",
+      "website": null
+    },
+    {
+      "id": "hfaml",
+      "name": "HF AML",
+      "shortName": "HF AML",
+      "website": null
+    }
+  ]
+}

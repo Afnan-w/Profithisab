@@ -1,0 +1,61 @@
+{
+  "fundId": "idlc-balanced-fund",
+  "dividends": [
+    {
+      "recordDate": "2020-01-31",
+      "amount": 0.245
+    },
+    {
+      "recordDate": "2020-07-31",
+      "amount": 0.241
+    },
+    {
+      "recordDate": "2021-01-31",
+      "amount": 0.261
+    },
+    {
+      "recordDate": "2021-07-31",
+      "amount": 0.295
+    },
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.325
+    },
+    {
+      "recordDate": "2022-07-31",
+      "amount": 0.309
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.271
+    },
+    {
+      "recordDate": "2023-07-31",
+      "amount": 0.277
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.297
+    },
+    {
+      "recordDate": "2024-07-31",
+      "amount": 0.321
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.354
+    },
+    {
+      "recordDate": "2025-07-31",
+      "amount": 0.309
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.302
+    },
+    {
+      "recordDate": "2026-07-31",
+      "amount": 0.326
+    }
+  ]
+}

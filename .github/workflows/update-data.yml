@@ -1,0 +1,112 @@
+name: Update NAV data
+
+on:
+  schedule:
+    # Every Monday at 03:17 UTC (09:17 Dhaka). Off the hour to avoid the crowd.
+    - cron: "17 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Validate the committed data
+        run: npm run data:check
+
+      - name: Check freshness
+        id: freshness
+        continue-on-error: true
+        run: |
+          if ! npm run data:staleness -- --json --max-age=21 > staleness.json; then
+            echo "stale=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "stale=0" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Import new files from data/incoming (when licensed)
+        id: import
+        continue-on-error: true
+        run: |
+          shopt -s nullglob
+          files=(data/incoming/*.csv data/incoming/*.json data/incoming/*.xlsx)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No files in data/incoming — nothing to import."
+            exit 0
+          fi
+          ready=$(node -e "const l=require('./data/license.json'); process.exit(l.permissionDate && l.attributionText && l.permitted && l.permitted.length ? 0 : 1)")
+          if [ "$ready" != "0" ]; then
+            echo "Files are waiting, but data/license.json is not filled in. Import skipped on purpose."
+            exit 0
+          fi
+          npm run data:import -- data/incoming
+
+      - name: Re-validate after import
+        if: steps.import.outcome == 'success'
+        run: |
+          npm run data:check
+          npm run data:staleness
+
+      - name: Commit and push data changes
+        id: commit
+        if: steps.import.outcome == 'success'
+        run: |
+          git config user.name "profithisab-data-bot"
+          git config user.email "data@profithisab.com"
+          git add data
+          if [ -f scripts/last-run.md ]; then
+            git add scripts/last-run.md
+          fi
+          if git diff --cached --quiet; then
+            echo "No data changes to commit."
+            echo "changed=0" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "data: NAV update $(date -u +%F)"
+            git push
+            echo "changed=1" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open an issue when the data is three weeks old
+        if: steps.freshness.outputs.stale == '1'
+        run: |
+          TITLE="Data refresh needed — latest NAV is over 3 weeks old"
+          if gh issue list --state open --search "$TITLE in:title" --json number --jq 'length' | grep -q '^0$'; then
+            gh issue create \
+              --title "$TITLE" \
+              --body "The weekly data check found that the newest NAV is more than 21 days old. Add a licensed export to \`data/incoming\` and run the importer, or update the source. See \`DATA-GUIDE.md\` and \`/data-status\`."
+          else
+            echo "An open issue already exists."
+          fi
+
+      - name: Open an issue when the import fails
+        if: steps.import.outcome == 'failure'
+        run: |
+          TITLE="Data import failed $(date -u +%F)"
+          if gh issue list --state open --search "$TITLE in:title" --json number --jq 'length' | grep -q '^0$'; then
+            gh issue create \
+              --title "$TITLE" \
+              --body "The weekly workflow could not import the files in \`data/incoming\`. Run \`npm run data:import -- data/incoming --dry-run\` locally, read \`scripts/last-run.md\`, and check \`data/review-needed.json\`."
+          else
+            echo "An open issue already exists."
+          fi

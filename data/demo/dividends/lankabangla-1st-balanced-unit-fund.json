@@ -1,0 +1,69 @@
+{
+  "fundId": "lankabangla-1st-balanced-unit-fund",
+  "dividends": [
+    {
+      "recordDate": "2019-01-31",
+      "amount": 0.178
+    },
+    {
+      "recordDate": "2019-07-31",
+      "amount": 0.175
+    },
+    {
+      "recordDate": "2020-01-31",
+      "amount": 0.18
+    },
+    {
+      "recordDate": "2020-07-31",
+      "amount": 0.161
+    },
+    {
+      "recordDate": "2021-01-31",
+      "amount": 0.172
+    },
+    {
+      "recordDate": "2021-07-31",
+      "amount": 0.161
+    },
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.151
+    },
+    {
+      "recordDate": "2022-07-31",
+      "amount": 0.186
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.178
+    },
+    {
+      "recordDate": "2023-07-31",
+      "amount": 0.175
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.178
+    },
+    {
+      "recordDate": "2024-07-31",
+      "amount": 0.188
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.193
+    },
+    {
+      "recordDate": "2025-07-31",
+      "amount": 0.183
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.185
+    },
+    {
+      "recordDate": "2026-07-31",
+      "amount": 0.179
+    }
+  ]
+}

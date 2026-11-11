@@ -1,0 +1,33 @@
+{
+  "fundId": "cwt-emerging-bangladesh-first-growth-fund",
+  "dividends": [
+    {
+      "recordDate": "2020-01-31",
+      "amount": 0.3
+    },
+    {
+      "recordDate": "2021-01-31",
+      "amount": 0.352
+    },
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.431
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.487
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.476
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.578
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.639
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "sourceName": "ReturnKoto",
+  "sourceUrl": "https://returnkoto.com",
+  "contact": "",
+  "permissionDate": "",
+  "permitted": [],
+  "attributionText": "",
+  "attributionUrl": "https://returnkoto.com",
+  "automatedFetching": false,
+  "displayVerification": false,
+  "notes": "FILL THIS IN before the first import. Record what the founder permitted, the date, and the exact attribution wording. See docs/permission-note.md. Automated fetching stays false unless permission explicitly allows it."
+}

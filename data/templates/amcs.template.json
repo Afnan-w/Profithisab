@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "amcs": [
+    {
+      "id": "example-amc",
+      "name": "Example Asset Management Company Limited",
+      "shortName": "Example AMC",
+      "website": "https://example.com"
+    }
+  ]
+}

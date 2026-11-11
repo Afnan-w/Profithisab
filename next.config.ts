@@ -5,6 +5,11 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   outputFileTracingRoot: path.join(import.meta.dirname),
+  // The compare page reads /data at request time on the server; trace it into
+  // the Vercel deployment so the files are present.
+  outputFileTracingIncludes: {
+    "/**": ["./data/**/*"],
+  },
   async headers() {
     return [
       {

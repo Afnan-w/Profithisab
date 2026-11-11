@@ -1,0 +1,33 @@
+{
+  "fundId": "hfaml-acme-employees-unit-fund",
+  "dividends": [
+    {
+      "recordDate": "2020-01-31",
+      "amount": 0.363
+    },
+    {
+      "recordDate": "2021-01-31",
+      "amount": 0.336
+    },
+    {
+      "recordDate": "2022-01-31",
+      "amount": 0.314
+    },
+    {
+      "recordDate": "2023-01-31",
+      "amount": 0.342
+    },
+    {
+      "recordDate": "2024-01-31",
+      "amount": 0.312
+    },
+    {
+      "recordDate": "2025-01-31",
+      "amount": 0.306
+    },
+    {
+      "recordDate": "2026-01-31",
+      "amount": 0.267
+    }
+  ]
+}

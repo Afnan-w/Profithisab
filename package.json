@@ -5,8 +5,14 @@
   "description": "Profithisab — Real returns of Bangladeshi mutual funds, replayed from published NAV history.",
   "scripts": {
     "dev": "next dev",
+    "prebuild": "npm run data:check",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "data:check": "tsx scripts/check-data.ts",
+    "data:import": "tsx scripts/import.ts",
+    "data:approve": "tsx scripts/approve.ts",
+    "data:staleness": "tsx scripts/staleness.ts",
+    "test": "tsx --test tests/calc.test.ts tests/import.test.ts"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -15,7 +21,8 @@
     "next-themes": "^0.4.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "tailwind-merge": "^3.0.2"
+    "tailwind-merge": "^3.0.2",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15",
@@ -24,7 +31,9 @@
     "@types/react-dom": "^19.1.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
+    "read-excel-file": "^5.8.8",
     "tailwindcss": "^3.4.15",
+    "tsx": "^4.23.15",
     "typescript": "^5.7.2"
   }
 }
