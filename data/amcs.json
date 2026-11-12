@@ -1,65 +1,50 @@
 {
   "schemaVersion": 1,
   "amcs": [
-    {
-      "id": "cwt",
-      "name": "CWT",
-      "shortName": "CWT",
-      "website": null
-    },
-    {
-      "id": "edge",
-      "name": "EDGE",
-      "shortName": "EDGE",
-      "website": null
-    },
-    {
-      "id": "ekush",
-      "name": "Ekush",
-      "shortName": "Ekush",
-      "website": null
-    },
-    {
-      "id": "hfaml",
-      "name": "HF AML",
-      "shortName": "HF AML",
-      "website": null
-    },
-    {
-      "id": "icl",
-      "name": "ICL",
-      "shortName": "ICL",
-      "website": null
-    },
-    {
-      "id": "idlc",
-      "name": "IDLC Asset Management Limited",
-      "shortName": "IDLC",
-      "website": "https://idlc.com/aml/nav.php"
-    },
-    {
-      "id": "lankabangla",
-      "name": "LankaBangla",
-      "shortName": "LankaBangla",
-      "website": null
-    },
-    {
-      "id": "shanta",
-      "name": "Shanta Asset Management Limited",
-      "shortName": "Shanta",
-      "website": "https://www.shanta-aml.com"
-    },
-    {
-      "id": "ucb",
-      "name": "UCB",
-      "shortName": "UCB",
-      "website": null
-    },
-    {
-      "id": "vipb",
-      "name": "VIPB",
-      "shortName": "VIPB",
-      "website": null
-    }
+    { "id": "3i", "name": "3i Asset Management Company Limited", "shortName": "3i AMCL", "website": null },
+    { "id": "acacia", "name": "ACACIA SRIM Limited", "shortName": "ACACIA SRIM", "website": null },
+    { "id": "aims", "name": "Asset & Investment Management Services Bangladesh Ltd.", "shortName": "AIMS", "website": null },
+    { "id": "alliance", "name": "Alliance Capital Asset Management Ltd.", "shortName": "Alliance Capital", "website": null },
+    { "id": "ams-global", "name": "AMS Global AMCL", "shortName": "AMS Global", "website": null },
+    { "id": "asian-tiger", "name": "Asian Tiger Capital Partners Asset Management Ltd.", "shortName": "Asian Tiger", "website": null },
+    { "id": "assurance", "name": "Assurance Asset Management Ltd.", "shortName": "Assurance", "website": null },
+    { "id": "blue-wealth", "name": "Blue-Wealth Assets Limited", "shortName": "Blue-Wealth", "website": null },
+    { "id": "bmsl", "name": "BMSL Asset Management Company Limited", "shortName": "BMSL", "website": null },
+    { "id": "candlestone", "name": "CandleStone Investments Partner Limited", "shortName": "CandleStone", "website": null },
+    { "id": "capitec", "name": "Capitec Asset Management Limited", "shortName": "Capitec", "website": null },
+    { "id": "capm", "name": "CAPM (Capital & Asset Portfolio Management) Company Ltd.", "shortName": "CAPM", "website": null },
+    { "id": "constellation", "name": "Constellation Asset Management Company Limited", "shortName": "Constellation", "website": null },
+    { "id": "credence", "name": "Credence Asset Management Limited", "shortName": "Credence", "website": null },
+    { "id": "cwt", "name": "CWT Asset Management Company Limited", "shortName": "CWT", "website": null },
+    { "id": "ebl", "name": "EBL AML", "shortName": "EBL AML", "website": null },
+    { "id": "edge", "name": "EDGE AMC Limited", "shortName": "EDGE", "website": null },
+    { "id": "ekush", "name": "Ekush Wealth Management", "shortName": "Ekush", "website": null },
+    { "id": "green-delta", "name": "Green Delta Dragon AMCL", "shortName": "Green Delta Dragon", "website": null },
+    { "id": "hfaml", "name": "HF AML", "shortName": "HF AML", "website": null },
+    { "id": "icl", "name": "ICL", "shortName": "ICL", "website": null },
+    { "id": "icb", "name": "ICB AMCL", "shortName": "ICB AMCL", "website": null },
+    { "id": "idlc", "name": "IDLC Asset Management Limited", "shortName": "IDLC", "website": "https://idlc.com/aml/nav.php" },
+    { "id": "investasia", "name": "Investasia", "shortName": "Investasia", "website": null },
+    { "id": "investit", "name": "Investit", "shortName": "Investit", "website": null },
+    { "id": "joytun", "name": "Joytun", "shortName": "Joytun", "website": null },
+    { "id": "lankabangla", "name": "LankaBangla", "shortName": "LankaBangla", "website": null },
+    { "id": "mercantile", "name": "Mercantile Bank", "shortName": "Mercantile Bank", "website": null },
+    { "id": "midland", "name": "Midland Bank", "shortName": "Midland Bank", "website": null },
+    { "id": "mtb", "name": "MTB", "shortName": "MTB", "website": null },
+    { "id": "nam", "name": "NAM IBBL", "shortName": "NAM IBBL", "website": null },
+    { "id": "peninsula", "name": "Peninsula AMCL", "shortName": "Peninsula", "website": null },
+    { "id": "pli", "name": "PLI AML", "shortName": "PLI AML", "website": null },
+    { "id": "prime-financial", "name": "Prime Financial", "shortName": "Prime Financial", "website": null },
+    { "id": "race", "name": "RACE", "shortName": "RACE", "website": null },
+    { "id": "rupali-life", "name": "Rupali Life Insurance", "shortName": "Rupali Life", "website": null },
+    { "id": "sandhani", "name": "Sandhani AML", "shortName": "Sandhani", "website": null },
+    { "id": "saml", "name": "SAML", "shortName": "SAML", "website": null },
+    { "id": "seml", "name": "SEML", "shortName": "SEML", "website": null },
+    { "id": "shanta", "name": "Shanta Asset Management Limited", "shortName": "Shanta", "website": "https://www.shanta-aml.com" },
+    { "id": "ucb", "name": "UCB", "shortName": "UCB", "website": null },
+    { "id": "ufs", "name": "UFS", "shortName": "UFS", "website": null },
+    { "id": "vanguard", "name": "VANGUARD AML", "shortName": "VANGUARD AML", "website": null },
+    { "id": "vipb", "name": "VIPB", "shortName": "VIPB", "website": null },
+    { "id": "zenith", "name": "Zenith", "shortName": "Zenith", "website": null }
   ]
 }
