@@ -12,7 +12,7 @@ export function FundCard({ fund }: { fund: Fund }) {
   const d = fund.series.length >= 2 ? sparkPath(fund.slug) : "";
 
   return (
-    <article className="card card-pad flex flex-col justify-between transition hover:border-brand-500">
+    <article className="card card-pad flex flex-col justify-between transition hover:border-brand-500/50 hover:shadow-md group">
       <Link href={`/funds/${fund.slug}`} className="group block">
         <div className="flex items-start justify-between gap-2">
           <div className="flex flex-wrap items-center gap-1.5">
@@ -21,17 +21,17 @@ export function FundCard({ fund }: { fund: Fund }) {
           </div>
           <span className="hidden text-[10px] uppercase tracking-wide text-faint sm:block">{fund.acronym}</span>
         </div>
-        <h3 className="mt-2 font-semibold leading-snug tracking-tight group-hover:text-brand-700 dark:group-hover:text-brand-300">
+        <h3 className="mt-2 font-semibold leading-snug tracking-tight group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors">
           {fund.name}
         </h3>
         <p className="mt-0.5 text-xs text-muted">{fund.amc}</p>
 
-        <div className="mt-4 flex items-end justify-between gap-2">
+        <div className="mt-5 flex items-end justify-between gap-2">
           <div>
             <p className={`text-2xl font-bold tnum ${has3y ? "text-brand-600 dark:text-brand-400" : "text-fg"}`}>
               {headline === null ? "—" : pct(headline)}
             </p>
-            <p className="text-[11px] text-muted">
+            <p className="mt-0.5 text-[11px] text-muted">
               {has3y
                 ? "per year · 3-year total return"
                 : headline !== null
@@ -42,7 +42,7 @@ export function FundCard({ fund }: { fund: Fund }) {
           {d ? <Spark path={d} /> : <span className="text-[10px] text-faint">{NOT_AVAILABLE}</span>}
         </div>
 
-        <div className="mt-3 grid grid-cols-3 gap-2 border-t border-line pt-3 text-[11px] text-muted">
+        <div className="mt-4 grid grid-cols-3 gap-3 border-t border-line pt-3 text-[11px] text-muted">
           <span>
             Worst fall{" "}
             <span className="tnum font-semibold text-fg">
@@ -57,7 +57,7 @@ export function FundCard({ fund }: { fund: Fund }) {
           </span>
         </div>
       </Link>
-      <p className="mt-2 flex items-center justify-between gap-2 text-[10px] text-faint">
+      <p className="mt-3 flex items-center justify-between gap-2 text-[10px] text-faint">
         <span>Latest NAV {fullDate(fund.latestNavDate)}</span>
         {fund.source.url ? (
           <a

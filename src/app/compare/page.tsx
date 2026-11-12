@@ -95,7 +95,7 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
         </p>
       </header>
 
-      <div className="card card-pad mt-6">
+      <div className="card card-pad mt-6 elev">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <form action="/compare" method="get" className="flex flex-wrap items-end gap-2">
             {[0, 1, 2, 3].map((i) => (
@@ -147,21 +147,27 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
       </p>
 
       <section className="mt-8 grid gap-4 sm:grid-cols-3">
-        <Link href="/funds" className="card card-pad transition hover:border-brand-500">
-          <h2 className="font-semibold">Browse all {ALL_FUNDS.length} funds</h2>
-          <p className="mt-1 text-sm text-muted">Growth, balanced, income and Shariah — with quality flags.</p>
+        <Link href="/funds" className="card transition hover:border-brand-500 group">
+          <div className="card-pad !p-4 sm:!p-5">
+            <h2 className="font-semibold group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors">Browse all {ALL_FUNDS.length} funds</h2>
+            <p className="mt-1 text-sm text-muted">Growth, balanced, income and Shariah — with quality flags.</p>
+          </div>
         </Link>
-        <Link href="/guides/best-mutual-funds-bangladesh" className="card card-pad transition hover:border-brand-500">
-          <h2 className="font-semibold">Leaderboard</h2>
-          <p className="mt-1 text-sm text-muted">The roster ranked by one transparent number.</p>
+        <Link href="/guides/best-mutual-funds-bangladesh" className="card transition hover:border-brand-500 group">
+          <div className="card-pad !p-4 sm:!p-5">
+            <h2 className="font-semibold group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors">Leaderboard</h2>
+            <p className="mt-1 text-sm text-muted">The roster ranked by one transparent number.</p>
+          </div>
         </Link>
-        <Link href="/guides/sanchayapatra-vs-mutual-funds" className="card card-pad transition hover:border-brand-500">
-          <h2 className="font-semibold">Sanchayapatra vs mutual funds</h2>
-          <p className="mt-1 text-sm text-muted">Certificates vs units — decided by the numbers, not by ads.</p>
+        <Link href="/guides/sanchayapatra-vs-mutual-funds" className="card transition hover:border-brand-500 group">
+          <div className="card-pad !p-4 sm:!p-5">
+            <h2 className="font-semibold group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors">Sanchayapatra vs mutual funds</h2>
+            <p className="mt-1 text-sm text-muted">Certificates vs units — decided by the numbers, not by ads.</p>
+          </div>
         </Link>
       </section>
 
-      <p className="mt-8 pb-14 text-xs text-faint">
+      <p className="mt-10 pb-16 text-xs text-faint">
         Figures rebuilt from the committed NAV history, latest fund date {fullDate(latest)}. Benchmarks are labelled
         approximate where they are not officially cited. For research — not investment advice.
       </p>

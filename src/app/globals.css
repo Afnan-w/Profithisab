@@ -2,16 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Design tokens ───────────────────────────────────────────────────────── */
+/* Dark mode is primary: deep charcoal/navy with teal-emerald accents. */
+
 :root {
   --bg: #f7faf9;
   --surface: #ffffff;
-  --raised: #f2f7f5;
+  --raised: #f1f5f4;
+  --elevated: #e7efee;
   --fg: #0c1512;
   --fg-soft: #33403a;
   --muted: #5b6b64;
   --faint: #8a9791;
   --line: #e2ebe7;
   --line-strong: #cbd8d2;
+  --brand: #059669;
+  --brand-hover: #047857;
+  --brand-glow: #34d399;
   --brand-link: #047857;
   --ok: #059669;
   --bad: #dc2626;
@@ -20,17 +27,21 @@
 }
 
 .dark {
-  --bg: #0a0f0d;
-  --surface: #10161392;
-  --raised: #141c18;
-  --fg: #eaf3ef;
-  --fg-soft: #c4d2cc;
-  --muted: #94a59d;
-  --faint: #6b7d75;
-  --line: #1d2925;
-  --line-strong: #2a3a34;
+  --bg: #070a0a;
+  --surface: #0f171a;
+  --raised: #162127;
+  --elevated: #1c292f;
+  --fg: #f8fafc;
+  --fg-soft: #cbd5e1;
+  --muted: #94a3b8;
+  --faint: #64748b;
+  --line: #1e293b;
+  --line-strong: #334155;
+  --brand: #14b8a6;
+  --brand-hover: #0d9488;
+  --brand-glow: #0ea5e9;
   --brand-link: #34d399;
-  --ok: #34d399;
+  --ok: #22c55e;
   --bad: #f87171;
   --warn: #fbbf24;
   color-scheme: dark;
@@ -51,13 +62,15 @@ body {
 
 .tnum { font-variant-numeric: tabular-nums; }
 
-::selection { background: #34d39955; }
+::selection { background: color-mix(in srgb, var(--brand) 40%, transparent); }
 
 *:focus-visible {
-  outline: 2px solid var(--ok);
+  outline: 2px solid var(--brand);
   outline-offset: 2px;
   border-radius: 4px;
 }
+
+/* ── Components ─────────────────────────────────────────────────────────── */
 
 @layer components {
   .card {
@@ -76,17 +89,25 @@ body {
   }
   .btn-cta {
     @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition;
-    background: #059669;
+    background: var(--brand);
     color: #fff;
+    box-shadow: 0 1px 3px color-mix(in srgb, var(--brand) 35%, transparent);
   }
-  .btn-cta:hover { background: #047857; }
+  .btn-cta:hover { background: var(--brand-hover); }
+  .btn-cta:active { transform: translateY(-1px); }
   .btn-quiet {
     @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition border;
     background: var(--surface);
     border-color: var(--line-strong);
     color: var(--fg);
   }
-  .btn-quiet:hover { border-color: var(--ok); color: var(--ok); }
+  .btn-quiet:hover { border-color: var(--brand); color: var(--brand); }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition;
+    background: transparent;
+    color: var(--muted);
+  }
+  .btn-ghost:hover { color: var(--brand); background: color-mix(in srgb, var(--brand) 8%, transparent); }
   .prose-lab h2 { @apply text-2xl font-semibold tracking-tight mt-10 mb-3; }
   .prose-lab h3 { @apply text-lg font-semibold mt-8 mb-2; }
   .prose-lab p { @apply leading-7 mb-4; }
@@ -94,13 +115,13 @@ body {
   .prose-lab table { @apply w-full text-sm; }
 }
 
-/* Range input (amount slider) */
+/* ── Range input (amount slider) ── */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
   height: 4px;
   border-radius: 999px;
-  background: linear-gradient(to right, #10b981 var(--fill, 50%), var(--line-strong) var(--fill, 50%));
+  background: linear-gradient(to right, var(--brand) var(--fill, 50%), var(--line-strong) var(--fill, 50%));
   outline: none;
 }
 input[type="range"]::-webkit-slider-thumb {
@@ -109,13 +130,35 @@ input[type="range"]::-webkit-slider-thumb {
   width: 18px;
   height: 18px;
   border-radius: 999px;
-  background: #059669;
+  background: var(--brand);
   border: 3px solid var(--surface);
-  box-shadow: 0 1px 4px rgb(0 0 0 / 0.25);
+  box-shadow: 0 1px 4px color-mix(in srgb, #000 25%, transparent);
   cursor: pointer;
 }
 input[type="range"]::-moz-range-thumb {
   width: 18px; height: 18px; border-radius: 999px;
-  background: #059669; border: 3px solid var(--surface);
+  background: var(--brand); border: 3px solid var(--surface);
   cursor: pointer;
+}
+
+/* ── Glass / elevation utilities ── */
+.glass {
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid color-mix(in srgb, var(--line) 45%, transparent);
+}
+.elev {
+  box-shadow: 0 4px 20px -4px color-mix(in srgb, #000 20%, transparent);
+}
+
+/* ── Reveal animation for cards ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
 }

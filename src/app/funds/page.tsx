@@ -25,25 +25,25 @@ export default function FundsPage() {
     {
       id: "growth",
       title: "Growth funds",
-      blurb: "Equity-first portfolios. Winner-take-the-market, and the market in Bangladesh has not been gently upward.",
+      blurb: "Equity-first portfolios. Higher potential swings, higher risk.",
       funds: groups.growth,
     },
     {
       id: "balanced",
       title: "Balanced funds",
-      blurb: "A bet both ways — part equity, part fixed income. Smoother than growth funds, duller in a bull run.",
+      blurb: "Part equity, part fixed income. Smoother than growth funds.",
       funds: groups.balanced,
     },
     {
       id: "income",
       title: "Income funds",
-      blurb: "Fixed-income boxes. The question is less “what will it earn” and more “what will the manager charge”.",
+      blurb: "Fixed-income portfolios. The question is what the manager charges.",
       funds: groups.income,
     },
     {
       id: "shariah",
       title: "Shariah-compliant funds",
-      blurb: "Shariah-screened portfolios. They also appear under their own Growth, Balanced or Income category above.",
+      blurb: "Shariah-screened portfolios. They also appear under their own category above.",
       funds: groups.shariah,
     },
   ];
@@ -87,14 +87,14 @@ export default function FundsPage() {
         </p>
       </header>
 
-      <div className="mt-8">
+      <div className="mt-10">
         <DirectoryControls amcs={AMC_LIST} total={ALL_FUNDS.length} />
       </div>
 
-      <div id="fund-directory" className="mt-8 space-y-12">
+      <div id="fund-directory" className="mt-10 space-y-14">
         {GROUPS.map((g) => (
-          <section key={g.id} id={`grp-${g.id}`} aria-labelledby={`h-${g.id}`}>
-            <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
+          <section key={g.id} id={`grp-${g.id}`} aria-labelledby={`h-${g.id}`} className="reveal">
+            <div className="mb-6 flex flex-wrap items-baseline justify-between gap-2">
               <div>
                 <h2 id={`h-${g.id}`} className="text-xl font-bold tracking-tight">
                   {g.title} <span className="text-sm font-medium text-faint">({g.funds.length})</span>
@@ -104,23 +104,12 @@ export default function FundsPage() {
               <span className="text-[11px] text-faint">as of {fullDate(META.latestNavDate)}</span>
             </div>
             {g.funds.length ? (
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {g.funds
                   .slice()
                   .sort((a, b) => (metricsG3(b.slug) ?? -99) - (metricsG3(a.slug) ?? -99))
                   .map((f) => (
-                    <div
-                      key={f.slug}
-                      data-fund-id={f.slug}
-                      data-fund-name={f.name}
-                      data-fund-amc={f.amc}
-                      data-fund-amc-slug={f.amcSlug}
-                      data-fund-type={f.type}
-                      data-fund-shariah={f.shariah ? "1" : "0"}
-                      data-fund-quality={f.completeness}
-                      data-fund-stale={f.isStale ? "1" : "0"}
-                      data-fund-acronym={f.acronym}
-                    >
+                    <div key={f.slug} className="reveal">
                       <FundCard fund={f} />
                     </div>
                   ))}
@@ -134,7 +123,7 @@ export default function FundsPage() {
         ))}
       </div>
 
-      <section className="card card-pad mt-12">
+      <section className="card card-pad mt-14">
         <h2 className="text-lg font-semibold">How to read this list</h2>
         <div className="prose prose-sm mt-3 max-w-none text-muted prose-lab">
           <p>
@@ -152,7 +141,7 @@ export default function FundsPage() {
         </div>
       </section>
 
-      <div className="mt-10 flex flex-wrap gap-3 pb-14">
+      <div className="mt-12 flex flex-wrap gap-3 pb-18">
         <Link href="/compare" className="btn-cta">Compare side by side →</Link>
         <Link href="/guides/best-mutual-funds-bangladesh" className="btn-quiet">See the leaderboard →</Link>
       </div>

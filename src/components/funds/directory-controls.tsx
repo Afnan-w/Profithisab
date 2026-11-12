@@ -23,7 +23,6 @@ export function DirectoryControls({ amcs, total }: FilterMeta) {
   const rootRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // Support ?q= for SearchAction deep links.
     const sp = new URLSearchParams(window.location.search);
     const init = sp.get("q");
     if (init) setQ(init);
@@ -49,16 +48,12 @@ export function DirectoryControls({ amcs, total }: FilterMeta) {
     setCount(visible);
   }, [q, amc, type, shariah, completeOnly]);
 
-  useEffect(() => {
-    if (!rootRef.current) return;
-  }, []);
-
   const sectionFor = useMemo(() => type || "all", [type]);
 
   return (
-    <div ref={rootRef} className="card card-pad">
+    <div ref={rootRef} className="card card-pad elev">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="flex flex-1 items-center gap-2 rounded-xl border border-line bg-surface px-3 py-2 focus-within:border-brand-500">
+        <div className="flex flex-1 items-center gap-2 rounded-xl border border-line bg-surface px-3 py-2 focus-within:border-brand-500 focus-within:ring-1 focus-within:ring-brand">
           <Search size={15} className="text-faint" aria-hidden="true" />
           <input
             type="search"
@@ -102,7 +97,6 @@ export function DirectoryControls({ amcs, total }: FilterMeta) {
         <span className="ml-auto text-xs text-muted" aria-live="polite">
           Showing <strong className="text-fg">{count}</strong> of {total} funds
         </span>
-        {sectionFor === "all" ? null : null}
       </div>
     </div>
   );

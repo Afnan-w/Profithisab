@@ -9,9 +9,9 @@ import { fullDate } from "@/lib/format";
 export function DataBanner() {
   if (IS_DEMO) {
     return (
-      <div role="status" className="border-b border-amber-300 bg-amber-100 text-amber-950 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-100">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2 text-xs sm:px-6">
-          <strong className="rounded bg-amber-900 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-50 dark:bg-amber-200 dark:text-amber-950">
+      <div role="status" className="border-b border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-300">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2.5 text-sm sm:px-6">
+          <strong className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-800 dark:bg-amber-900 dark:text-amber-400">
             Demo data
           </strong>
           <span className="font-medium">
@@ -27,8 +27,8 @@ export function DataBanner() {
 
   if (META.counts.stale > 0) {
     return (
-      <div role="status" className="border-b border-amber-300 bg-amber-50 text-amber-950 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-100">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2 text-xs sm:px-6">
+      <div role="status" className="border-b border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-300">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2.5 text-sm sm:px-6">
           <strong>Heads up:</strong>
           <span>
             {META.counts.stale} fund{META.counts.stale === 1 ? "" : "s"} have no published NAV in the last 30 days. They are

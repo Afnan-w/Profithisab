@@ -72,7 +72,7 @@ export default function DataStatusPage() {
       </header>
 
       {IS_DEMO ? (
-        <div className="mt-6 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm leading-7 text-amber-950 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100">
+        <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-7 text-amber-900 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-300">
           <strong>Demo dataset.</strong> The NAV histories below were generated for layout and arithmetic testing.
           They are not published fund data. The same page will show the real per-fund status after a licensed import.
         </div>
@@ -94,7 +94,7 @@ export default function DataStatusPage() {
         const matched = roster.funds.filter((r) => covered.has(normalize(r.name))).length;
         return (
           <section className="mt-4">
-            <div className="card card-pad !p-4 text-sm">
+            <div className="card card-pad !p-4 elev">
               <h2 className="text-lg font-semibold">Fund universe</h2>
               <p className="mt-2 leading-relaxed text-muted">
                 Bangladesh has <strong className="text-fg">{roster.fundCount} open-end funds</strong> in the LankaBangla
@@ -140,7 +140,7 @@ export default function DataStatusPage() {
                   return (
                     <tr key={f.slug} id={f.slug} className="scroll-mt-20 border-b border-line">
                       <td className="border border-line px-3 py-2.5">
-                        <Link href={`/funds/${f.slug}`} className="font-medium hover:text-brand-700 dark:hover:text-brand-300">
+                        <Link href={`/funds/${f.slug}`} className="font-medium hover:text-brand-700 dark:hover:text-brand-300 transition-colors">
                           {f.name}
                         </Link>
                         <span className="ml-1.5 text-[10px] text-faint">{f.acronym}</span>
@@ -184,7 +184,7 @@ export default function DataStatusPage() {
 
       {/* Licence + attribution */}
       <section className="mt-10 grid gap-4 lg:grid-cols-2">
-        <div className="card card-pad">
+        <div className="card card-pad elev">
           <h2 className="text-lg font-semibold">Permission &amp; attribution</h2>
           <dl className="mt-3 grid gap-2 text-sm">
             <Row k="Source name" v={LICENSE.sourceName || NOT_AVAILABLE} />
@@ -212,7 +212,7 @@ export default function DataStatusPage() {
           </p>
         </div>
 
-        <div className="card card-pad">
+        <div className="card card-pad elev">
           <h2 className="text-lg font-semibold">Review queue</h2>
           {REVIEW.length ? (
             <>
@@ -286,7 +286,7 @@ export default function DataStatusPage() {
         </div>
       </section>
 
-      <p className="mt-10 pb-14 text-xs text-faint">
+      <p className="mt-12 pb-16 text-xs text-faint">
         Method and formulas: <Link href="/methodology" className="underline decoration-dotted hover:text-fg">methodology</Link>.{" "}
         {IS_DEMO ? "This build is demo data. " : "This build is served from imported data files. "}
         Nothing here is investment advice.
@@ -297,7 +297,7 @@ export default function DataStatusPage() {
 
 function Summary({ label, value, sub }: { label: string; value: string; sub: string }) {
   return (
-    <div className="card card-pad !p-4">
+    <div className="card card-pad !p-4 elev">
       <p className="text-[11px] font-medium uppercase tracking-wide text-muted">{label}</p>
       <p className="mt-1 text-xl font-bold tnum">{value}</p>
       <p className="text-[11px] text-faint">{sub}</p>

@@ -58,7 +58,6 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
   const values = lumpFull.map((p) => p.value);
   const sanch = BENCHES.find((b) => b.slug === "sanchayapatra");
   const sanchTrail = sanch ? benchTrail(sanch.slug, fund).map((v) => (v === null ? null : v * 100000)) : [];
-  // Benchmarks with a real dated series (DSEX/DSES): the actual index, rescaled to the fund window.
   const indexTrails = BENCHES.filter((b) => b.series && b.series.length >= 2)
     .filter((b) => b.slug !== "dses" || fund.shariah)
     .map((b) => ({ bench: b, trail: benchTrail(b.slug, fund).map((v) => (v === null ? null : v * 100000)) }))
@@ -129,7 +128,7 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
       </nav>
 
       {/* Hero */}
-      <header className="card !p-5 sm:!p-8">
+      <header className="card card-pad !p-5 sm:!p-8 elev reveal">
         <div className="flex flex-wrap items-center gap-2">
           <TypeBadge type={fund.type} shariah={fund.shariah} />
           <QualityBadge completeness={fund.completeness} stale={fund.isStale} />
@@ -143,37 +142,37 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
         </p>
 
         {became !== null && totalReturn !== null ? (
-          <p className="mt-6 text-xl font-semibold leading-relaxed sm:text-2xl">
+          <p className="mt-7 text-xl font-semibold leading-relaxed sm:text-2xl">
             ৳1,00,000 invested {has3y ? "3 years ago" : `at the start of this window (${longDate(labels[0])})`} became{" "}
             <span className="whitespace-nowrap text-brand-600 dark:text-brand-400">{takaExact(became)}</span>{" "}
             <span className="text-sm font-normal text-muted">({pct(totalReturn)} total · dividends reinvested)</span>
           </p>
         ) : (
-          <p className="mt-6 rounded-xl border border-line bg-raised p-4 text-sm text-muted">
+          <p className="mt-7 rounded-xl border border-line bg-raised p-4 text-sm text-muted">
             {NOT_ENOUGH_HISTORY} for a ৳1,00,000 replay. This fund has {fund.nav.length} published NAV observation
             {fund.nav.length === 1 ? "" : "s"} in the data file; at least two, at least 90 days apart, are required.
           </p>
         )}
 
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
           <Metric label={has3y ? "3 yr / yr" : "Per year"} value={pct(headline)} accent={headline !== null} />
           <Metric label="1 yr / yr" value={pct(m.g1)} />
-          <Metric label="SIP ৳5k/mo·3 yr" value={pct(m.sip.irr3)} sub="per year" />
+          <Metric label="SIP ৳5k/mo · 3 yr" value={pct(m.sip.irr3)} sub="per year" />
           <Metric label="Worst fall" value={pct(m.worstFall, { signed: false })} tone="bad" />
           <Metric label="Reported size" value={fund.fundSize === null ? NOT_AVAILABLE : cr(fund.fundSize)} />
           <Metric label="Fee / year" value={feeText} />
         </div>
 
-        <div className="mt-6 flex flex-wrap gap-2">
+        <div className="mt-7 flex flex-wrap gap-2">
           <Link href={`/compare?funds=${fund.slug}`} className="btn-cta text-sm">Compare this fund →</Link>
           <CopyButton text={`${site.url}/funds/${fund.slug}`} label="Copy link" />
-          <Link href="#method" className="btn-quiet text-sm">How every figure is built</Link>
+          <Link href="#method" className="btn-ghost text-sm">How every figure is built</Link>
         </div>
       </header>
 
       {/* Charts */}
       <section className="mt-8 grid gap-6 lg:grid-cols-2">
-        <div className="card card-pad">
+        <div className="card card-pad elev reveal">
           {values.length >= 2 ? (
             <MultiLineChart
               title="What ৳1,00,000 did across the tracked window — total return"
@@ -196,7 +195,7 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
             <p className="text-sm text-muted">Not enough NAV history to draw a total-return chart.</p>
           )}
         </div>
-        <div className="card card-pad">
+        <div className="card card-pad elev reveal">
           {fund.series.length >= 2 ? (
             <MultiLineChart
               title="NAV per unit — the published price alone"
@@ -212,8 +211,8 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
       </section>
 
       {/* Details */}
-      <section className="mt-8 grid gap-6 lg:grid-cols-[1.15fr_1fr]">
-        <div className="card card-pad">
+      <section className="mt-8 grid gap-6 lg:grid-cols-[1.2fr_1fr]">
+        <div className="card card-pad elev reveal">
           <h2 className="text-lg font-semibold">The numbers that matter</h2>
           <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 text-sm sm:grid-cols-3">
             <KV k="1-year" v={pct(m.g1)} />
@@ -240,7 +239,7 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
         </div>
 
         <div className="space-y-6">
-          <div className="card card-pad">
+          <div className="card card-pad elev reveal">
             <h2 className="text-lg font-semibold">Fees, minimums, exits</h2>
             <dl className="mt-3 grid gap-y-2.5 text-sm">
               <Row k="Fee (management + recurring)" v={fund.fee === null ? NOT_AVAILABLE : `${fund.fee.toFixed(2)}% a year`} />
@@ -250,7 +249,7 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
             </dl>
           </div>
 
-          <div className="card card-pad">
+          <div className="card card-pad elev reveal">
             <h2 className="text-lg font-semibold">Dividend record</h2>
             {dividends.length ? (
               <table className="mt-3 w-full text-sm">
@@ -277,7 +276,7 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
             )}
           </div>
 
-          <div className="card card-pad">
+          <div className="card card-pad elev reveal">
             <h2 className="text-lg font-semibold">Dataset for this fund</h2>
             <dl className="mt-2 grid gap-y-2 text-xs">
               <Row k="Completeness" v={fund.completeness} />
@@ -295,7 +294,7 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
       </section>
 
       {/* SIP replay */}
-      <section className="card card-pad mt-6 flex flex-wrap items-center justify-between gap-3">
+      <section className="card card-pad mt-6 elev reveal flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="text-sm font-semibold">The ৳5,000-a-month question, answered</p>
           <p className="mt-1 max-w-xl text-sm text-muted">
@@ -337,11 +336,11 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
           <details className="card px-4 py-3">
             <summary className="cursor-pointer list-none font-medium">Worst fall, volatility, consistency</summary>
             <p className="mt-2 text-sm leading-relaxed text-muted">
-              Worst fall is the largest peak-to-trough drop of the NAV line (dividends do not cushion it).
-              Volatility is annualised standard deviation of monthly NAV moves. Positive months is the share of
+              Worst fall is the largest peak-to-trough drop of the NAV line itself (dividends do not cushion it).
+              Volatility is annualised standard deviation of month-end NAV log-returns. Positive months is the share of
               trailing months where NAV rose or held. Beta versus DSEX uses the real month-end DSEX closes
               (exchange data published via Shanta AML) over up to 36 overlapping months; it is hidden when
-              fewer than 12 clean months overlap.
+              fewer than 12 clean overlapping months exist.
             </p>
           </details>
           <details className="card px-4 py-3">
@@ -386,19 +385,19 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
         </p>
         <div className="mt-4 grid gap-4 sm:grid-cols-3">
           {related.map((rf) => (
-            <Link key={rf.slug} href={`/funds/${rf.slug}`} className="card card-pad transition hover:border-brand-500">
+            <Link key={rf.slug} href={`/funds/${rf.slug}`} className="card card-pad transition hover:border-brand-500 group">
               <div className="flex flex-wrap items-center gap-1.5">
                 <TypeBadge type={rf.type} shariah={rf.shariah} />
                 <QualityBadge completeness={rf.completeness} stale={rf.isStale} />
               </div>
-              <p className="mt-2 font-semibold leading-snug">{rf.name}</p>
+              <p className="mt-2 font-semibold leading-snug group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors">{rf.name}</p>
               <p className="mt-1 text-xs text-muted">{rf.amc} · {pct(g3Of(rf.slug))}</p>
             </Link>
           ))}
         </div>
       </section>
 
-      <section className="mt-10 flex flex-wrap gap-3 pb-14">
+      <section className="mt-12 flex flex-wrap gap-3 pb-20">
         <Link href="/compare" className="btn-quiet text-sm">Compare funds →</Link>
         <Link href="/guides/how-to-invest-in-mutual-funds-in-bangladesh" className="btn-quiet text-sm">How to buy units →</Link>
         <Link href="/methodology" className="btn-quiet text-sm">Full methodology →</Link>

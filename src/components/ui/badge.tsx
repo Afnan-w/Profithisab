@@ -39,10 +39,6 @@ export function TypeBadge({ type, shariah }: { type: FundType; shariah?: boolean
   );
 }
 
-/**
- * Data-quality chip. This replaces the old "AMC-Verified" badge: a badge is
- * only shown when verification.json has a real, licensed entry.
- */
 export function QualityBadge({ completeness, stale }: { completeness: Completeness; stale?: boolean }) {
   if (stale) return <Badge tone="amber">Stale · no NAV in 30+ days</Badge>;
   if (completeness === "complete") return <Badge tone="brand">Complete</Badge>;

@@ -24,8 +24,8 @@ export default function MethodologyPage() {
         cannot show how a figure was built, it does not go on the site.
       </p>
 
-      <div className="mt-10 space-y-10">
-        <section>
+      <div className="mt-12 space-y-12">
+        <section className="reveal">
           <h2 className="text-2xl font-bold tracking-tight">Total return (the headline)</h2>
           <p className="mt-2 leading-7 text-fg-soft">
             Start with one unit bought at the window&apos;s first published NAV. Walk through the published NAVs.
@@ -33,13 +33,13 @@ export default function MethodologyPage() {
             date (reinvested) or add the cash to the holding (cash). The ratio of final value to initial value,
             annualised geometrically, is the per-year figure.
           </p>
-          <div className="card card-pad mt-4 text-sm text-muted">
+          <div className="card card-pad mt-4 elev text-sm text-muted">
             CAGR = (V<sub>end</sub> / V<sub>start</sub>)<sup>365 / days</sup> − 1. A period shorter than 90 days is
             not annualised, because doing so would turn noise into a headline.
           </div>
         </section>
 
-        <section>
+        <section className="reveal">
           <h2 className="text-2xl font-bold tracking-tight">Windows, not cherry-picks</h2>
           <p className="mt-2 leading-7 text-fg-soft">
             The site computes 1-year, 3-year, 5-year and since-launch figures from the same stored history. Each
@@ -49,7 +49,7 @@ export default function MethodologyPage() {
           </p>
         </section>
 
-        <section>
+        <section className="reveal">
           <h2 className="text-2xl font-bold tracking-tight">SIP arithmetic</h2>
           <p className="mt-2 leading-7 text-fg-soft">
             A monthly SIP buys a fixed ৳ amount of units at each month-end NAV in the window. Dividends follow the
@@ -59,7 +59,7 @@ export default function MethodologyPage() {
           </p>
         </section>
 
-        <section>
+        <section className="reveal">
           <h2 className="text-2xl font-bold tracking-tight">Risk and consistency</h2>
           <ul className="mt-2 list-disc space-y-1.5 pl-5 leading-7 text-fg-soft">
             <li><strong>Worst fall</strong> — largest peak-to-trough drop of the NAV line itself (no dividend cushioning).</li>
@@ -69,7 +69,7 @@ export default function MethodologyPage() {
           </ul>
         </section>
 
-        <section>
+        <section className="reveal">
           <h2 className="text-2xl font-bold tracking-tight">Which funds are tracked</h2>
           <p className="mt-2 leading-7 text-fg-soft">
             This build contains {STATS.funds} open-end funds across {STATS.amcs} asset managers. That is the roster
@@ -85,12 +85,12 @@ export default function MethodologyPage() {
           </p>
         </section>
 
-        <section id="data-status" className="scroll-mt-20">
+        <section id="data-status" className="scroll-mt-20 reveal">
           <h2 className="text-2xl font-bold tracking-tight">Data status — read this if the numbers matter</h2>
           <div
-            className={`card card-pad mt-3 ${
+            className={`card card-pad mt-3 elev ${
               IS_DEMO
-                ? "border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950/40"
+                ? "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20"
                 : "border-line"
             }`}
           >
@@ -144,17 +144,17 @@ export default function MethodologyPage() {
                   ) : null}
                   . Automated fetching is {LICENSE.automatedFetching ? "permitted" : "not permitted"}.
                 </p>
+                <p className="mt-3 text-sm font-medium">
+                  <Link href="/data-status" className="underline decoration-dotted hover:text-fg">
+                    Open the per-fund data status table →
+                  </Link>
+                </p>
               </>
             )}
-            <p className="mt-3 text-sm font-medium">
-              <Link href="/data-status" className="underline decoration-dotted hover:text-fg">
-                Open the per-fund data status table →
-              </Link>
-            </p>
           </div>
         </section>
 
-        <section>
+        <section className="reveal">
           <h2 className="text-2xl font-bold tracking-tight">The benchmarks we compare against</h2>
           <ul className="mt-2 space-y-3 leading-7 text-fg-soft">
             {BENCHES.map((b) => (
@@ -189,7 +189,7 @@ export default function MethodologyPage() {
           </p>
         </section>
 
-        <section>
+        <section className="reveal">
           <h2 className="text-2xl font-bold tracking-tight">What we refuse to do</h2>
           <ul className="mt-2 list-disc space-y-1.5 pl-5 leading-7 text-fg-soft">
             <li>Window-shop: no per-fund start dates, no post-crash resets.</li>
@@ -200,7 +200,7 @@ export default function MethodologyPage() {
           </ul>
         </section>
 
-        <section>
+        <section className="reveal">
           <h2 className="text-2xl font-bold tracking-tight">Sources &amp; credits</h2>
           <p className="mt-2 leading-7 text-fg-soft">
             NAV and dividend rows come from the files committed under <code>/data</code>. They are fetched directly from
@@ -224,7 +224,7 @@ export default function MethodologyPage() {
         </section>
       </div>
 
-      <p className="mt-10 pb-14 text-xs text-faint">
+      <p className="mt-14 pb-20 text-xs text-faint">
         Dataset generated {fullDate(META.lastUpdated)} · latest NAV {fullDate(META.latestNavDate)} ·{" "}
         {STATS.funds} funds · {IS_DEMO ? "DEMO data" : "imported data"}.
       </p>

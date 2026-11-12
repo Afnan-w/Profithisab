@@ -67,7 +67,7 @@
       "source": {
         "name": "Dhaka Stock Exchange daily closing levels, republished on Shanta AML fund pages",
         "url": "https://www.shanta-aml.com/our-funds/shanta-amanah-shariah-fund",
-        "asOf": "2026-11-11"
+        "asOf": "2026-11-12"
       },
       "note": "Real month-end DSEX closing levels (the last published close of each month). Chart overlays rescale the index to the fund's tracked window; the annual rate is the index CAGR over the published series.",
       "series": [
@@ -484,8 +484,8 @@
           "value": 5417.43598
         },
         {
-          "date": "2026-11-11",
-          "value": 5445.05718
+          "date": "2026-11-12",
+          "value": 5444.9065
         }
       ]
     },
@@ -494,12 +494,12 @@
       "name": "DSES (Dhaka Stock Exchange Shariah index)",
       "shortName": "DSES",
       "color": "#14b8a6",
-      "annualRate": -2.52,
+      "annualRate": -2.49,
       "status": "verified",
       "source": {
         "name": "Dhaka Stock Exchange daily closing levels, republished on Shanta AML fund pages",
         "url": "https://www.shanta-aml.com/our-funds/shanta-amanah-shariah-fund",
-        "asOf": "2026-11-11"
+        "asOf": "2026-11-12"
       },
       "note": "Real month-end DSES closing levels — the Shariah-screened index, shown next to the Shariah funds. Same sourcing and conventions as the DSEX entry.",
       "series": [
@@ -916,8 +916,8 @@
           "value": 1050.66542
         },
         {
-          "date": "2026-11-11",
-          "value": 1055.40215
+          "date": "2026-11-12",
+          "value": 1057.3013
         }
       ]
     }
