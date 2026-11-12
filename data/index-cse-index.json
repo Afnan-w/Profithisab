@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "sample": true,
+  "note": "Sample placeholder shipped with the repo so the page renders before the first scheduled fetch. No CSE index levels are cited yet — enable the cse-index source and run `npm run fetch:index` to populate this file with validated data. Until then the page must show this as sample, not as a live CSE figure.",
+  "source_name": "Chittagong Stock Exchange — CSE Index (sample placeholder)",
+  "source_url": "https://www.cse.com.bd/",
+  "data_type": "index",
+  "category": "stock-index",
+  "data_date": "2026-11-11",
+  "fetched_at": "2026-11-11T11:40:35.335Z",
+  "schedule": "every 15 minutes during DSE trading hours (Sunday to Thursday, 10:00–14:30 Asia/Dhaka)",
+  "delay_minutes": 15,
+  "records": []
+}

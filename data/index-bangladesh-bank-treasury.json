@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "sample": true,
+  "note": "Sample placeholder shipped with the repo so the page renders before the first scheduled fetch. Bangladesh Bank publishes no public REST API for treasury bills and bonds — this source is a strictly rate-limited HTML fetch (enabled: false by default). Until it is enabled and validated, no treasury figures are published here (records is empty rather than invented).",
+  "source_name": "Bangladesh Bank — Treasury Bills & Bonds (sample placeholder)",
+  "source_url": "https://www.bb.org.bd/en/index.php/policydata/tbillbond",
+  "data_type": "index",
+  "category": "government-securities",
+  "data_date": "2026-11-11",
+  "fetched_at": "2026-11-11T11:40:35.335Z",
+  "schedule": "daily after market close",
+  "delay_minutes": null,
+  "records": []
+}

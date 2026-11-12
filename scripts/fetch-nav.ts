@@ -4,12 +4,13 @@ import { pathToFileURL } from "node:url";
 import { z } from "zod";
 import { DATA_DIR } from "../src/lib/data";
 import { isValidISODate, todayISO } from "../src/lib/date";
+import { benchmarksFileSchema } from "../src/lib/schema";
 
 /**
  * `npm run data:fetch`
  *
  * Fetches NAV data directly from the first-party sources listed in
- * data/sources.json (AMC websites + the LankaBangla fund-universe table) and
+ * data/nav-sources.json (AMC websites + the LankaBangla fund-universe table) and
  * writes normalised JSON files into data/incoming/, which `data:import` then
  * merges into data/funds.json and data/nav/.
  *
@@ -26,7 +27,7 @@ const RAW_DIR = path.join(DATA_DIR, "raw");
 const INCOMING_DIR = path.join(DATA_DIR, "incoming");
 const ROSTER_FILE = path.join(DATA_DIR, "market-roster.json");
 
-/* ── Source registry (data/sources.json) ──────────────────────────────────── */
+/* ── Source registry (data/nav-sources.json) ──────────────────────────────────── */
 
 const sourceEntrySchema = z.object({
   id: z.string(),
@@ -59,7 +60,7 @@ export type FundMeta = z.infer<typeof fundMetaSchema>;
 export type SourcesFile = z.infer<typeof sourcesFileSchema>;
 
 export function loadSources(): SourcesFile {
-  const raw = JSON.parse(fs.readFileSync(path.join(DATA_DIR, "sources.json"), "utf8"));
+  const raw = JSON.parse(fs.readFileSync(path.join(DATA_DIR, "nav-sources.json"), "utf8"));
   return sourcesFileSchema.parse(raw);
 }
 
@@ -219,11 +220,19 @@ export function normalizeName(s: string): string {
 
 /* ── Adapter: Shanta (fund pages embed full NAV history as JSON) ──────────── */
 
+export interface DsePoint {
+  date: string;
+  dsex: number | null;
+  ds30: number | null;
+  dses: number | null;
+}
+
 export interface ShantaPayload {
   fundSlugs: string[];
   navs: NavRow[];
   dividends: DividendRow[];
-  dseRowCount: number;
+  /** Daily DSE index levels embedded in every Shanta fund page (date, dsex, ds30, dses). */
+  dse: DsePoint[];
 }
 
 export function parseShantaPage(html: string): ShantaPayload {
@@ -259,8 +268,23 @@ export function parseShantaPage(html: string): ShantaPayload {
     if (key && date && amount !== null && amount > 0) dividends.push({ fund: key, recordDate: date, amount });
   }
 
-  const dse = (props.dseData as unknown[] | undefined) ?? [];
-  return { fundSlugs, navs, dividends, dseRowCount: dse.length };
+  const dseRaw = (props.dseData as Array<Record<string, unknown>> | undefined) ?? [];
+  const dse: DsePoint[] = [];
+  for (const r of dseRaw) {
+    const date = typeof r.date === "string" && isValidIso(r.date) ? r.date : null;
+    if (!date) continue;
+    dse.push({
+      date,
+      dsex: num(String(r.dsex ?? "")),
+      ds30: num(String(r.ds30 ?? "")),
+      dses: num(String(r.dses ?? "")),
+    });
+  }
+  return { fundSlugs, navs, dividends, dse };
+}
+
+function isValidIso(s: string): boolean {
+  return /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Date.parse(s));
 }
 
 /* ── Adapter: IDLC (historic NAV AJAX table) ─────────────────────────────── */
@@ -349,6 +373,99 @@ export function parseLankabdTable(html: string, fallbackDate: string): Roster {
   return { asOf, funds };
 }
 
+/* ── Benchmarks: DSE index series from the Shanta payload ─────────────────── */
+
+/**
+ * Shanta's fund pages embed a daily DSE index table alongside the NAV history.
+ * We republish it as a month-end series (last published level of each month) in
+ * data/benchmarks.json so the site's charts can overlay the real index instead
+ * of a flat-rate approximation. Sourced from the exchange via Shanta's public
+ * pages; the series and the source attribution travel together.
+ */
+interface BenchFile {
+  schemaVersion: number;
+  benchmarks: Array<Record<string, unknown>>;
+}
+
+export function monthEndLevels(
+  points: DsePoint[],
+  pick: (p: DsePoint) => number | null
+): Array<{ date: string; value: number }> {
+  const byMonth = new Map<string, { date: string; value: number }>();
+  for (const p of points) {
+    const value = pick(p);
+    if (value === null || value <= 0 || !Number.isFinite(value)) continue;
+    byMonth.set(p.date.slice(0, 7), { date: p.date, value }); // rows arrive chronological; the last row of a month wins
+  }
+  return [...byMonth.values()].sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+}
+
+/** Annualised growth of the published series; needs at least one full year. */
+export function cagrOfLevels(series: Array<{ date: string; value: number }>): number | null {
+  if (series.length < 13) return null;
+  const first = series[0];
+  const last = series[series.length - 1];
+  const years = (Date.parse(last.date) - Date.parse(first.date)) / (365.25 * 86_400_000);
+  if (years < 364 / 365.25 || first.value <= 0) return null; // 12 months counts as a year
+  return (Math.pow(last.value / first.value, 1 / years) - 1) * 100;
+}
+
+export function updateDseBenchmarks(dse: DsePoint[]): string {
+  if (dse.length < 250) return `DSE payload too small (${dse.length} rows) — benchmarks left unchanged.`;
+  const file = path.join(DATA_DIR, "benchmarks.json");
+  const doc = JSON.parse(fs.readFileSync(file, "utf8")) as BenchFile;
+  const source = {
+    name: "Dhaka Stock Exchange daily closing levels, republished on Shanta AML fund pages",
+    url: "https://www.shanta-aml.com/our-funds/shanta-amanah-shariah-fund",
+    asOf: dse[dse.length - 1].date,
+  };
+  const defs = [
+    {
+      id: "dsex",
+      name: "DSEX (Dhaka Stock Exchange broad index)",
+      shortName: "DSEX",
+      color: "#8b5cf6",
+      pick: (p: DsePoint) => p.dsex,
+      note:
+        "Real month-end DSEX closing levels (the last published close of each month). " +
+        "Chart overlays rescale the index to the fund's tracked window; the annual rate is the index CAGR over the published series.",
+    },
+    {
+      id: "dses",
+      name: "DSES (Dhaka Stock Exchange Shariah index)",
+      shortName: "DSES",
+      color: "#14b8a6",
+      pick: (p: DsePoint) => p.dses,
+      note:
+        "Real month-end DSES closing levels — the Shariah-screened index, shown next to the Shariah funds. " +
+        "Same sourcing and conventions as the DSEX entry.",
+    },
+  ];
+  for (const def of defs) {
+    const levels = monthEndLevels(dse, def.pick);
+    if (levels.length < 13) continue;
+    const rate = cagrOfLevels(levels);
+    const entry = {
+      id: def.id,
+      name: def.name,
+      shortName: def.shortName,
+      color: def.color,
+      annualRate: rate === null ? null : Math.round(rate * 100) / 100,
+      status: "verified",
+      source,
+      note: def.note,
+      series: levels.map((l) => ({ date: l.date, value: l.value })),
+    };
+    const hit = doc.benchmarks.find((b) => b.id === def.id);
+    if (hit) Object.assign(hit, entry);
+    else doc.benchmarks.push(entry);
+  }
+  // Re-validate the whole file so a bad write fails here, not at build time.
+  benchmarksFileSchema.parse(doc);
+  fs.writeFileSync(file, `${JSON.stringify(doc, null, 2)}\n`);
+  return `DSEX/DSES month-end series written (${dse[0].date} → ${dse[dse.length - 1].date}).`;
+}
+
 /* ── Orchestration ────────────────────────────────────────────────────────── */
 
 interface FetchResult {
@@ -424,7 +541,7 @@ async function fetchShanta(roster: Roster | null, noCache: boolean): Promise<Fet
   );
 
   const unmapped = payload.fundSlugs.filter((s) => !byPageSlug.has(s));
-  if (unmapped.length) console.warn(`  ! unmapped Shanta fund page(s): ${unmapped.join(", ")} — skipped, add them to data/sources.json`);
+  if (unmapped.length) console.warn(`  ! unmapped Shanta fund page(s): ${unmapped.join(", ")} — skipped, add them to data/nav-sources.json`);
 
   const navs = payload.navs
     .filter((n) => byPageSlug.has(n.fund))
@@ -438,13 +555,16 @@ async function fetchShanta(roster: Roster | null, noCache: boolean): Promise<Fet
   const file = path.join(INCOMING_DIR, "shanta.json");
   fs.writeFileSync(file, `${JSON.stringify(incoming, null, 2)}\n`);
 
+  const benchDetail = updateDseBenchmarks(payload.dse);
+  console.log(`  ${benchDetail}`);
+
   const perFund = [...new Set(navs.map((n) => n.fund))];
   return {
     source: "shanta",
     navRows: navs.length,
     dividendRows: dividends.length,
     funds: perFund.length,
-    detail: `DSE index series available in payload (${payload.dseRowCount} rows) — not used yet.`,
+    detail: benchDetail,
   };
 }
 
@@ -452,7 +572,7 @@ async function fetchIdlc(roster: Roster | null, noCache: boolean): Promise<Fetch
   console.log("→ IDLC AML: historic NAV endpoint…");
   const sources = loadSources();
   const idlcFunds = sources.funds.filter((f) => f.sources.idlc);
-  if (!idlcFunds.length) throw new Error("No IDLC funds configured in data/sources.json");
+  if (!idlcFunds.length) throw new Error("No IDLC funds configured in data/nav-sources.json");
 
   const navs: NavRow[] = [];
   for (const fund of idlcFunds) {

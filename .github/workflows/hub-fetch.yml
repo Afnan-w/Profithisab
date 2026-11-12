@@ -1,0 +1,84 @@
+name: Investment Data Hub fetch
+
+on:
+  schedule:
+    # NAV and rates once per day after the Dhaka market close (09:00 UTC = 15:00 Asia/Dhaka).
+    - cron: "0 9 * * *"
+    # Index levels every 15 minutes during DSE trading hours (Sun-Thu 10:00-14:30 Asia/Dhaka
+    # = 04:00-08:30 UTC). The fetch script self-gates to the trading window.
+    - cron: "*/15 4-8 * * 0-4"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: hub-fetch
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TZ: Asia/Dhaka
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Fetch NAV and rates (daily after market close)
+        if: github.event_name == 'schedule' && github.event.schedule == '0 9 * * *' || github.event_name == 'workflow_dispatch'
+        id: fetch-nav-rates
+        continue-on-error: true
+        run: |
+          npm run fetch:nav
+          npm run fetch:rates
+
+      - name: Fetch index levels (every 15 min in trading window)
+        if: github.event_name == 'schedule' && github.event.schedule == '*/15 4-8 * * 0-4' || github.event_name == 'workflow_dispatch'
+        id: fetch-index
+        continue-on-error: true
+        run: |
+          node -e "
+            const now = new Date();
+            const utcMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
+            const dhakaMinutes = (utcMinutes + 6 * 60) % (24 * 60);
+            if (dhakaMinutes < 10 * 60 || dhakaMinutes > 14 * 60 + 30) { console.log('Outside DSE trading window (10:00-14:30 Asia/Dhaka), skipping index fetch'); process.exit(0); }
+          "
+          npm run fetch:index
+
+      - name: Commit data changes
+        id: commit
+        if: always()
+        run: |
+          git config user.name "profithisab-data-bot"
+          git config user.email "data@profithisab.com"
+          git add data
+          if git diff --cached --quiet; then
+            echo "No data changes to commit."
+            echo "changed=0" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "data: hub fetch $(date -u +%F)"
+            git push
+            echo "changed=1" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open an issue when the fetch fails
+        if: steps.fetch-nav-rates.outcome == 'failure' || steps.fetch-index.outcome == 'failure'
+        run: |
+          TITLE="Hub data fetch failed $(date -u +%F)"
+          if gh issue list --state open --search "$TITLE in:title" --json number --jq 'length' | grep -q '^0$'; then
+            gh issue create --title "$TITLE" --body "The Investment Data Hub fetch workflow failed. Check the Actions run and the sources in data/sources.json."
+          else
+            echo "An open issue already exists."
+          fi

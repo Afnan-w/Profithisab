@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ALL_FUNDS, BENCHES, getFund, lumpPath, metricsFor, benchTrail } from "@/lib/returns";
+import { ALL_FUNDS, BENCHES, getFund, lumpPath, metricsFor, benchTrail, benchTrailStart } from "@/lib/returns";
 import { MultiLineChart } from "@/components/charts/line-chart";
 import { BenchBars } from "@/components/charts/bench-bars";
 import { TypeBadge, QualityBadge, Badge } from "@/components/ui/badge";
@@ -57,7 +57,16 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
   const labels = lumpFull.map((p) => p.date.slice(0, 7));
   const values = lumpFull.map((p) => p.value);
   const sanch = BENCHES.find((b) => b.slug === "sanchayapatra");
-  const sanchTrail = sanch ? benchTrail(sanch.slug, fund).map((p) => p.value * 100000) : [];
+  const sanchTrail = sanch ? benchTrail(sanch.slug, fund).map((v) => (v === null ? null : v * 100000)) : [];
+  // Benchmarks with a real dated series (DSEX/DSES): the actual index, rescaled to the fund window.
+  const indexTrails = BENCHES.filter((b) => b.series && b.series.length >= 2)
+    .filter((b) => b.slug !== "dses" || fund.shariah)
+    .map((b) => ({ bench: b, trail: benchTrail(b.slug, fund).map((v) => (v === null ? null : v * 100000)) }))
+    .filter((e) => e.trail.some((v) => v !== null));
+  const indexTrailStarts = indexTrails
+    .map((e) => benchTrailStart(e.trail, fund))
+    .filter((m): m is string => m !== null)
+    .sort();
   const became = lump.length ? lump[lump.length - 1].value : null;
   const totalReturn = lump.length ? lump[lump.length - 1].value / 100000 - 1 : null;
 
@@ -174,9 +183,14 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
                 ...(sanchTrail.length
                   ? [{ name: `${sanch!.short} at ${sanch!.annualRate?.toFixed(2)}%/yr (approx.)`, values: sanchTrail, color: sanch!.color, dashed: true }]
                   : []),
+                ...indexTrails.map(({ bench, trail }) => ({
+                  name: `${bench.short} — actual index levels`,
+                  values: trail,
+                  color: bench.color,
+                })),
               ]}
               formatTick={(v) => taka(v)}
-              note={`Ends ${fullDate(fund.latestNavDate)}`}
+              note={`Ends ${fullDate(fund.latestNavDate)}${indexTrailStarts.length && indexTrailStarts[0] > labels[0] ? ` · index line starts ${indexTrailStarts[0]}` : ""}`}
             />
           ) : (
             <p className="text-sm text-muted">Not enough NAV history to draw a total-return chart.</p>
@@ -325,8 +339,9 @@ export default async function FundPage({ params }: { params: Promise<{ slug: str
             <p className="mt-2 text-sm leading-relaxed text-muted">
               Worst fall is the largest peak-to-trough drop of the NAV line (dividends do not cushion it).
               Volatility is annualised standard deviation of monthly NAV moves. Positive months is the share of
-              trailing months where NAV rose or held. Beta versus DSEX is deliberately not shown: no cited DSEX
-              history is loaded.
+              trailing months where NAV rose or held. Beta versus DSEX uses the real month-end DSEX closes
+              (exchange data published via Shanta AML) over up to 36 overlapping months; it is hidden when
+              fewer than 12 clean months overlap.
             </p>
           </details>
           <details className="card px-4 py-3">

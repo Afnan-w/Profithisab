@@ -1,103 +1,84 @@
 {
   "schemaVersion": 1,
   "updated": "2026-11-11",
-  "navConvention": "We use the standard quoted NAV: \"NAV at Fair Value\" (IDLC) / \"NAV Per Unit at Market Price\" (LankaBangla, Shanta). NAV-at-cost and buy/sell prices are ignored because they embed fees and are not comparable across funds.",
-  "politeness": {
-    "userAgent": "ProfithisabDataBot/1.0 (https://profithisab.vercel.app; contact data@profithisab.com)",
-    "delayMs": 2500,
-    "cache": "data/raw/ (gitignored, same-day cache)",
-    "stopOn": [403, 429]
-  },
+  "note": "Investment Data Hub source registry. Every source starts with enabled: false. Flip enabled to true only after you have confirmed the source is public, does not require login, does not prohibit automated access, and is not covered by a paid licence. See README for how to enable a source.",
   "sources": [
     {
-      "id": "shanta",
-      "name": "Shanta Asset Management Limited",
-      "url": "https://www.shanta-aml.com/our-funds/shanta-amanah-shariah-fund",
-      "kind": "amc-website",
-      "role": "NAV history + dividends",
-      "note": "One fund page embeds the full daily NAV history since inception for all Shanta funds as JSON (__NEXT_DATA__), plus a DSE index series. Served by the AMC's own website."
+      "id": "bangladesh-bank-treasury",
+      "name": "Bangladesh Bank — Treasury Bills & Bonds",
+      "type": "html",
+      "url": "https://www.bb.org.bd/en/index.php/policydata/tbillbond",
+      "data_type": "index",
+      "category": "government-securities",
+      "schedule": "daily after market close",
+      "delay_minutes": null,
+      "enabled": false
     },
     {
-      "id": "idlc",
-      "name": "IDLC Asset Management Limited",
-      "url": "https://idlc.com/aml/nav.php",
-      "kind": "amc-website",
-      "role": "NAV history",
-      "note": "Historic NAV AJAX endpoint (admin/ajax_handle.php, request_type=historic_nav) returns the full available history per fund. Dividend history is not in this endpoint yet."
+      "id": "dse-index",
+      "name": "Dhaka Stock Exchange — DSEX / DSES Index",
+      "type": "html",
+      "url": "https://www.dse.com.bd/",
+      "data_type": "index",
+      "category": "stock-index",
+      "schedule": "every 15 minutes during DSE trading hours (Sunday to Thursday, 10:00–14:30 Asia/Dhaka)",
+      "delay_minutes": 15,
+      "enabled": false
     },
     {
-      "id": "lankabd",
-      "name": "LankaBangla Financial Portal",
-      "url": "https://www.lankabd.com/MF/OpenEndMutualFund",
-      "kind": "portal",
-      "role": "fund universe snapshot (roster)",
-      "note": "Server-rendered weekly table of every open-end fund: latest NAV, prices, loads, AUM (in million BDT), inception month. Used for the roster and freshness/AUM metadata; its NAV archive API requires login, so NAV histories come from the AMCs directly."
+      "id": "cse-index",
+      "name": "Chittagong Stock Exchange — CSE Index",
+      "type": "html",
+      "url": "https://www.cse.com.bd/",
+      "data_type": "index",
+      "category": "stock-index",
+      "schedule": "every 15 minutes during DSE trading hours (Sunday to Thursday, 10:00–14:30 Asia/Dhaka)",
+      "delay_minutes": 15,
+      "enabled": false
+    },
+    {
+      "id": "sonchayapatra-rates",
+      "name": "Bangladesh Sanchayapatra / Savings Schemes",
+      "type": "html",
+      "url": "https://www.bspcl.gov.bd/",
+      "data_type": "rates",
+      "category": "savings-schemes",
+      "schedule": "daily after market close",
+      "delay_minutes": null,
+      "enabled": false
+    },
+    {
+      "id": "bank-fdr-rates",
+      "name": "Commercial Bank FDR Rates",
+      "type": "manual",
+      "url": null,
+      "data_type": "fdr",
+      "category": "bank-deposits",
+      "schedule": "manual update",
+      "delay_minutes": null,
+      "enabled": false
+    },
+    {
+      "id": "mutual-fund-nav",
+      "name": "Asset Manager NAV Publications",
+      "type": "html",
+      "url": null,
+      "data_type": "nav",
+      "category": "mutual-funds",
+      "schedule": "daily after market close",
+      "delay_minutes": null,
+      "enabled": false
+    },
+    {
+      "id": "licensed-provider-placeholder",
+      "name": "Licensed Data Provider (placeholder)",
+      "type": "json-api",
+      "url": null,
+      "data_type": "other",
+      "category": "licensed",
+      "schedule": "n/a",
+      "delay_minutes": null,
+      "enabled": false
     }
-  ],
-  "funds": [
-    {
-      "slug": "idlc-balanced-fund",
-      "name": "IDLC Balanced Fund",
-      "acronym": "IBF",
-      "amc": "idlc",
-      "type": "balanced",
-      "shariah": false,
-      "sources": { "idlc": { "key": "1" } }
-    },
-    {
-      "slug": "idlc-growth-fund",
-      "name": "IDLC Growth Fund",
-      "acronym": "IGF",
-      "amc": "idlc",
-      "type": "growth",
-      "shariah": false,
-      "sources": { "idlc": { "key": "2" } }
-    },
-    {
-      "slug": "idlc-aml-shariah-fund",
-      "name": "IDLC AML Shariah Fund",
-      "acronym": "ISF",
-      "amc": "idlc",
-      "type": "growth",
-      "shariah": true,
-      "sources": { "idlc": { "key": "3" } }
-    },
-    {
-      "slug": "idlc-income-fund",
-      "name": "IDLC Income Fund",
-      "acronym": "IIF",
-      "amc": "idlc",
-      "type": "income",
-      "shariah": false,
-      "sources": { "idlc": { "key": "4" } }
-    },
-    {
-      "slug": "shanta-first-income-unit-fund",
-      "name": "Shanta First Income Unit Fund",
-      "acronym": "SFIUF",
-      "amc": "shanta",
-      "type": "income",
-      "shariah": false,
-      "sources": { "shanta": { "slug": "shanta-first-income-unit-fund", "dividendKey": "sfiuf" } }
-    },
-    {
-      "slug": "shanta-amanah-shariah-fund",
-      "name": "Shanta Amanah Shariah Fund",
-      "acronym": "SASF",
-      "amc": "shanta",
-      "type": "growth",
-      "shariah": true,
-      "sources": { "shanta": { "slug": "shanta-amanah-shariah-fund", "dividendKey": "sasf" } }
-    },
-    {
-      "slug": "shanta-fixed-income-fund",
-      "name": "Shanta Fixed Income Fund",
-      "acronym": "SFIF",
-      "amc": "shanta",
-      "type": "income",
-      "shariah": false,
-      "sources": { "shanta": { "slug": "shanta-fixed-income-fund", "dividendKey": "sfif" } }
-    }
-  ],
-  "fundMetaNotes": "type and shariah come from each fund's own name and published description; they are our classification, not an AMC certification. fundSize is fetched weekly from the LankaBangla roster (AUM converted from million BDT to crore)."
+  ]
 }

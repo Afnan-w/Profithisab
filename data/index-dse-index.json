@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "sample": true,
+  "note": "Sample index levels committed with the repo (from data/benchmarks.json, DSEX/DSES closes republished on Shanta AML fund pages) so the page renders before the first scheduled fetch. Not a real-time feed: DSE levels here are delayed closing data, never presented as live.",
+  "source_name": "Dhaka Stock Exchange — DSEX / DSES Index (sample)",
+  "source_url": "https://www.dse.com.bd/",
+  "data_type": "index",
+  "category": "stock-index",
+  "data_date": "2026-11-11",
+  "fetched_at": "2026-11-11T11:40:35.335Z",
+  "schedule": "every 15 minutes during DSE trading hours (Sunday to Thursday, 10:00–14:30 Asia/Dhaka)",
+  "delay_minutes": 15,
+  "records": [
+    {
+      "value": 5445.05718,
+      "data_date": "2026-11-11",
+      "source_name": "Dhaka Stock Exchange — DSEX / DSES Index (sample)",
+      "source_url": "https://www.dse.com.bd/",
+      "label": "DSEX (Broad index)",
+      "category": "stock-index",
+      "delay_minutes": 15
+    },
+    {
+      "value": 1055.40215,
+      "data_date": "2026-11-11",
+      "source_name": "Dhaka Stock Exchange — DSEX / DSES Index (sample)",
+      "source_url": "https://www.dse.com.bd/",
+      "label": "DSES (Shariah index)",
+      "category": "stock-index",
+      "delay_minutes": 15
+    }
+  ]
+}

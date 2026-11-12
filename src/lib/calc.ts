@@ -379,5 +379,70 @@ export function suspiciousJump(prev: NavRow, next: NavRow, threshold = 0.15): bo
   return Math.abs(next.nav / prev.nav - 1) > threshold;
 }
 
+/* ── Benchmark index series ───────────────────────────────────────────────── */
+
+export interface BenchLevel {
+  date: string;
+  value: number;
+}
+
+/**
+ * Per-৳1 growth of a dated index level series aligned to fund month keys
+ * ("YYYY-MM"). Each plotted value is the index level divided by the level in
+ * the fund's first overlapping month. Months the index doesn't cover (before
+ * the series starts) come back as null — the chart starts the line there.
+ */
+export function alignBenchTrail(monthKeys: string[], levels: BenchLevel[]): Array<number | null> {
+  if (levels.length < 2) return monthKeys.map(() => null);
+  const byMonth = new Map(levels.map((l) => [l.date.slice(0, 7), l.value]));
+  const idx = monthKeys.map((m) => byMonth.get(m) ?? null);
+  const first = idx.find((v): v is number => v !== null);
+  if (first === undefined || first <= 0) return monthKeys.map(() => null);
+  return idx.map((v) => (v === null ? null : v / first));
+}
+
+/**
+ * Beta of a fund vs an index level series: covariance of overlapping monthly
+ * returns over the variance of the index's monthly returns. Only month pairs
+ * that are adjacent calendar months on both sides count (publishing gaps would
+ * otherwise mix different holding periods). Needs at least 12 clean pairs,
+ * taken from the most recent ones.
+ */
+export function betaVsIndex(nav: NavRow[], levels: BenchLevel[] | null, months = 36): number | null {
+  if (!levels || levels.length < 13) return null;
+  const byMonth = new Map(levels.map((l) => [l.date.slice(0, 7), l.value]));
+  const fundM = monthEndSeries(nav);
+  const pairs: Array<[number, number]> = [];
+  for (let i = 1; i < fundM.length; i++) {
+    const pm = fundM[i - 1].date.slice(0, 7);
+    const cm = fundM[i].date.slice(0, 7);
+    if (!adjacentMonths(pm, cm)) continue;
+    const bp = byMonth.get(pm);
+    const bc = byMonth.get(cm);
+    if (bp === undefined || bc === undefined || bp <= 0 || fundM[i - 1].nav <= 0) continue;
+    pairs.push([fundM[i].nav / fundM[i - 1].nav - 1, bc / bp - 1]);
+  }
+  const use = pairs.slice(-months);
+  if (use.length < 12) return null;
+  const n = use.length;
+  const meanF = use.reduce((s, p) => s + p[0], 0) / n;
+  const meanM = use.reduce((s, p) => s + p[1], 0) / n;
+  let cov = 0;
+  let varM = 0;
+  for (const [f, m] of use) {
+    cov += (f - meanF) * (m - meanM);
+    varM += (m - meanM) ** 2;
+  }
+  return varM > 0 ? cov / varM : null;
+}
+
+/** True when month keys a and b are consecutive calendar months. */
+function adjacentMonths(a: string, b: string): boolean {
+  const [ay, am] = a.split("-").map(Number);
+  const [by, bm] = b.split("-").map(Number);
+  if (!ay || !am || !by || !bm) return false;
+  return by === ay && bm === am + 1 ? true : by === ay + 1 && bm === 1 && am === 12;
+}
+
 export { MIN_ANNUALIZED_DAYS };
 export { addDays };

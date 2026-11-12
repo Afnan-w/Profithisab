@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   // The compare page reads /data at request time on the server; trace it into
   // the Vercel deployment so the files are present.
   outputFileTracingIncludes: {
-    "/**": ["./data/**/*"],
+    "/**": ["./data/**/*", "./config/**/*"],
   },
   async headers() {
     return [

@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+  cagrOfLevels,
+  monthEndLevels,
   parseIdlcTable,
   parseLankabdTable,
   parseNavDate,
@@ -65,11 +67,40 @@ test("parseShantaPage extracts NAV rows and dividends", () => {
   assert.equal(payload.navs.length, 3);
   assert.ok(payload.navs.some((n) => n.fund === "shanta-fixed-income-fund" && n.date === "2021-08-19" && n.nav === 10));
   assert.deepEqual(payload.dividends, [{ fund: "sasf", recordDate: "2020-01-02", amount: 0.13 }]);
-  assert.equal(payload.dseRowCount, 1);
+  assert.deepEqual(payload.dse, [{ date: "2026-11-11", dsex: 5445.05, ds30: null, dses: null }]);
 });
 
 test("parseShantaPage throws on layout change", () => {
   assert.throws(() => parseShantaPage("<html><body>no payload</body></html>"));
+});
+
+/* ── DSE index series → benchmarks ────────────────────────────────────────── */
+
+test("monthEndLevels keeps the last published level of each month", () => {
+  const levels = monthEndLevels(
+    [
+      { date: "2026-01-05", dsex: 5000, ds30: null, dses: null },
+      { date: "2026-01-28", dsex: 5100, ds30: null, dses: null },
+      { date: "2026-02-02", dsex: 5050, ds30: null, dses: null },
+      { date: "2026-02-15", dsex: null, ds30: null, dses: null },
+    ],
+    (p) => p.dsex
+  );
+  assert.deepEqual(levels, [
+    { date: "2026-01-28", value: 5100 },
+    { date: "2026-02-02", value: 5050 },
+  ]);
+});
+
+test("cagrOfLevels needs at least a year and returns percent", () => {
+  const year: Array<{ date: string; value: number }> = [];
+  for (let i = 0; i < 13; i++) {
+    const d = new Date(Date.UTC(2025, i, 28));
+    year.push({ date: d.toISOString().slice(0, 10), value: 100 * Math.pow(1.1, i / 12) });
+  }
+  const rate = cagrOfLevels(year);
+  assert.ok(rate !== null && Math.abs(rate - 10) < 1.5, `got ${rate}`);
+  assert.equal(cagrOfLevels(year.slice(0, 6)), null);
 });
 
 /* ── LankaBangla roster table ─────────────────────────────────────────────── */

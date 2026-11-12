@@ -17,6 +17,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/blog`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/methodology`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/data-status`, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${base}/hub`, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${base}/hub/mutual-funds`, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${base}/hub/savings`, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${base}/hub/opportunities`, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${base}/hub/calculators`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/about`, changeFrequency: "yearly", priority: 0.5 },
     { url: `${base}/invest`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/privacy`, changeFrequency: "yearly", priority: 0.3 },
@@ -27,6 +32,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: f.latestNavDate ? new Date(f.latestNavDate) : dataDate,
     changeFrequency: "weekly",
     priority: 0.7,
+  }));
+
+  const hubFunds: MetadataRoute.Sitemap = ALL_FUNDS.map((f) => ({
+    url: `${base}/hub/mutual-funds/${f.slug}`,
+    lastModified: f.latestNavDate ? new Date(f.latestNavDate) : dataDate,
+    changeFrequency: "weekly",
+    priority: 0.6,
   }));
 
   const learn: MetadataRoute.Sitemap = [
@@ -50,5 +62,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
-  return [...statics, ...funds, ...learn];
+  return [...statics, ...funds, ...hubFunds, ...learn];
 }

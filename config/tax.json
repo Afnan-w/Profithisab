@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "asOf": "2026-11-11",
+  "note": "Bangladesh tax and deduction rates used only for calculator estimates. Actual payouts depend on the issuer's rules and the investor's tax status. Not tax advice.",
+  "mutualFund": {
+    "dividendTaxPct": 10,
+    "capitalGainsTaxPct": 10,
+    "note": "Dividend and capital-gains tax on mutual fund units as per applicable finance act; subject to the investor's filer status and holding period."
+  },
+  "sonchayapatra": {
+    "interestTaxPct": 10,
+    "note": "Tax deducted at source on Sanchayapatra interest where applicable. Certain small instruments may be exempt up to a threshold."
+  },
+  "fdr": {
+    "interestTaxPct": 10,
+    "note": "Tax deducted at source on FDR interest for filers; non-filers may be subject to a higher rate under the finance act."
+  },
+  "savingsCertificate": {
+    "interestTaxPct": 10,
+    "note": "Tax on savings certificate interest as per NBR rules."
+  }
+}

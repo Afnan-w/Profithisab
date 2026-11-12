@@ -3,7 +3,8 @@ import { monthLabel } from "@/lib/format";
 
 export interface ChartSeries {
   name: string;
-  values: number[];
+  /** Month-aligned values; `null` = no data for that month (line starts after the gap). */
+  values: Array<number | null>;
   color: string;
   dashed?: boolean;
   area?: boolean;
@@ -35,8 +36,10 @@ export function MultiLineChart({
   const padB = 26;
   const n = labels.length;
 
-  const all = series.flatMap((s) => s.values);
-  if (!all.length || n < 2) return null;
+  const all = series
+    .flatMap((s) => s.values)
+    .filter((v): v is number => v !== null && Number.isFinite(v));
+  if (all.length < 2 || n < 2) return null;
   const min = Math.min(...all);
   const max = Math.max(...all);
   const yMin = min - (max - min) * 0.06 || 0;
@@ -56,6 +59,8 @@ export function MultiLineChart({
         <line x1={padL} y1={yOf(yMax)} x2={W - padR} y2={yOf(yMax)} stroke="var(--line)" strokeWidth="1" />
         <line x1={padL} y1={yOf(yMin)} x2={W - padR} y2={yOf(yMin)} stroke="var(--line)" strokeWidth="1" />
         {series.map((s, si) => {
+          const lastFinite = [...s.values].reverse().find((v): v is number => v !== null && Number.isFinite(v));
+          if (lastFinite === undefined) return null;
           const d = linePath(s.values, W - padL - padR, H - padT - padB);
           if (!d) return null;
           // linePath starts at (pad, padY); shift by transform
@@ -82,12 +87,12 @@ export function MultiLineChart({
               {/* end-of-line value pill */}
               <text
                 x={W - padR + 6}
-                y={yOf(s.values[n - 1]) + 3.5}
+                y={yOf(lastFinite) + 3.5}
                 fontSize="10.5"
                 fill={s.color}
                 className="tnum"
               >
-                {formatTick(s.values[n - 1])}
+                {formatTick(lastFinite)}
               </text>
             </g>
           );

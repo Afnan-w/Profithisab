@@ -22,7 +22,7 @@ inventing a figure.
 | `data/dividends/{slug}.json` | Cash dividend per unit by record date | Importer |
 | `data/amcs.json` | Asset manager names and websites | Importer |
 | `data/benchmarks.json` | Sanchayapatra, FDR and inflation reference lines, each marked `verified`, `approximate` or `unavailable` | You, with a cited source |
-| `data/sources.json` | **The fetch plan**: which sites are fetched, their URLs, politeness rules, and the curated fund list | You, when adding a new source or fund |
+| `data/nav-sources.json` | **The fetch plan**: which sites are fetched, their URLs, politeness rules, and the curated fund list | You, when adding a new source or fund |
 | `data/market-roster.json` | Weekly snapshot of every open-end fund in Bangladesh (name, AMC, NAV, AUM) from the LankaBangla portal | The fetcher |
 | `data/license.json` | The data-source policy and the exact attribution wording | **You, before the first real import** |
 | `data/verification.json` | Named human checks of a fund's data. Empty by default | You, only after a real check |
@@ -47,7 +47,7 @@ Financial Portal serves a public weekly table of the whole open-end fund
 universe. Nothing is scraped from aggregators, and ReturnKoto stays off-limits
 without written permission.
 
-`npm run data:fetch` reads `data/sources.json` and:
+`npm run data:fetch` reads `data/nav-sources.json` and:
 
 1. Fetches the LankaBangla open-end table → `data/market-roster.json` (fund
    universe + AUM, converted to crore).
@@ -65,7 +65,7 @@ roster covers all ~102 open-end funds.
 ### Adding a new AMC
 
 1. Find the AMC's own NAV page and confirm it is publicly reachable.
-2. Add the fund(s) to `data/sources.json` (`funds[]`): slug, name, acronym, AMC
+2. Add the fund(s) to `data/nav-sources.json` (`funds[]`): slug, name, acronym, AMC
    id, type, Shariah flag, and the source-specific key (fund id or page slug).
 3. Teach the fetcher how to read that site (a new adapter in
    `scripts/fetch-nav.ts`) — or, if the site offers a clean download, use the
@@ -190,7 +190,7 @@ What it does:
 1. Installs locked dependencies and validates the committed data.
 2. Checks whether the newest NAV is more than 21 days old.
 3. Runs `npm run data:fetch` — fetches fresh NAV data from the official sources
-   in `data/sources.json`.
+   in `data/nav-sources.json`.
 4. Imports `data/incoming/` (only if `data/license.json` is filled in).
 5. Commits changed data with `data: NAV update YYYY-MM-DD`.
 6. Opens a GitHub issue if the fetch/import fails, or if the data is three
@@ -221,7 +221,7 @@ It is not deleted. Its history still shows, with the stale warning attached.
 | --- | --- | --- |
 | `data/funds.json` failed validation | A required field is missing or malformed | Read the line number in the error; compare with the template |
 | `NAV must be greater than zero` | A zero/negative NAV slipped in | Correct the source file; it is not publishable |
-| `New fund ... needs type and shariah columns` | The importer cannot invent a category | Add the fund to `data/sources.json` with `type` and `shariah`, or add it by hand |
+| `New fund ... needs type and shariah columns` | The importer cannot invent a category | Add the fund to `data/nav-sources.json` with `type` and `shariah`, or add it by hand |
 | `moves 18.2% in one step (over 15%)` | Possible split, bonus unit or data error | Check the AMC notice, then `npm run data:approve` and re-run `data:check` |
 | `N-day NAV gap between X and Y` | The source did not publish NAVs for that period | Nothing to fix — the site shows the gap honestly on `/data-status` |
 | `dividend ... is 23 days from the nearest NAV date` | The dividend date may be a record date, not a NAV date | Confirm against the source, then approve or correct |

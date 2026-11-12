@@ -7,6 +7,7 @@ import { fullDate } from "@/lib/format";
 const NAV = [
   { href: "/funds", label: "Funds" },
   { href: "/compare", label: "Compare" },
+  { href: "/hub", label: "Data Hub" },
   { href: "/guides", label: "Learn" },
   { href: "/methodology", label: "Methodology" },
   { href: "/data-status", label: "Data status" },

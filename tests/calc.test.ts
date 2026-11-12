@@ -1,7 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
+  alignBenchTrail,
   annualisedVolatility,
+  betaVsIndex,
   cagrFrom,
   dividendEvents,
   latestNav,
@@ -195,4 +197,46 @@ test("dividend events are sorted and bounded by the window", () => {
   const events = dividendEvents(series, "2024-01-01", "2025-01-01");
   assert.equal(events.length, 1);
   assert.equal(events[0].amount, 10);
+});
+
+/* ── Benchmark alignment + beta ───────────────────────────────────────────── */
+
+test("alignBenchTrail rescales the index to the fund's first covered month", () => {
+  // Fund runs Jan–Apr; the index starts in February.
+  const months = ["2026-01", "2026-02", "2026-03", "2026-04"];
+  const levels = [
+    { date: "2026-02-27", value: 2000 },
+    { date: "2026-03-31", value: 2100 },
+    { date: "2026-04-29", value: 2200 },
+  ];
+  const trail = alignBenchTrail(months, levels);
+  assert.deepEqual(trail, [null, 1, 1.05, 1.1]);
+});
+
+test("alignBenchTrail returns all nulls for too-short series", () => {
+  assert.deepEqual(alignBenchTrail(["2026-01", "2026-02"], [{ date: "2026-01-31", value: 100 }]), [null, null]);
+});
+
+test("betaVsIndex recovers a 1.0 beta for a fund that moves with the index", () => {
+  // The fund's NAV = index level / 100 every month, so its monthly returns match the index.
+  const levels: Array<{ date: string; value: number }> = [];
+  const navRows: NavRow[] = [];
+  for (let i = 0; i < 24; i++) {
+    const d = new Date(Date.UTC(2024, i, 28)).toISOString().slice(0, 10);
+    const level = 1000 + i * 10 + (i % 3) * 5; // some wiggles
+    levels.push({ date: d, value: level });
+    navRows.push(nav(d, level / 100));
+  }
+  const beta = betaVsIndex(navRows, levels);
+  assert.ok(beta !== null && Math.abs(beta - 1) < 0.001, `got ${beta}`);
+});
+
+test("betaVsIndex needs 12 clean overlapping months", () => {
+  const levels = Array.from({ length: 10 }, (_, i) => ({
+    date: new Date(Date.UTC(2025, i, 28)).toISOString().slice(0, 10),
+    value: 1000 + i,
+  }));
+  const navRows = levels.map((l) => nav(l.date, 10));
+  assert.equal(betaVsIndex(navRows, levels), null);
+  assert.equal(betaVsIndex(navRows, null), null);
 });

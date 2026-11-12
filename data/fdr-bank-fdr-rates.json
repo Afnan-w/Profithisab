@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "sample": true,
+  "note": "Illustrative sample values shipped with the repo so the page renders before the first manual update. These are NOT current bank rates — they are placeholders. Update data/manual/*.json (remove \"draft\": true) or enable the bank-fdr-rates source to publish real, cited figures. FDR rates are manual data: always labelled \"manually updated on [date]\".",
+  "source_name": "Commercial Bank FDR Rates (sample placeholder)",
+  "source_url": null,
+  "data_type": "fdr",
+  "category": "bank-deposits",
+  "data_date": "2026-11-11",
+  "fetched_at": "2026-11-11T11:40:35.335Z",
+  "schedule": "manual update",
+  "delay_minutes": null,
+  "records": [
+    {
+      "value": 6.5,
+      "data_date": "2026-11-11",
+      "source_name": "Commercial Bank FDR Rates (sample placeholder)",
+      "source_url": "",
+      "label": "12-month FDR (general, illustrative)",
+      "category": "bank-deposits"
+    },
+    {
+      "value": 6,
+      "data_date": "2026-11-11",
+      "source_name": "Commercial Bank FDR Rates (sample placeholder)",
+      "source_url": "",
+      "label": "6-month FDR (general, illustrative)",
+      "category": "bank-deposits"
+    },
+    {
+      "value": 7,
+      "data_date": "2026-11-11",
+      "source_name": "Commercial Bank FDR Rates (sample placeholder)",
+      "source_url": "",
+      "label": "24-month FDR (general, illustrative)",
+      "category": "bank-deposits"
+    }
+  ]
+}

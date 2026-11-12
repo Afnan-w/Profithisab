@@ -1,19 +1,31 @@
 /** SVG path helper — client-safe (no filesystem imports). */
 
-export function linePath(values: number[], w: number, h: number): string {
-  if (values.length < 2) return "";
-  const finite = values.filter((v) => Number.isFinite(v));
-  if (finite.length < 2) return "";
+/**
+ * Maps values to an SVG polyline. `null` entries are months with no data: they
+ * are skipped and the line restarts after the gap, so a benchmark trail that
+ * begins later than the fund still lines up on the same month grid.
+ */
+export function linePath(values: Array<number | null>, w: number, h: number): string {
+  const n = values.length;
+  const finite = values.filter((v): v is number => v !== null && Number.isFinite(v));
+  if (n < 2 || finite.length < 2) return "";
   const min = Math.min(...finite);
   const max = Math.max(...finite);
   const pad = 2;
   const span = max - min || 1;
-  const step = (w - pad * 2) / (values.length - 1);
+  const step = (w - pad * 2) / (n - 1);
   let d = "";
-  for (let i = 0; i < values.length; i++) {
-    const x = (pad + i * step).toFixed(1);
-    const y = (h - pad - ((values[i] - min) / span) * (h - pad * 2)).toFixed(1);
-    d += `${i === 0 ? "M" : "L"}${x} ${y} `;
+  let broken = true;
+  for (let i = 0; i < n; i++) {
+    const v = values[i];
+    if (v === null || !Number.isFinite(v)) {
+      broken = true;
+      continue;
+    }
+    const x = pad + i * step;
+    const y = h - pad - ((v - min) / span) * (h - pad * 2);
+    d += `${broken ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)} `;
+    broken = false;
   }
   return d.trim();
 }

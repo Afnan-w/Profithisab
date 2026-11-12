@@ -1,6 +1,8 @@
 import { getDataset, availableBenchmarks } from "@/lib/data";
 import {
+  alignBenchTrail,
   annualisedVolatility,
+  betaVsIndex,
   dividendsBetween,
   latestNav,
   lumpSum,
@@ -8,9 +10,10 @@ import {
   monthEndSeries,
   positiveMonths,
   sipRun as sipCalc,
+  type BenchLevel,
   type ValuePoint,
 } from "@/lib/calc";
-import { addDays, addMonths, endOfMonthKey } from "@/lib/date";
+import { addDays, addMonths } from "@/lib/date";
 import { linePath } from "@/lib/chart";
 import type { Fund, FundMetrics, FundType, PeriodReturn, SipResult } from "@/lib/types";
 
@@ -97,6 +100,8 @@ export interface Bench {
   status: "verified" | "approximate" | "unavailable";
   note: string;
   source: { name: string; url: string | null; asOf: string | null };
+  /** Dated level series when one exists (e.g. the real DSEX closes). */
+  series: BenchLevel[] | null;
 }
 
 export const BENCHES: Bench[] = ds.benchmarks.map((b) => ({
@@ -108,6 +113,7 @@ export const BENCHES: Bench[] = ds.benchmarks.map((b) => ({
   status: b.status,
   note: b.note,
   source: { name: b.source.name, url: b.source.url ?? null, asOf: b.source.asOf ?? null },
+  series: (b.series as BenchLevel[] | null) ?? null,
 }));
 
 export const AVAILABLE_BENCHES = BENCHES.filter((b) => b.status !== "unavailable" && b.annualRate !== null);
@@ -120,6 +126,9 @@ export function benchBySlug(slug: string): Bench | undefined {
 
 const METRICS = new Map<string, FundMetrics>();
 const LUMP_PATHS = new Map<string, ValuePoint[]>();
+
+/** Real DSEX month-end levels (from data/benchmarks.json) — the cited market series used for beta. */
+const DSEX_LEVELS = (ds.benchmarks.find((b) => b.id === "dsex")?.series as BenchLevel[] | null) ?? null;
 
 function seriesFor(fund: Fund) {
   return { nav: fund.nav, dividends: fund.dividends };
@@ -187,7 +196,7 @@ export function metricsFor(slug: string): FundMetrics {
     worstFall: dd.value,
     drawdown: dd,
     vol: annualisedVolatility(fund.nav),
-    beta: null, // requires a cited DSEX history; deliberately not fabricated
+    beta: betaVsIndex(fund.nav, DSEX_LEVELS),
     positiveMonths3y: positiveMonths(fund.nav),
     sip: {
       irr1: s1?.xirr ?? null,
@@ -225,21 +234,36 @@ export function lumpPath(slug: string, amount: number, months: number | null): V
   return lumpSum(seriesFor(fund), amount, years, "reinvest")?.path ?? [];
 }
 
-/** Flat-rate benchmark trail aligned to the fund's month-end series (per ৳1). */
-export function benchTrail(benchSlug: string, fund: Fund): ValuePoint[] {
+/**
+ * Benchmark trail aligned to the fund's month-end series (per ৳1).
+ * When the benchmark has a real dated series (DSEX/DSES) the actual index
+ * levels are used — rescaled so ৳1 = the index level in the fund's first
+ * covered month — and months the index doesn't cover are null. Otherwise a
+ * flat annual rate compounds month by month.
+ */
+export function benchTrail(benchSlug: string, fund: Fund): Array<number | null> {
+  const months = fund.series.map((p) => p.m);
   const b = BENCHES.find((x) => x.slug === benchSlug);
-  if (!b || b.annualRate === null || b.status === "unavailable") return [];
+  if (!b) return months.map(() => null);
+  if (b.series && b.series.length >= 2) return alignBenchTrail(months, b.series);
+  if (b.annualRate === null || b.status === "unavailable") return months.map(() => null);
   const rM = Math.pow(1 + b.annualRate / 100, 1 / 12) - 1;
   let value = 1;
   return fund.series.map((p, i) => {
     if (i > 0) value *= 1 + rM;
-    return { date: endOfMonthKey(p.m), value };
+    return value;
   });
 }
 
 /** Benchmark values in ৳, index-aligned to the fund's month-end series. */
-export function benchValues(benchSlug: string, fund: Fund, amount: number): number[] {
-  return benchTrail(benchSlug, fund).map((p) => p.value * amount);
+export function benchValues(benchSlug: string, fund: Fund, amount: number): Array<number | null> {
+  return benchTrail(benchSlug, fund).map((v) => (v === null ? null : v * amount));
+}
+
+/** First month key covered by a benchmark trail, if any. */
+export function benchTrailStart(trail: Array<number | null>, fund: Fund): string | null {
+  const i = trail.findIndex((v) => v !== null);
+  return i === -1 ? null : fund.series[i]?.m ?? null;
 }
 
 /** SVG polyline path for a numeric series. */

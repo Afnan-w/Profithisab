@@ -65,7 +65,7 @@ export default function MethodologyPage() {
             <li><strong>Worst fall</strong> — largest peak-to-trough drop of the NAV line itself (no dividend cushioning).</li>
             <li><strong>Volatility</strong> — annualised standard deviation of month-end NAV log-returns.</li>
             <li><strong>Positive months</strong> — share of trailing months where NAV rose or held.</li>
-            <li><strong>Beta versus DSEX</strong> — not shown. No cited DSEX history is loaded, and a generated index path would be fake precision.</li>
+            <li><strong>Beta versus DSEX</strong> — covariance of the fund's monthly NAV returns with the real month-end DSEX closes over the variance of the index's own monthly returns, using up to 36 overlapping months. Hidden when fewer than 12 clean overlapping months exist.</li>
           </ul>
         </section>
 
@@ -194,7 +194,7 @@ export default function MethodologyPage() {
           <ul className="mt-2 list-disc space-y-1.5 pl-5 leading-7 text-fg-soft">
             <li>Window-shop: no per-fund start dates, no post-crash resets.</li>
             <li>Invent a number: missing values stay missing, and short history stays short.</li>
-            <li>Draw a benchmark we cannot cite: gold and DSEX are marked unavailable.</li>
+            <li>Draw a benchmark we cannot cite: gold is marked unavailable. DSEX and DSES use real month-end closes sourced from the exchange via Shanta AML's published pages.</li>
             <li>Let partner fees touch a single digit in the tables.</li>
             <li>Hide the boring parts: fees, drawdowns, stale flags and row counts sit beside the headlines.</li>
           </ul>

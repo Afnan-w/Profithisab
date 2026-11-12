@@ -1,0 +1,10 @@
+{
+  "draft": true,
+  "_instructions": "Template for a manual data entry. Copy this file to a new file named after the label slug (e.g. 12-month-fdr.json), fill in the fields, and DELETE the \"draft\": true line (and this _instructions line) so the fetch pipeline and the site ingest it. Files still marked \"draft\": true are skipped as templates. Manual entries are always displayed as \"manually updated on [date]\" — never as real-time data.",
+  "value": 0,
+  "data_date": "2026-11-11",
+  "label": "12-month FDR (general)",
+  "source_name": "Bank name / official source",
+  "source_url": "https://example.com/official-rate-page",
+  "updated": "2026-11-11"
+}

@@ -13,7 +13,10 @@
     "data:import": "tsx scripts/import.ts",
     "data:approve": "tsx scripts/approve.ts",
     "data:staleness": "tsx scripts/staleness.ts",
-    "test": "tsx --test tests/calc.test.ts tests/import.test.ts tests/fetch.test.ts"
+    "fetch:nav": "tsx scripts/fetch/hub.ts nav",
+    "fetch:rates": "tsx scripts/fetch/hub.ts rates",
+    "fetch:index": "tsx scripts/fetch/hub.ts index",
+    "test": "tsx --test tests/calc.test.ts tests/import.test.ts tests/fetch.test.ts tests/hub.test.ts"
   },
   "dependencies": {
     "clsx": "^2.1.1",

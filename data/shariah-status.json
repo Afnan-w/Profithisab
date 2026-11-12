@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "checkedOn": "2026-11-12",
+  "note": "Shariah status is listed ONLY when the fund's own official materials state it explicitly. A fund whose name contains 'Shariah' is not marked compliant here unless an official page or document says so, and a fund with no entry is shown as 'not confirmed' — we never infer status from a fund's name. Check the fund's official prospectus before investing.",
+  "funds": [
+    {
+      "slug": "shanta-amanah-shariah-fund",
+      "status": "shariah-compliant",
+      "source_name": "Shanta Asset Management — Shanta Amanah Shariah Fund page",
+      "source_url": "https://www.shanta-aml.com/our-funds/shanta-amanah-shariah-fund",
+      "quote": "Shanta Amanah Shariah Fund is a shariah-compliant mutual fund designed to cater to the investment objectives of Islamic-minded investors.",
+      "checked_on": "2026-11-12"
+    },
+    {
+      "slug": "idlc-aml-shariah-fund",
+      "status": "shariah-compliant",
+      "source_name": "IDLC Asset Management — IDLC AML Shariah Fund page",
+      "source_url": "https://idlc.com/aml/shariah_fund.php",
+      "quote": "To generate profit by investing in a portfolio of Shariah compliant securities, vetted by the Shariah Advisory Board.",
+      "checked_on": "2026-11-12"
+    }
+  ]
+}

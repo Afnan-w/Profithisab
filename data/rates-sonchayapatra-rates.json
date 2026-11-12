@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "sample": true,
+  "note": "Illustrative sample values shipped with the repo so the page renders before the first scheduled fetch. These are NOT current published rates. Enable the sonchayapatra-rates source and run `npm run fetch:rates` to replace them with validated figures from the official source.",
+  "source_name": "Bangladesh Sanchayapatra / Savings Schemes (sample)",
+  "source_url": "https://www.bspcl.gov.bd/",
+  "data_type": "rates",
+  "category": "savings-schemes",
+  "data_date": "2026-11-11",
+  "fetched_at": "2026-11-11T11:40:35.335Z",
+  "schedule": "daily after market close",
+  "delay_minutes": null,
+  "records": [
+    {
+      "value": 11.28,
+      "data_date": "2026-11-11",
+      "source_name": "Bangladesh Sanchayapatra / Savings Schemes (sample)",
+      "source_url": "https://www.bspcl.gov.bd/",
+      "label": "3-Year Sanchayapatra (at par)",
+      "category": "savings-schemes"
+    },
+    {
+      "value": 11.4,
+      "data_date": "2026-11-11",
+      "source_name": "Bangladesh Sanchayapatra / Savings Schemes (sample)",
+      "source_url": "https://www.bspcl.gov.bd/",
+      "label": "5-Year Sanchayapatra (at par)",
+      "category": "savings-schemes"
+    },
+    {
+      "value": 11.98,
+      "data_date": "2026-11-11",
+      "source_name": "Bangladesh Sanchayapatra / Savings Schemes (sample)",
+      "source_url": "https://www.bspcl.gov.bd/",
+      "label": "Family Savings Certificate (5-year)",
+      "category": "savings-schemes"
+    },
+    {
+      "value": 10.5,
+      "data_date": "2026-11-11",
+      "source_name": "Bangladesh Sanchayapatra / Savings Schemes (sample)",
+      "source_url": "https://www.bspcl.gov.bd/",
+      "label": "Pension Savings Certificate (5-year)",
+      "category": "savings-schemes"
+    },
+    {
+      "value": 11.76,
+      "data_date": "2026-11-11",
+      "source_name": "Bangladesh Sanchayapatra / Savings Schemes (sample)",
+      "source_url": "https://www.bspcl.gov.bd/",
+      "label": "Monthly Profit Sanchayapatra (5-year)",
+      "category": "savings-schemes"
+    }
+  ]
+}

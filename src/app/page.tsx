@@ -254,8 +254,8 @@ export default function HomePage() {
             <BenchBars items={benchmarkItems} />
           </div>
           <p className="mt-4 text-[11px] leading-relaxed text-faint">
-            Gold and DSEX are marked unavailable and are not drawn. We will add them only with a dated, citable series —
-            not with a generated path.
+            Gold is marked unavailable and is not drawn. DSEX and DSES use real month-end index closes (2018 →
+            today), sourced from the exchange via Shanta AML's published pages — not a generated path.
           </p>
         </div>
       </section>

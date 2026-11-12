@@ -134,6 +134,111 @@ marked `approximate`, and gold/DSEX marked `unavailable`. Update a rate only wit
 a source and date; never turn an approximate line into a verified one without a
 citation.
 
+## Investment Data Hub (`/hub`)
+
+An additive section of the site — every existing page, route and nav item is
+unchanged; the header gained one **Data Hub** link. The hub covers:
+
+| Route | Contents |
+| --- | --- |
+| `/hub` | Landing page + source registry status (enabled/sample/stale/delay flags) |
+| `/hub/mutual-funds` | Searchable fund table with a Shariah filter and per-fund links |
+| `/hub/mutual-funds/[slug]` | Per-fund NAV history chart, latest NAV points, Shariah status source |
+| `/hub/savings` | Sonchayapatra / savings-scheme rates |
+| `/hub/opportunities` | FDR rates, Bangladesh Bank treasury, DSE & CSE indexes |
+| `/hub/calculators` | SIP, lump sum, FDR and Sonchayapatra calculators |
+
+Display rules enforced in code (`src/lib/hub/freshness.ts`,
+`src/components/hub/provenance.tsx`):
+
+- **Every** table/chart shows source name (linked), data date, last fetched time
+  in **Asia/Dhaka**, and a “Delayed by up to X minutes” badge where the source
+  declares a delay. Nothing delayed or manual is ever presented as real-time.
+- Past the expected refresh interval (36 h daily / 45 min for 15-minute sources)
+  the block shows **“Data may be outdated”**. Manual and unknown schedules are
+  never flagged stale — they are labelled **“manually updated on [date]”** instead.
+- Sample data shipped so pages render before the first fetch is badged
+  **“Sample data”** everywhere it appears.
+- **Shariah status is never inferred from a fund name.** Only entries in
+  `data/shariah-status.json` with a citable official source (name, URL, quote,
+  checked-on date) are shown as confirmed; every other fund reads
+  **“Not confirmed”** — which is not the same as non-compliant.
+- No buy/sell recommendations, no rankings without a shown method, and
+  “Past performance does not guarantee future results.” under every fund/return
+  figure plus the site-wide notice “Information only. Not investment advice.
+  Check the fund's official prospectus before investing.”
+
+### Hub data files
+
+```
+data/
+├─ sources.json               source registry — every source starts enabled: false
+├─ shariah-status.json        source-documented Shariah statuses only
+├─ nav-history/{slug}.json    per-fund NAV history (merged by the fetcher)
+├─ {type}-{source-id}.json    result files: rates-*, fdr-*, index-*, nav-*
+├─ manual/{slug}.json         manual overrides; "draft": true = template, skipped
+config/
+└─ tax.json                   calculator tax assumptions (shown with the results)
+```
+
+Result files carry `source_name`, `source_url`, `data_date`, `fetched_at`,
+`schedule`, `delay_minutes` and `records[]`; sample copies add `"sample": true`.
+`src/lib/hub/` reads them server-side (filesystem, like `src/lib/data.ts`).
+
+### Enabling a source
+
+1. Open `data/sources.json` and confirm the source is **public**, needs **no
+   login**, does **not prohibit automated access**, and is **not a paid/licensed
+   feed**. If any check fails, leave it `enabled: false` — the hub then shows the
+   placeholder interface with no invented numbers.
+2. Flip `"enabled": true` for that source.
+3. Run the matching fetch and check the output:
+
+   ```bash
+   npm run fetch:nav       # data_type: nav   → NAV history per fund
+   npm run fetch:rates     # data_type: rates → savings-scheme rates
+   npm run fetch:index     # data_type: index → DSE/CSE/BB levels
+   ```
+
+4. Validation runs before anything is written: NAV > 0, rates within 0–30 %,
+   index levels > 0, every record needs a source URL and a real calendar date.
+   If more than 20 % of a batch fails (or the batch is empty), the run is
+   rejected and the **last good file is kept**. Fetch failures, logins, CAPTCHAs
+   and bot blocks stop that source immediately.
+
+The fetcher (`scripts/fetch/`) checks `robots.txt` first, sends a clear User-Agent
+with a contact address, waits ≥ 3 s between requests to the same host, times out
+at 15 s, retries at most twice with backoff, and never writes a file that fails
+validation.
+
+### Manual updates
+
+For sources with `"type": "manual"` (e.g. bank FDR rates) copy
+`data/manual/_template.json` to `data/manual/<label-slug>.json`, fill in
+`value`, `data_date`, `label`, `source_name` and `source_url`, and **delete the
+`"draft": true` line** — files still marked `draft` are skipped as templates.
+Run `npm run fetch:rates` (or the matching type) to ingest; the site then shows
+“manually updated on [date]” for those rows.
+
+### Schedules
+
+`.github/workflows/hub-fetch.yml`:
+
+- **NAV + rates + FDR**: daily at 09:00 UTC (15:00 Asia/Dhaka, after close).
+- **Indexes**: every 15 minutes, Sun–Thu 04:00–08:30 UTC
+  (10:00–14:30 Asia/Dhaka); the script self-gates to the trading window.
+- Paid/licensed sources stay `enabled: false` — placeholder interface only.
+- The workflow commits only `data/` (fetched results), so site code deploys via
+  Vercel on push while refreshed data lands from Actions.
+
+### Tests
+
+`npm test` includes `tests/hub.test.ts`: SIP/lump/FDR arithmetic, Sonchayapatra
+payout and compounding math, validation rules (including the >20 % rejection and
+last-good fallback), stale-data warnings, Asia/Dhaka formatting, delay/manual
+labels.
+
+
 ## Scripts
 
 | Command | What it does |
@@ -145,7 +250,10 @@ citation.
 | `npm run data:import -- <path>` | Import/merge a CSV, JSON or XLSX export |
 | `npm run data:approve` | Promote reviewed rows from the review queue |
 | `npm run data:staleness` | Report funds with no recent NAV |
-| `npm run test` | Run the arithmetic and importer unit tests |
+| `npm run fetch:nav` | Fetch enabled NAV sources into `data/nav-history/` |
+| `npm run fetch:rates` | Fetch enabled savings/manual rate sources |
+| `npm run fetch:index` | Fetch enabled index sources (DSE/CSE/BB) |
+| `npm run test` | Run the arithmetic, importer and hub unit tests |
 
 ## Environment variables
 
