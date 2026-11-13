@@ -20,7 +20,7 @@ export function SiteHeader() {
         <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight" aria-label="Profithisab home">
           <SiteLogo className="h-6 w-6" />
           <span className="text-[15px] font-bold tracking-tight">Profithisab</span>
-          <span className="hidden text-[11px] font-normal text-muted sm:inline">মিউচ্যুয়াল ফੰਡ রিটার্ন</span>
+          <span className="hidden text-[11px] font-normal text-muted sm:inline">Mutual Fund Returns</span>
         </Link>
         <nav className="ml-auto hidden items-center gap-1 md:flex" aria-label="Primary">
           {NAV.map((n) => (
