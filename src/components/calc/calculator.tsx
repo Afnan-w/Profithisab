@@ -50,7 +50,10 @@ interface CalcRow {
 }
 
 export default function Calculator({ funds, benchmarks, latestNavDate, isDemo }: Props) {
-  const [amount, setAmount] = useState(5000);
+  // The input keeps its own text so the field can be cleared and retyped;
+  // the numeric amount falls back to the last valid value while editing.
+  const [amountText, setAmountText] = useState("5000");
+  const lastValidAmount = useRef(5000);
   const [mode, setMode] = useState<CalculatorMode>("sip");
   const [horizon, setHorizon] = useState<PeriodId>("3y");
   const [shariahOnly, setShariahOnly] = useState(false);
@@ -65,7 +68,7 @@ export default function Calculator({ funds, benchmarks, latestNavDate, isDemo }:
     initialised.current = true;
     const sp = new URLSearchParams(window.location.search);
     const a = Number(sp.get("amount"));
-    if (Number.isFinite(a) && a >= 100) setAmount(Math.min(10_000_000, a));
+    if (Number.isFinite(a) && a >= 100) setAmountText(String(Math.min(10_000_000, a)));
     const m = sp.get("mode");
     if (m === "lump" || m === "sip") setMode(m);
     const h = sp.get("h");
@@ -76,8 +79,14 @@ export default function Calculator({ funds, benchmarks, latestNavDate, isDemo }:
   }, []);
 
   // Keep the address bar shareable without adding history entries.
+  const parsedAmount = Number(amountText);
+  const amountValid =
+    Number.isFinite(parsedAmount) && parsedAmount >= 100 && parsedAmount <= 10_000_000;
+  const amount = amountValid ? parsedAmount : lastValidAmount.current;
+
   useEffect(() => {
     if (!initialised.current) return;
+    if (amountValid) lastValidAmount.current = amount;
     const sp = new URLSearchParams();
     sp.set("amount", String(amount));
     sp.set("mode", mode);
@@ -196,10 +205,12 @@ export default function Calculator({ funds, benchmarks, latestNavDate, isDemo }:
                 type="number"
                 min={100}
                 step={500}
-                value={amount}
-                onChange={(e) => setAmount(Math.max(0, Math.min(10_000_000, Number(e.target.value) || 0)))}
+                placeholder="5000"
+                value={amountText}
+                onChange={(e) => setAmountText(e.target.value)}
                 className="w-28 bg-transparent px-2 py-2.5 text-lg font-semibold tnum outline-none"
                 inputMode="numeric"
+                aria-describedby="calc-amount-hint"
               />
             </div>
             <div className="flex flex-wrap gap-1">
@@ -207,7 +218,7 @@ export default function Calculator({ funds, benchmarks, latestNavDate, isDemo }:
                 <button
                   key={p}
                   type="button"
-                  onClick={() => setAmount(p)}
+                  onClick={() => setAmountText(String(p))}
                   className={`rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition ${
                     amount === p
                       ? "border-brand-500 bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300"
@@ -218,6 +229,11 @@ export default function Calculator({ funds, benchmarks, latestNavDate, isDemo }:
                 </button>
               ))}
             </div>
+            {!amountValid ? (
+              <p id="calc-amount-hint" className="w-full text-[11px] text-faint">
+                Showing results for the last valid amount. Enter a figure between ৳100 and ৳1 crore.
+              </p>
+            ) : null}
           </div>
         </div>
 
