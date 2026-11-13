@@ -636,14 +636,14 @@
       "amcId": "lankabangla",
       "type": "balanced",
       "shariah": false,
-      "launchDate": null,
+      "launchDate": "2016-11-03",
       "fee": null,
-      "fundSize": null,
+      "fundSize": 34.1,
       "minInvestment": 5000,
       "source": {
-        "name": "LankaBangla Financial Portal weekly open-end table",
-        "url": "https://www.lankabd.com/MF/OpenEndMutualFund",
-        "asOf": "2026-10-19",
+        "name": "LankaBangla AML published NAV history (first-party)",
+        "url": "https://lbamcl.com/nav",
+        "asOf": "2026-11-12",
         "kind": "public-disclosure"
       }
     },
@@ -655,14 +655,14 @@
       "amcId": "lankabangla",
       "type": "balanced",
       "shariah": true,
-      "launchDate": null,
+      "launchDate": "2018-04-05",
       "fee": null,
-      "fundSize": null,
+      "fundSize": 29.4,
       "minInvestment": 5000,
       "source": {
-        "name": "LankaBangla Financial Portal weekly open-end table",
-        "url": "https://www.lankabd.com/MF/OpenEndMutualFund",
-        "asOf": "2026-10-19",
+        "name": "LankaBangla AML published NAV history (first-party)",
+        "url": "https://lbamcl.com/nav",
+        "asOf": "2026-11-12",
         "kind": "public-disclosure"
       }
     },
@@ -674,14 +674,14 @@
       "amcId": "lankabangla",
       "type": "income",
       "shariah": false,
-      "launchDate": null,
+      "launchDate": "2026-06-17",
       "fee": null,
-      "fundSize": null,
+      "fundSize": 27.1,
       "minInvestment": 5000,
       "source": {
-        "name": "LankaBangla Financial Portal weekly open-end table",
-        "url": "https://www.lankabd.com/MF/OpenEndMutualFund",
-        "asOf": "2026-10-19",
+        "name": "LankaBangla AML published NAV history (first-party)",
+        "url": "https://lbamcl.com/nav",
+        "asOf": "2026-11-12",
         "kind": "public-disclosure"
       }
     },

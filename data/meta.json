@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-13T10:46:35.906Z",
+  "generatedAt": "2026-11-13T10:53:22.016Z",
   "lastUpdated": "2026-11-13",
   "latestNavDate": "2026-11-12",
   "isDemo": false,
@@ -7,11 +7,11 @@
   "counts": {
     "funds": 52,
     "amcs": 45,
-    "withNav": 11,
+    "withNav": 14,
     "complete": 0,
-    "partial": 11,
-    "missing": 41,
-    "stale": 41,
+    "partial": 14,
+    "missing": 38,
+    "stale": 38,
     "verified": 0
   },
   "perFund": [
@@ -315,29 +315,29 @@
     {
       "id": "lankabangla-1st-balanced-unit-fund",
       "slug": "lankabangla-1st-balanced-unit-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
+      "latestNavDate": "2026-11-12",
+      "completeness": "partial",
+      "rows": 691,
+      "stale": false,
+      "source": "LankaBangla AML published NAV history (first-party)"
     },
     {
       "id": "lankabangla-al-arafah-shariah-unit-fund",
       "slug": "lankabangla-al-arafah-shariah-unit-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
+      "latestNavDate": "2026-11-12",
+      "completeness": "partial",
+      "rows": 617,
+      "stale": false,
+      "source": "LankaBangla AML published NAV history (first-party)"
     },
     {
       "id": "lankabangla-fixed-income-fund",
       "slug": "lankabangla-fixed-income-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
+      "latestNavDate": "2026-11-12",
+      "completeness": "partial",
+      "rows": 102,
+      "stale": false,
+      "source": "LankaBangla AML published NAV history (first-party)"
     },
     {
       "id": "mtb-unit-fund",

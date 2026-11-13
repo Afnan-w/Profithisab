@@ -118,3 +118,29 @@ Each import appends a dated entry here. Old entries are never deleted.
 | edge-al-amin-shariah-consumer-fund | 397 | 0 |
 | edge-high-quality-income-fund | 426 | 0 |
 
+
+## 2026-11-13T10:51:51.606Z — lbaml.json
+
+
+- Mode: NAV merge
+- Funds: 52 (new 0, updated 3)
+- NAV rows added: 1410; unchanged: 0; sent to review: 0
+- Dividends added: 0
+- Review items: 0
+
+### Column mapping
+
+| Our field | Export column |
+| --- | --- |
+| fund | `fund` |
+| date | `date` |
+| nav | `nav` |
+
+### Coverage after merge
+
+| Fund | NAV rows | Dividend rows |
+| --- | --- | --- |
+| lankabangla-1st-balanced-unit-fund | 691 | 0 |
+| lankabangla-al-arafah-shariah-unit-fund | 617 | 0 |
+| lankabangla-fixed-income-fund | 102 | 0 |
+

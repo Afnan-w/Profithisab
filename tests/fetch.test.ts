@@ -6,6 +6,7 @@ import {
   parseEdgePage,
   parseIdlcTable,
   parseLankabdTable,
+  parseLbNavHistory,
   parseNavDate,
   parseShantaPage,
 } from "../scripts/fetch-nav";
@@ -153,6 +154,23 @@ test("parseEdgePage handles a single-series chart (DSES Shariah funds) and missi
   assert.equal(payload.navs[0].nav, 15.81);
   assert.equal(payload.fundSize, null);
   assert.equal(payload.inception, null);
+});
+
+/* ── LankaBangla AML NAV-history API ──────────────────────────────────────── */
+
+const lbNavJson = JSON.stringify({
+  data: [
+    ["LankaBangla 1st Balanced Unit Fund", "2016-11-03", "2016-11-03", "10.11", "10.11", "10.11", "4673.00"],
+    ["LankaBangla 1st Balanced Unit Fund", "2016-11-03", "2016-11-10", "10.13", "10.13", "10.13", "4677.00"],
+    ["LankaBangla 1st Balanced Unit Fund", "2016-11-03", "2026-11-12", "11.65", "11.65", "11.65", "5444.90650"],
+  ],
+});
+
+test("parseLbNavHistory reads the weekly NAV series from the AMC endpoint", () => {
+  const rows = parseLbNavHistory(lbNavJson);
+  assert.equal(rows.length, 3);
+  assert.deepEqual(rows[0], { fund: "LankaBangla 1st Balanced Unit Fund", date: "2016-11-03", nav: 10.11 });
+  assert.deepEqual(rows[2], { fund: "LankaBangla 1st Balanced Unit Fund", date: "2026-11-12", nav: 11.65 });
 });
 
 /* ── LankaBangla roster table ─────────────────────────────────────────────── */

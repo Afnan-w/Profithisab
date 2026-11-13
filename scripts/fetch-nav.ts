@@ -386,6 +386,69 @@ async function fetchEdge(roster: Roster | null, noCache: boolean): Promise<Fetch
   };
 }
 
+/* ── Adapter: LankaBangla AML (public NAV-history API on lbamcl.com) ──────── */
+
+/**
+ * lbamcl.com/nav drives its "Historical Nav" table from an unauthenticated
+ * endpoint:
+ *   POST https://lbamcl.com/api/include/classes/frontend/getnav.php?action=history
+ *   body: fund_name=<1|5|6|7|8>&from_date=YYYY-MM-DD&to_date=YYYY-MM-DD
+ * Rows are [fundName, inceptionDate, navDate, nav, …, DSEX]. NAVs are weekly
+ * (the AMC computes NAV weekly) and the series runs since inception.
+ */
+export function parseLbNavHistory(json: string): NavRow[] {
+  const doc = JSON.parse(json) as { data?: unknown[][] };
+  const out: NavRow[] = [];
+  for (const row of doc.data ?? []) {
+    const date = parseNavDate(String(row[2] ?? ""));
+    const nav = num(String(row[3] ?? ""));
+    if (date && nav !== null && nav > 0) out.push({ fund: String(row[0] ?? ""), date, nav });
+  }
+  return out;
+}
+
+async function fetchLankabangla(roster: Roster | null, noCache: boolean): Promise<FetchResult> {
+  console.log("→ LankaBangla AML: NAV-history API…");
+  const sources = loadSources();
+  const lbFunds = sources.funds.filter((f) => f.sources.lbaml);
+  if (!lbFunds.length) throw new Error("No LankaBangla AML funds configured in data/nav-sources.json");
+
+  const navs: NavRow[] = [];
+  for (const fund of lbFunds) {
+    const key = fund.sources.lbaml!.key;
+    const json = await politeFetch("https://lbamcl.com/api/include/classes/frontend/getnav.php?action=history", {
+      method: "POST",
+      body: new URLSearchParams({
+        fund_name: key,
+        from_date: "2000-01-01",
+        to_date: todayISO(),
+      }).toString(),
+      cacheKey: `lbaml-fund-${key}.json`,
+      noCache,
+    });
+    const parsed = parseLbNavHistory(json);
+    const seen = new Set<string>();
+    for (const row of parsed) {
+      if (seen.has(row.date)) continue;
+      seen.add(row.date);
+      navs.push({ fund: fund.slug, date: row.date, nav: row.nav });
+    }
+    console.log(`  ${fund.name}: ${seen.size} NAV rows`);
+  }
+
+  const { rows } = fundRowsFor("lbaml", new Set(), roster);
+  const incoming: IncomingFile = { funds: rows, history: navs, dividends: [] };
+  fs.writeFileSync(path.join(INCOMING_DIR, "lbaml.json"), `${JSON.stringify(incoming, null, 2)}\n`);
+
+  return {
+    source: "lbaml",
+    navRows: navs.length,
+    dividendRows: 0,
+    funds: lbFunds.length,
+    detail: "Weekly NAV history from the AMC's own public endpoint. Dividend record dates not published in this endpoint yet.",
+  };
+}
+
 /* ── Adapter: LankaBangla open-end fund table (roster snapshot) ──────────── */
 
 export interface RosterFund {
@@ -712,6 +775,7 @@ async function main() {
   if (!only || only.includes("shanta")) results.push(await fetchShanta(roster, noCache));
   if (!only || only.includes("idlc")) results.push(await fetchIdlc(roster, noCache));
   if (!only || only.includes("edge")) results.push(await fetchEdge(roster, noCache));
+  if (!only || only.includes("lbaml")) results.push(await fetchLankabangla(roster, noCache));
 
   console.log("\nFetch summary");
   for (const r of results) {
