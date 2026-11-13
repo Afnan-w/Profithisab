@@ -68,12 +68,12 @@
       "shariah": true,
       "launchDate": "2023-09-01",
       "fee": null,
-      "fundSize": null,
+      "fundSize": 6.5,
       "minInvestment": 5000,
       "source": {
-        "name": "LankaBangla Financial Portal weekly open-end table",
-        "url": "https://www.lankabd.com/MF/OpenEndMutualFund",
-        "asOf": "2026-10-19",
+        "name": "CWT AMC published NAV history (first-party)",
+        "url": "https://www.cwtamc.com/cwt-community-bank-shariah-fund/",
+        "asOf": "2026-11-12",
         "kind": "public-disclosure"
       }
     },
@@ -87,12 +87,12 @@
       "shariah": false,
       "launchDate": "2019-08-01",
       "fee": null,
-      "fundSize": null,
+      "fundSize": 5.8,
       "minInvestment": 5000,
       "source": {
-        "name": "LankaBangla Financial Portal weekly open-end table",
-        "url": "https://www.lankabd.com/MF/OpenEndMutualFund",
-        "asOf": "2026-10-19",
+        "name": "CWT AMC published NAV history (first-party)",
+        "url": "https://www.cwtamc.com/cwt-emerging-bangladesh-first-growth-fund-cwtebfgf/",
+        "asOf": "2026-11-12",
         "kind": "public-disclosure"
       }
     },
@@ -106,12 +106,12 @@
       "shariah": false,
       "launchDate": "2021-06-01",
       "fee": null,
-      "fundSize": null,
+      "fundSize": 5.4,
       "minInvestment": 5000,
       "source": {
-        "name": "LankaBangla Financial Portal weekly open-end table",
-        "url": "https://www.lankabd.com/MF/OpenEndMutualFund",
-        "asOf": "2026-10-19",
+        "name": "CWT AMC published NAV history (first-party)",
+        "url": "https://www.cwtamc.com/opportunities-fund/",
+        "asOf": "2026-11-12",
         "kind": "public-disclosure"
       }
     },
@@ -125,12 +125,12 @@
       "shariah": false,
       "launchDate": "2020-09-01",
       "fee": null,
-      "fundSize": null,
+      "fundSize": 7.1,
       "minInvestment": 5000,
       "source": {
-        "name": "LankaBangla Financial Portal weekly open-end table",
-        "url": "https://www.lankabd.com/MF/OpenEndMutualFund",
-        "asOf": "2026-10-19",
+        "name": "CWT AMC published NAV history (first-party)",
+        "url": "https://www.cwtamc.com/cwt-sadharan-bima-growth-fund-cwtsbgf/",
+        "asOf": "2026-11-12",
         "kind": "public-disclosure"
       }
     },

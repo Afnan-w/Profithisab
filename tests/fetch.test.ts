@@ -3,6 +3,7 @@ import { test } from "node:test";
 import {
   cagrOfLevels,
   monthEndLevels,
+  parseCwtTable,
   parseEdgePage,
   parseIdlcTable,
   parseLankabdTable,
@@ -154,6 +155,23 @@ test("parseEdgePage handles a single-series chart (DSES Shariah funds) and missi
   assert.equal(payload.navs[0].nav, 15.81);
   assert.equal(payload.fundSize, null);
   assert.equal(payload.inception, null);
+});
+
+/* ── CWT AMC fund page (daily NAV table) ─────────────────────────────────── */
+
+const cwtHtml = `
+<p>Publishing Date Validity Date NAV (At Market Price) NAV (At Cost Price) Sale Price Repurchase Price DSEX</p>
+<table>
+<tr><td>12/11/2026</td><td>15/11/2026</td><td>15.90</td><td>13.94</td><td>15.90</td><td>15.90</td><td>5444.91</td></tr>
+<tr><td>11/11/2026</td><td>12/11/2026</td><td>15.82</td><td>13.93</td><td>15.82</td><td>15.82</td><td>5445.06</td></tr>
+<tr><td>n/a</td><td>n/a</td><td>n/a</td></tr>
+</table>`;
+
+test("parseCwtTable reads the at-market NAV from dd/mm/yyyy table rows", () => {
+  const rows = parseCwtTable(cwtHtml);
+  assert.equal(rows.length, 2);
+  assert.deepEqual(rows[0], { fund: "", date: "2026-11-12", nav: 15.9 });
+  assert.deepEqual(rows[1], { fund: "", date: "2026-11-11", nav: 15.82 });
 });
 
 /* ── LankaBangla AML NAV-history API ──────────────────────────────────────── */

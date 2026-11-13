@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-13T10:53:22.016Z",
+  "generatedAt": "2026-11-13T11:00:23.408Z",
   "lastUpdated": "2026-11-13",
   "latestNavDate": "2026-11-12",
   "isDemo": false,
@@ -7,11 +7,11 @@
   "counts": {
     "funds": 52,
     "amcs": 45,
-    "withNav": 14,
+    "withNav": 18,
     "complete": 0,
-    "partial": 14,
-    "missing": 38,
-    "stale": 38,
+    "partial": 18,
+    "missing": 34,
+    "stale": 34,
     "verified": 0
   },
   "perFund": [
@@ -45,38 +45,38 @@
     {
       "id": "cwt-community-bank-shariah-fund",
       "slug": "cwt-community-bank-shariah-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
+      "latestNavDate": "2026-11-12",
+      "completeness": "partial",
+      "rows": 340,
+      "stale": false,
+      "source": "CWT AMC published NAV history (first-party)"
     },
     {
       "id": "cwt-emerging-bangladesh-first-growth-fund",
       "slug": "cwt-emerging-bangladesh-first-growth-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
+      "latestNavDate": "2026-11-12",
+      "completeness": "partial",
+      "rows": 515,
+      "stale": false,
+      "source": "CWT AMC published NAV history (first-party)"
     },
     {
       "id": "cwt-opportunities-fund",
       "slug": "cwt-opportunities-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
+      "latestNavDate": "2026-11-12",
+      "completeness": "partial",
+      "rows": 450,
+      "stale": false,
+      "source": "CWT AMC published NAV history (first-party)"
     },
     {
       "id": "cwt-sadharan-bima-growth-fund",
       "slug": "cwt-sadharan-bima-growth-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
+      "latestNavDate": "2026-11-12",
+      "completeness": "partial",
+      "rows": 499,
+      "stale": false,
+      "source": "CWT AMC published NAV history (first-party)"
     },
     {
       "id": "ebl-aml-1st-unit-fund",

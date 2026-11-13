@@ -34,6 +34,14 @@
       "note": "Each fund page (edgeamc.com/<fund-slug>) embeds the complete daily NAV history since inception as a Google Charts table, plus Fund Summary tiles (inception date, fund size). Dividends are published only as fiscal-year percentages without record dates, so they are not imported."
     },
     {
+      "id": "cwt",
+      "name": "CWT Asset Management Company Ltd.",
+      "url": "https://www.cwtamc.com",
+      "kind": "amc-website",
+      "role": "NAV history",
+      "note": "Each fund page (cwtamc.com/<page>) publishes the full daily NAV table since inception (Publishing Date, Validity Date, NAV at Market/Cost price, Sale, Repurchase, DSEX). We import the at-market NAV. Page slugs: cwt-emerging-bangladesh-first-growth-fund-cwtebfgf, cwt-sadharan-bima-growth-fund-cwtsbgf, opportunities-fund, cwt-community-bank-shariah-fund."
+    },
+    {
       "id": "lbaml",
       "name": "LankaBangla Asset Management Company Limited",
       "url": "https://lbamcl.com/nav",
@@ -78,10 +86,10 @@
     { "slug": "icl-balanced-fund", "name": "ICL Balanced Fund", "acronym": "ICBF", "amc": "icl", "type": "balanced", "shariah": false, "sources": {} },
     { "slug": "icl-growth-fund", "name": "BCB ICL Growth Fund", "acronym": "ICGF", "amc": "icl", "type": "growth", "shariah": false, "sources": {} },
     { "slug": "icl-inctl-shariah-fund", "name": "ICL INCTL Shariah Fund", "acronym": "ICSF", "amc": "icl", "type": "growth", "shariah": true, "sources": {} },
-    { "slug": "cwt-community-bank-shariah-fund", "name": "CWT Community Bank Shariah Fund", "acronym": "CBSF", "amc": "cwt", "type": "growth", "shariah": true, "sources": {} },
-    { "slug": "cwt-emerging-bangladesh-first-growth-fund", "name": "CWT Emerging Bangladesh First Growth Fund", "acronym": "CEBGF", "amc": "cwt", "type": "growth", "shariah": false, "sources": {} },
-    { "slug": "cwt-opportunities-fund", "name": "CWT Opportunities Fund", "acronym": "COF", "amc": "cwt", "type": "growth", "shariah": false, "sources": {} },
-    { "slug": "cwt-sadharan-bima-growth-fund", "name": "CWT Sadharan Bima Growth Fund", "acronym": "CSBGF", "amc": "cwt", "type": "growth", "shariah": false, "sources": {} },
+    { "slug": "cwt-community-bank-shariah-fund", "name": "CWT Community Bank Shariah Fund", "acronym": "CBSF", "amc": "cwt", "type": "growth", "shariah": true, "sources": { "cwt": { "page": "cwt-community-bank-shariah-fund" } } },
+    { "slug": "cwt-emerging-bangladesh-first-growth-fund", "name": "CWT Emerging Bangladesh First Growth Fund", "acronym": "CEBGF", "amc": "cwt", "type": "growth", "shariah": false, "sources": { "cwt": { "page": "cwt-emerging-bangladesh-first-growth-fund-cwtebfgf" } } },
+    { "slug": "cwt-opportunities-fund", "name": "CWT Opportunities Fund", "acronym": "COF", "amc": "cwt", "type": "growth", "shariah": false, "sources": { "cwt": { "page": "opportunities-fund" } } },
+    { "slug": "cwt-sadharan-bima-growth-fund", "name": "CWT Sadharan Bima Growth Fund", "acronym": "CSBGF", "amc": "cwt", "type": "growth", "shariah": false, "sources": { "cwt": { "page": "cwt-sadharan-bima-growth-fund-cwtsbgf" } } },
     { "slug": "lankabangla-1st-balanced-unit-fund", "name": "LankaBangla 1st Balanced Unit Fund", "acronym": "LBUF", "amc": "lankabangla", "type": "balanced", "shariah": false, "sources": { "lbaml": { "key": "1" } } },
     { "slug": "lankabangla-al-arafah-shariah-unit-fund", "name": "LankaBangla Al-Arafah Shariah Unit Fund", "acronym": "LAASUF", "amc": "lankabangla", "type": "balanced", "shariah": true, "sources": { "lbaml": { "key": "5" } } },
     { "slug": "lankabangla-fixed-income-fund", "name": "LankaBangla Fixed Income Fund", "acronym": "LFIF", "amc": "lankabangla", "type": "income", "shariah": false, "sources": { "lbaml": { "key": "8" } } },

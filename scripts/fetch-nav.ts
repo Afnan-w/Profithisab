@@ -386,6 +386,65 @@ async function fetchEdge(roster: Roster | null, noCache: boolean): Promise<Fetch
   };
 }
 
+/* ── Adapter: CWT AMC (fund pages publish the full daily NAV table) ───────── */
+
+/**
+ * Every CWT fund page (cwtamc.com/<page>) contains a daily NAV table:
+ * Publishing Date (dd/mm/yyyy) | Validity Date | NAV (At Market Price) |
+ * NAV (At Cost Price) | Sale Price | Repurchase Price | DSEX index.
+ * We use the at-market NAV (the standard quoted NAV, see data/nav-sources.json).
+ */
+export function parseCwtTable(html: string): NavRow[] {
+  const out: NavRow[] = [];
+  for (const m of html.matchAll(/<tr[^>]*>((?:(?!<\/tr>).)*?)<\/tr>/gis)) {
+    const cells = [...m[1].matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi)].map((c) => stripTags(c[1]));
+    if (cells.length < 3) continue;
+    const dm = cells[0].match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    if (!dm) continue;
+    const date = `${dm[3]}-${dm[2]}-${dm[1]}`;
+    const nav = num(cells[2]); // NAV (At Market Price)
+    if (!isValidISODate(date) || nav === null || nav <= 0) continue;
+    out.push({ fund: "", date, nav });
+  }
+  return out;
+}
+
+async function fetchCwt(roster: Roster | null, noCache: boolean): Promise<FetchResult> {
+  console.log("→ CWT AMC: fund pages (daily NAV tables)…");
+  const sources = loadSources();
+  const cwtFunds = sources.funds.filter((f) => f.sources.cwt);
+  if (!cwtFunds.length) throw new Error("No CWT funds configured in data/nav-sources.json");
+
+  const navs: NavRow[] = [];
+  for (const fund of cwtFunds) {
+    const page = fund.sources.cwt!.page;
+    const html = await politeFetch(`https://www.cwtamc.com/${page}/`, {
+      cacheKey: `cwt-${page}.html`,
+      noCache,
+    });
+    const parsed = parseCwtTable(html);
+    const seen = new Set<string>();
+    for (const row of parsed) {
+      if (seen.has(row.date)) continue;
+      seen.add(row.date);
+      navs.push({ fund: fund.slug, date: row.date, nav: row.nav });
+    }
+    console.log(`  ${fund.name}: ${seen.size} NAV rows`);
+  }
+
+  const { rows } = fundRowsFor("cwt", new Set(), roster);
+  const incoming: IncomingFile = { funds: rows, history: navs, dividends: [] };
+  fs.writeFileSync(path.join(INCOMING_DIR, "cwt.json"), `${JSON.stringify(incoming, null, 2)}\n`);
+
+  return {
+    source: "cwt",
+    navRows: navs.length,
+    dividendRows: 0,
+    funds: cwtFunds.length,
+    detail: "Daily NAV history (at-market price) from each fund's own page. Dividend record dates not published in this table yet.",
+  };
+}
+
 /* ── Adapter: LankaBangla AML (public NAV-history API on lbamcl.com) ──────── */
 
 /**
@@ -776,6 +835,7 @@ async function main() {
   if (!only || only.includes("idlc")) results.push(await fetchIdlc(roster, noCache));
   if (!only || only.includes("edge")) results.push(await fetchEdge(roster, noCache));
   if (!only || only.includes("lbaml")) results.push(await fetchLankabangla(roster, noCache));
+  if (!only || only.includes("cwt")) results.push(await fetchCwt(roster, noCache));
 
   console.log("\nFetch summary");
   for (const r of results) {

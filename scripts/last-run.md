@@ -144,3 +144,30 @@ Each import appends a dated entry here. Old entries are never deleted.
 | lankabangla-al-arafah-shariah-unit-fund | 617 | 0 |
 | lankabangla-fixed-income-fund | 102 | 0 |
 
+
+## 2026-11-13T10:58:38.448Z — cwt.json
+
+
+- Mode: NAV merge
+- Funds: 52 (new 0, updated 4)
+- NAV rows added: 1804; unchanged: 0; sent to review: 0
+- Dividends added: 0
+- Review items: 0
+
+### Column mapping
+
+| Our field | Export column |
+| --- | --- |
+| fund | `fund` |
+| date | `date` |
+| nav | `nav` |
+
+### Coverage after merge
+
+| Fund | NAV rows | Dividend rows |
+| --- | --- | --- |
+| cwt-community-bank-shariah-fund | 340 | 0 |
+| cwt-emerging-bangladesh-first-growth-fund | 515 | 0 |
+| cwt-opportunities-fund | 450 | 0 |
+| cwt-sadharan-bima-growth-fund | 499 | 0 |
+
