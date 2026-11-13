@@ -26,6 +26,14 @@
       "note": "Historic NAV AJAX endpoint (admin/ajax_handle.php, request_type=historic_nav) returns the full available history per fund. Dividend history is not in this endpoint yet."
     },
     {
+      "id": "edge",
+      "name": "EDGE AMC Limited",
+      "url": "https://www.edgeamc.com/nav",
+      "kind": "amc-website",
+      "role": "NAV history + fund size + inception",
+      "note": "Each fund page (edgeamc.com/<fund-slug>) embeds the complete daily NAV history since inception as a Google Charts table, plus Fund Summary tiles (inception date, fund size). Dividends are published only as fiscal-year percentages without record dates, so they are not imported."
+    },
+    {
       "id": "lankabd",
       "name": "LankaBangla Financial Portal",
       "url": "https://www.lankabd.com/MF/OpenEndMutualFund",
@@ -42,10 +50,10 @@
     { "slug": "shanta-first-income-unit-fund", "name": "Shanta First Income Unit Fund", "acronym": "SFIUF", "amc": "shanta", "type": "income", "shariah": false, "sources": { "shanta": { "slug": "shanta-first-income-unit-fund", "dividendKey": "sfiuf" } } },
     { "slug": "shanta-amanah-shariah-fund", "name": "Shanta Amanah Shariah Fund", "acronym": "SASF", "amc": "shanta", "type": "growth", "shariah": true, "sources": { "shanta": { "slug": "shanta-amanah-shariah-fund", "dividendKey": "sasf" } } },
     { "slug": "shanta-fixed-income-fund", "name": "Shanta Fixed Income Fund", "acronym": "SFIF", "amc": "shanta", "type": "income", "shariah": false, "sources": { "shanta": { "slug": "shanta-fixed-income-fund", "dividendKey": "sfif" } } },
-    { "slug": "edge-amc-growth-fund", "name": "EDGE AMC Growth Fund", "acronym": "EAGF", "amc": "edge", "type": "growth", "shariah": false, "sources": {} },
-    { "slug": "edge-bangladesh-mutual-fund", "name": "EDGE Bangladesh Mutual Fund", "acronym": "EBMF", "amc": "edge", "type": "balanced", "shariah": false, "sources": {} },
-    { "slug": "edge-al-amin-shariah-consumer-fund", "name": "EDGE Al-Amin Shariah Consumer Fund", "acronym": "EASCF", "amc": "edge", "type": "growth", "shariah": true, "sources": {} },
-    { "slug": "edge-high-quality-income-fund", "name": "EDGE High Quality Income Fund", "acronym": "EHQIF", "amc": "edge", "type": "income", "shariah": false, "sources": {} },
+    { "slug": "edge-amc-growth-fund", "name": "EDGE AMC Growth Fund", "acronym": "EAGF", "amc": "edge", "type": "growth", "shariah": false, "sources": { "edge": { "slug": "edge-amc-growth-fund" } } },
+    { "slug": "edge-bangladesh-mutual-fund", "name": "EDGE Bangladesh Mutual Fund", "acronym": "EBMF", "amc": "edge", "type": "balanced", "shariah": false, "sources": { "edge": { "slug": "edge-bangladesh-mutual-fund" } } },
+    { "slug": "edge-al-amin-shariah-consumer-fund", "name": "EDGE Al-Amin Shariah Consumer Fund", "acronym": "EASCF", "amc": "edge", "type": "growth", "shariah": true, "sources": { "edge": { "slug": "edge-alamin-shariah-consumer-fund" } } },
+    { "slug": "edge-high-quality-income-fund", "name": "EDGE High Quality Income Fund", "acronym": "EHQIF", "amc": "edge", "type": "income", "shariah": false, "sources": { "edge": { "slug": "edge-high-quality-income-fund" } } },
     { "slug": "ekush-first-unit-fund", "name": "Ekush First Unit Fund", "acronym": "EFUF", "amc": "ekush", "type": "growth", "shariah": false, "sources": {} },
     { "slug": "ekush-growth-fund", "name": "Ekush Growth Fund", "acronym": "EGF", "amc": "ekush", "type": "growth", "shariah": false, "sources": {} },
     { "slug": "ekush-stable-return-fund", "name": "Ekush Stable Return Fund", "acronym": "ESRF", "amc": "ekush", "type": "income", "shariah": false, "sources": {} },

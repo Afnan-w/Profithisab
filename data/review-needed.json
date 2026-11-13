@@ -1,7 +1,21 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12",
+  "updatedAt": "2026-11-13",
   "items": [
+    {
+      "file": "dividends",
+      "row": 0,
+      "reason": "EDGE funds (edge-bangladesh-mutual-fund, edge-amc-growth-fund, edge-high-quality-income-fund, edge-al-amin-shariah-consumer-fund): edgeamc.com publishes dividends only as fiscal-year percentages (e.g. 2025: 3.60%) without record dates, so total return for these funds is currently NAV-only and therefore understated. Confirm each year's record date (DSE dividend announcements or EDGE fact sheets) and per-unit amount before adding rows to data/dividends/.",
+      "raw": {
+        "funds": [
+          "edge-bangladesh-mutual-fund",
+          "edge-amc-growth-fund",
+          "edge-high-quality-income-fund",
+          "edge-al-amin-shariah-consumer-fund"
+        ],
+        "source": "https://www.edgeamc.com/edge-bangladesh-mutual-fund (Dividend History section)"
+      }
+    },
     {
       "file": "dividends",
       "row": 0,

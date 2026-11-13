@@ -91,3 +91,30 @@ Each import appends a dated entry here. Old entries are never deleted.
 | shanta-amanah-shariah-fund | 1819 | 4 |
 | shanta-fixed-income-fund | 891 | 1 |
 
+
+## 2026-11-13T10:45:10.810Z — edge.json
+
+
+- Mode: NAV merge
+- Funds: 52 (new 0, updated 4)
+- NAV rows added: 1986; unchanged: 0; sent to review: 0
+- Dividends added: 0
+- Review items: 0
+
+### Column mapping
+
+| Our field | Export column |
+| --- | --- |
+| fund | `fund` |
+| date | `date` |
+| nav | `nav` |
+
+### Coverage after merge
+
+| Fund | NAV rows | Dividend rows |
+| --- | --- | --- |
+| edge-amc-growth-fund | 553 | 0 |
+| edge-bangladesh-mutual-fund | 610 | 0 |
+| edge-al-amin-shariah-consumer-fund | 397 | 0 |
+| edge-high-quality-income-fund | 426 | 0 |
+

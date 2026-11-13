@@ -3,6 +3,7 @@ import { test } from "node:test";
 import {
   cagrOfLevels,
   monthEndLevels,
+  parseEdgePage,
   parseIdlcTable,
   parseLankabdTable,
   parseNavDate,
@@ -101,6 +102,57 @@ test("cagrOfLevels needs at least a year and returns percent", () => {
   const rate = cagrOfLevels(year);
   assert.ok(rate !== null && Math.abs(rate - 10) < 1.5, `got ${rate}`);
   assert.equal(cagrOfLevels(year.slice(0, 6)), null);
+});
+
+/* ── EDGE AMC fund page (Google Charts NAV history + summary tiles) ───────── */
+
+const edgeHtml = `
+<div class="plan_funt_item"><div class="plan_funt_item_tt text-center"><h4>Inception Date</h4></div>
+<div class="plan_funt_item_vl text-center"><h5>02 Aug 2018</h5></div></div>
+<div class="plan_funt_item"><div class="plan_funt_item_tt text-center"><h4>Fund Size*</h4></div>
+<div class="plan_funt_item_vl text-center"><h5>BDT 237,360,847</h5></div></div>
+<div class="nav_chart_item"><div id="curve_chart"></div></div>
+<script>
+google.charts.load('current', { 'packages': ['corechart'] });
+function drawChart() {
+  var data = google.visualization.arrayToDataTable([
+    ['Date', 'EDGEBDMF', 'DSEX', 'DS30'],
+    [new Date(2026, 10, 12), 21.26, 10.08, 10.88],
+    [new Date(2026, 9, 31), 20.92, 10.03, 11.02],
+    [new Date(2026, 0, 5), 10.05, 5.01, 5.5],
+    [new Date(2018, 7, 9), 10.01, 10.01, 10.00],
+  ]);
+  chart.draw(data, options);
+}
+var pie = google.visualization.arrayToDataTable([
+  ['Sector', 'Portfolio Weight'], ['Pharmaceuticals', 22.85], ['Consumer', 16.90],
+]);
+</script>`;
+
+test("parseEdgePage reads the full NAV series, fund size and inception from a fund page", () => {
+  const payload = parseEdgePage(edgeHtml);
+  assert.equal(payload.navs.length, 4);
+  assert.deepEqual(payload.navs[0], { fund: "", date: "2026-11-12", nav: 21.26 });
+  assert.deepEqual(payload.navs[2], { fund: "", date: "2026-01-05", nav: 10.05 }); // month is 0-based in the series
+  assert.deepEqual(payload.navs[3], { fund: "", date: "2018-08-09", nav: 10.01 });
+  assert.equal(payload.fundSize, 23.74); // BDT 237,360,847 → crore
+  assert.equal(payload.inception, "2018-08-02");
+});
+
+test("parseEdgePage handles a single-series chart (DSES Shariah funds) and missing tiles", () => {
+  const single = `
+    <script>
+    var data = google.visualization.arrayToDataTable([
+      ['Date', 'EDGEHQIF'],
+      [new Date(2026, 10, 12), 15.81],
+      [new Date(2026, 10, 11), 15.80],
+    ]);
+    </script>`;
+  const payload = parseEdgePage(single);
+  assert.equal(payload.navs.length, 2);
+  assert.equal(payload.navs[0].nav, 15.81);
+  assert.equal(payload.fundSize, null);
+  assert.equal(payload.inception, null);
 });
 
 /* ── LankaBangla roster table ─────────────────────────────────────────────── */

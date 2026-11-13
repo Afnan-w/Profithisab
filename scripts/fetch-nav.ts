@@ -304,6 +304,88 @@ export function parseIdlcTable(html: string): NavRow[] {
   return out;
 }
 
+/* ── Adapter: EDGE AMC (fund pages embed the full NAV history as a Google Charts table) ── */
+
+export interface EdgePayload {
+  navs: NavRow[];
+  /** AUM in crore, from the page's Fund Size tile. */
+  fundSize: number | null;
+  /** Inception date (YYYY-MM-DD) from the page's Inception Date tile. */
+  inception: string | null;
+}
+
+/**
+ * Every EDGE AMC fund page (https://www.edgeamc.com/<fund-slug>) embeds:
+ *  - a Google Charts series `[['Date','<CODE>','DSEX','DS30'], [new Date(y,m,d), nav, dsex, ds30], …]`
+ *    holding the complete daily NAV history since inception;
+ *  - a Fund Summary with Inception Date and Fund Size tiles.
+ * The series uses JS month indexing (0-based), so month+1 gives the real month.
+ */
+export function parseEdgePage(html: string): EdgePayload {
+  const navs: NavRow[] = [];
+  const m = html.match(/arrayToDataTable\(\[\s*\['Date',\s*'[^']+'(?:\s*,\s*'[^']+'){0,3}\],([\s\S]*?)\]\s*\)/);
+  if (m) {
+    for (const r of m[1].matchAll(/new Date\((\d{4}),\s*(\d{1,2}),\s*(\d{1,2})\),\s*([\d.]+)/g)) {
+      const date = `${r[1]}-${String(Number(r[2]) + 1).padStart(2, "0")}-${String(Number(r[3])).padStart(2, "0")}`;
+      const nav = Number(r[4]);
+      if (isValidISODate(date) && nav > 0) navs.push({ fund: "", date, nav });
+    }
+  }
+
+  let fundSize: number | null = null;
+  let inception: string | null = null;
+  for (const tile of html.matchAll(/<h4>([^<]+)<\/h4>\s*<\/div>[\s\S]{0,200}?<h5>([^<]+)<\/h5>/g)) {
+    const label = stripTags(tile[1]);
+    const value = stripTags(tile[2]);
+    if (/fund size/i.test(label)) {
+      const amount = Number(value.replace(/[^\d.]/g, ""));
+      if (Number.isFinite(amount) && amount > 0) fundSize = Math.round((amount / 10_000_000) * 100) / 100; // crore
+    } else if (/inception/i.test(label)) {
+      inception = parseNavDate(value);
+    }
+  }
+  return { navs, fundSize, inception };
+}
+
+async function fetchEdge(roster: Roster | null, noCache: boolean): Promise<FetchResult> {
+  console.log("→ EDGE AMC: fund pages (embedded NAV history)…");
+  const sources = loadSources();
+  const edgeFunds = sources.funds.filter((f) => f.sources.edge);
+  if (!edgeFunds.length) throw new Error("No EDGE funds configured in data/nav-sources.json");
+
+  const navs: NavRow[] = [];
+  const dividends: DividendRow[] = [];
+  const sizes = new Map<string, number | null>();
+  for (const fund of edgeFunds) {
+    const slug = fund.sources.edge!.slug;
+    const html = await politeFetch(`https://www.edgeamc.com/${slug}`, {
+      cacheKey: `edge-${slug}.html`,
+      noCache,
+    });
+    const payload = parseEdgePage(html);
+    for (const row of payload.navs) navs.push({ fund: fund.slug, date: row.date, nav: row.nav });
+    sizes.set(fund.slug, payload.fundSize);
+    console.log(`  ${fund.name}: ${payload.navs.length} NAV rows · size ${payload.fundSize ?? "—"} crore · inception ${payload.inception ?? "—"}`);
+  }
+
+  // The EDGE page tiles are fresher than the weekly roster, so they win when present.
+  const { rows } = fundRowsFor("edge", new Set(), roster);
+  const funds = rows.map((r) => ({ ...r, fundSize: sizes.get(r.slug) ?? r.fundSize }));
+
+  const incoming: IncomingFile = { funds, history: navs, dividends };
+  fs.writeFileSync(path.join(INCOMING_DIR, "edge.json"), `${JSON.stringify(incoming, null, 2)}\n`);
+
+  return {
+    source: "edge",
+    navRows: navs.length,
+    dividendRows: 0,
+    funds: edgeFunds.length,
+    detail:
+      "NAV history, fund size and inception from each fund's own page. EDGE publishes dividends as fiscal-year " +
+      "percentages without record dates — not imported until record dates are confirmed (see data/review-needed.json).",
+  };
+}
+
 /* ── Adapter: LankaBangla open-end fund table (roster snapshot) ──────────── */
 
 export interface RosterFund {
@@ -629,6 +711,7 @@ async function main() {
   const results: FetchResult[] = [];
   if (!only || only.includes("shanta")) results.push(await fetchShanta(roster, noCache));
   if (!only || only.includes("idlc")) results.push(await fetchIdlc(roster, noCache));
+  if (!only || only.includes("edge")) results.push(await fetchEdge(roster, noCache));
 
   console.log("\nFetch summary");
   for (const r of results) {

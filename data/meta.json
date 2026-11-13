@@ -1,239 +1,23 @@
 {
-  "generatedAt": "2026-11-12T12:49:51.976Z",
-  "lastUpdated": "2026-11-12",
-  "latestNavDate": "2026-11-11",
+  "generatedAt": "2026-11-13T10:46:35.906Z",
+  "lastUpdated": "2026-11-13",
+  "latestNavDate": "2026-11-12",
   "isDemo": false,
   "sourceName": "AMC-published NAV data (first-party)",
   "counts": {
     "funds": 52,
     "amcs": 45,
-    "withNav": 7,
+    "withNav": 11,
     "complete": 0,
-    "partial": 7,
-    "missing": 45,
-    "stale": 45,
+    "partial": 11,
+    "missing": 41,
+    "stale": 41,
     "verified": 0
   },
   "perFund": [
     {
-      "id": "idlc-aml-shariah-fund",
-      "slug": "idlc-aml-shariah-fund",
-      "latestNavDate": "2026-11-11",
-      "completeness": "partial",
-      "rows": 533,
-      "stale": false,
-      "source": "IDLC AML published NAV history (first-party)"
-    },
-    {
-      "id": "idlc-balanced-fund",
-      "slug": "idlc-balanced-fund",
-      "latestNavDate": "2026-11-11",
-      "completeness": "partial",
-      "rows": 649,
-      "stale": false,
-      "source": "IDLC AML published NAV history (first-party)"
-    },
-    {
-      "id": "idlc-growth-fund",
-      "slug": "idlc-growth-fund",
-      "latestNavDate": "2026-11-11",
-      "completeness": "partial",
-      "rows": 610,
-      "stale": false,
-      "source": "IDLC AML published NAV history (first-party)"
-    },
-    {
-      "id": "idlc-income-fund",
-      "slug": "idlc-income-fund",
-      "latestNavDate": "2026-11-11",
-      "completeness": "partial",
-      "rows": 458,
-      "stale": false,
-      "source": "IDLC AML published NAV history (first-party)"
-    },
-    {
-      "id": "shanta-amanah-shariah-fund",
-      "slug": "shanta-amanah-shariah-fund",
-      "latestNavDate": "2026-11-11",
-      "completeness": "partial",
-      "rows": 1819,
-      "stale": false,
-      "source": "Shanta AML published NAV history (first-party)"
-    },
-    {
-      "id": "shanta-first-income-unit-fund",
-      "slug": "shanta-first-income-unit-fund",
-      "latestNavDate": "2026-11-11",
-      "completeness": "partial",
-      "rows": 2153,
-      "stale": false,
-      "source": "Shanta AML published NAV history (first-party)"
-    },
-    {
-      "id": "shanta-fixed-income-fund",
-      "slug": "shanta-fixed-income-fund",
-      "latestNavDate": "2026-11-11",
-      "completeness": "partial",
-      "rows": 891,
-      "stale": false,
-      "source": "Shanta AML published NAV history (first-party)"
-    },
-    {
-      "id": "edge-amc-growth-fund",
-      "slug": "edge-amc-growth-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "edge-bangladesh-mutual-fund",
-      "slug": "edge-bangladesh-mutual-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "edge-al-amin-shariah-consumer-fund",
-      "slug": "edge-al-amin-shariah-consumer-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "edge-high-quality-income-fund",
-      "slug": "edge-high-quality-income-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "ekush-first-unit-fund",
-      "slug": "ekush-first-unit-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "ekush-growth-fund",
-      "slug": "ekush-growth-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "ekush-stable-return-fund",
-      "slug": "ekush-stable-return-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "vipb-growth-fund",
-      "slug": "vipb-growth-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "vipb-balanced-fund",
-      "slug": "vipb-balanced-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "vipb-fixed-income-fund",
-      "slug": "vipb-fixed-income-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "vipb-accelerated-income-unit-fund",
-      "slug": "vipb-accelerated-income-unit-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "vipb-nli-1st-unit-fund",
-      "slug": "vipb-nli-1st-unit-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "vipb-sebl-1st-unit-fund",
-      "slug": "vipb-sebl-1st-unit-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "hfaml-shariah-unit-fund",
-      "slug": "hfaml-shariah-unit-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "hfaml-unit-fund",
-      "slug": "hfaml-unit-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "ucb-aml-first-mutual-fund",
-      "slug": "ucb-aml-first-mutual-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "ucb-taqwa-growth-fund",
-      "slug": "ucb-taqwa-growth-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "icl-balanced-fund",
-      "slug": "icl-balanced-fund",
+      "id": "atc-shariah-unit-fund",
+      "slug": "atc-shariah-unit-fund",
       "latestNavDate": null,
       "completeness": "missing",
       "rows": 0,
@@ -250,8 +34,8 @@
       "source": "LankaBangla Financial Portal weekly open-end table"
     },
     {
-      "id": "icl-inctl-shariah-fund",
-      "slug": "icl-inctl-shariah-fund",
+      "id": "capm-unit-fund",
+      "slug": "capm-unit-fund",
       "latestNavDate": null,
       "completeness": "missing",
       "rows": 0,
@@ -295,8 +79,8 @@
       "source": "LankaBangla Financial Portal weekly open-end table"
     },
     {
-      "id": "lankabangla-1st-balanced-unit-fund",
-      "slug": "lankabangla-1st-balanced-unit-fund",
+      "id": "ebl-aml-1st-unit-fund",
+      "slug": "ebl-aml-1st-unit-fund",
       "latestNavDate": null,
       "completeness": "missing",
       "rows": 0,
@@ -304,8 +88,44 @@
       "source": "LankaBangla Financial Portal weekly open-end table"
     },
     {
-      "id": "lankabangla-al-arafah-shariah-unit-fund",
-      "slug": "lankabangla-al-arafah-shariah-unit-fund",
+      "id": "edge-al-amin-shariah-consumer-fund",
+      "slug": "edge-al-amin-shariah-consumer-fund",
+      "latestNavDate": "2026-11-12",
+      "completeness": "partial",
+      "rows": 397,
+      "stale": false,
+      "source": "EDGE AMC published NAV history (first-party)"
+    },
+    {
+      "id": "edge-amc-growth-fund",
+      "slug": "edge-amc-growth-fund",
+      "latestNavDate": "2026-11-12",
+      "completeness": "partial",
+      "rows": 553,
+      "stale": false,
+      "source": "EDGE AMC published NAV history (first-party)"
+    },
+    {
+      "id": "edge-bangladesh-mutual-fund",
+      "slug": "edge-bangladesh-mutual-fund",
+      "latestNavDate": "2026-11-12",
+      "completeness": "partial",
+      "rows": 610,
+      "stale": false,
+      "source": "EDGE AMC published NAV history (first-party)"
+    },
+    {
+      "id": "edge-high-quality-income-fund",
+      "slug": "edge-high-quality-income-fund",
+      "latestNavDate": "2026-11-12",
+      "completeness": "partial",
+      "rows": 426,
+      "stale": false,
+      "source": "EDGE AMC published NAV history (first-party)"
+    },
+    {
+      "id": "icb-eighth-unit-fund",
+      "slug": "icb-eighth-unit-fund",
       "latestNavDate": null,
       "completeness": "missing",
       "rows": 0,
@@ -313,8 +133,8 @@
       "source": "LankaBangla Financial Portal weekly open-end table"
     },
     {
-      "id": "lankabangla-fixed-income-fund",
-      "slug": "lankabangla-fixed-income-fund",
+      "id": "ekush-first-unit-fund",
+      "slug": "ekush-first-unit-fund",
       "latestNavDate": null,
       "completeness": "missing",
       "rows": 0,
@@ -322,8 +142,8 @@
       "source": "LankaBangla Financial Portal weekly open-end table"
     },
     {
-      "id": "icb-amcl-unit-fund",
-      "slug": "icb-amcl-unit-fund",
+      "id": "ekush-growth-fund",
+      "slug": "ekush-growth-fund",
       "latestNavDate": null,
       "completeness": "missing",
       "rows": 0,
@@ -331,44 +151,8 @@
       "source": "LankaBangla Financial Portal weekly open-end table"
     },
     {
-      "id": "icb-amcl-islamic-unit-fund",
-      "slug": "icb-amcl-islamic-unit-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "icb-first-unit-fund",
-      "slug": "icb-first-unit-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "icb-second-unit-fund",
-      "slug": "icb-second-unit-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "icb-third-unit-fund",
-      "slug": "icb-third-unit-fund",
-      "latestNavDate": null,
-      "completeness": "missing",
-      "rows": 0,
-      "stale": true,
-      "source": "LankaBangla Financial Portal weekly open-end table"
-    },
-    {
-      "id": "icb-fourth-unit-fund",
-      "slug": "icb-fourth-unit-fund",
+      "id": "ekush-stable-return-fund",
+      "slug": "ekush-stable-return-fund",
       "latestNavDate": null,
       "completeness": "missing",
       "rows": 0,
@@ -385,8 +169,8 @@
       "source": "LankaBangla Financial Portal weekly open-end table"
     },
     {
-      "id": "icb-sixth-unit-fund",
-      "slug": "icb-sixth-unit-fund",
+      "id": "icb-first-unit-fund",
+      "slug": "icb-first-unit-fund",
       "latestNavDate": null,
       "completeness": "missing",
       "rows": 0,
@@ -394,8 +178,8 @@
       "source": "LankaBangla Financial Portal weekly open-end table"
     },
     {
-      "id": "icb-seventh-unit-fund",
-      "slug": "icb-seventh-unit-fund",
+      "id": "icb-fourth-unit-fund",
+      "slug": "icb-fourth-unit-fund",
       "latestNavDate": null,
       "completeness": "missing",
       "rows": 0,
@@ -403,8 +187,17 @@
       "source": "LankaBangla Financial Portal weekly open-end table"
     },
     {
-      "id": "icb-eighth-unit-fund",
-      "slug": "icb-eighth-unit-fund",
+      "id": "hfaml-shariah-unit-fund",
+      "slug": "hfaml-shariah-unit-fund",
+      "latestNavDate": null,
+      "completeness": "missing",
+      "rows": 0,
+      "stale": true,
+      "source": "LankaBangla Financial Portal weekly open-end table"
+    },
+    {
+      "id": "hfaml-unit-fund",
+      "slug": "hfaml-unit-fund",
       "latestNavDate": null,
       "completeness": "missing",
       "rows": 0,
@@ -414,6 +207,15 @@
     {
       "id": "icb-amcl-converted-first-unit-fund",
       "slug": "icb-amcl-converted-first-unit-fund",
+      "latestNavDate": null,
+      "completeness": "missing",
+      "rows": 0,
+      "stale": true,
+      "source": "LankaBangla Financial Portal weekly open-end table"
+    },
+    {
+      "id": "icb-amcl-islamic-unit-fund",
+      "slug": "icb-amcl-islamic-unit-fund",
       "latestNavDate": null,
       "completeness": "missing",
       "rows": 0,
@@ -448,6 +250,96 @@
       "source": "LankaBangla Financial Portal weekly open-end table"
     },
     {
+      "id": "icb-amcl-unit-fund",
+      "slug": "icb-amcl-unit-fund",
+      "latestNavDate": null,
+      "completeness": "missing",
+      "rows": 0,
+      "stale": true,
+      "source": "LankaBangla Financial Portal weekly open-end table"
+    },
+    {
+      "id": "icl-balanced-fund",
+      "slug": "icl-balanced-fund",
+      "latestNavDate": null,
+      "completeness": "missing",
+      "rows": 0,
+      "stale": true,
+      "source": "LankaBangla Financial Portal weekly open-end table"
+    },
+    {
+      "id": "icl-inctl-shariah-fund",
+      "slug": "icl-inctl-shariah-fund",
+      "latestNavDate": null,
+      "completeness": "missing",
+      "rows": 0,
+      "stale": true,
+      "source": "LankaBangla Financial Portal weekly open-end table"
+    },
+    {
+      "id": "idlc-aml-shariah-fund",
+      "slug": "idlc-aml-shariah-fund",
+      "latestNavDate": "2026-11-11",
+      "completeness": "partial",
+      "rows": 533,
+      "stale": false,
+      "source": "IDLC AML published NAV history (first-party)"
+    },
+    {
+      "id": "idlc-balanced-fund",
+      "slug": "idlc-balanced-fund",
+      "latestNavDate": "2026-11-11",
+      "completeness": "partial",
+      "rows": 649,
+      "stale": false,
+      "source": "IDLC AML published NAV history (first-party)"
+    },
+    {
+      "id": "idlc-growth-fund",
+      "slug": "idlc-growth-fund",
+      "latestNavDate": "2026-11-11",
+      "completeness": "partial",
+      "rows": 610,
+      "stale": false,
+      "source": "IDLC AML published NAV history (first-party)"
+    },
+    {
+      "id": "idlc-income-fund",
+      "slug": "idlc-income-fund",
+      "latestNavDate": "2026-11-11",
+      "completeness": "partial",
+      "rows": 458,
+      "stale": false,
+      "source": "IDLC AML published NAV history (first-party)"
+    },
+    {
+      "id": "lankabangla-1st-balanced-unit-fund",
+      "slug": "lankabangla-1st-balanced-unit-fund",
+      "latestNavDate": null,
+      "completeness": "missing",
+      "rows": 0,
+      "stale": true,
+      "source": "LankaBangla Financial Portal weekly open-end table"
+    },
+    {
+      "id": "lankabangla-al-arafah-shariah-unit-fund",
+      "slug": "lankabangla-al-arafah-shariah-unit-fund",
+      "latestNavDate": null,
+      "completeness": "missing",
+      "rows": 0,
+      "stale": true,
+      "source": "LankaBangla Financial Portal weekly open-end table"
+    },
+    {
+      "id": "lankabangla-fixed-income-fund",
+      "slug": "lankabangla-fixed-income-fund",
+      "latestNavDate": null,
+      "completeness": "missing",
+      "rows": 0,
+      "stale": true,
+      "source": "LankaBangla Financial Portal weekly open-end table"
+    },
+    {
       "id": "mtb-unit-fund",
       "slug": "mtb-unit-fund",
       "latestNavDate": null,
@@ -457,8 +349,8 @@
       "source": "LankaBangla Financial Portal weekly open-end table"
     },
     {
-      "id": "capm-unit-fund",
-      "slug": "capm-unit-fund",
+      "id": "icb-second-unit-fund",
+      "slug": "icb-second-unit-fund",
       "latestNavDate": null,
       "completeness": "missing",
       "rows": 0,
@@ -466,8 +358,8 @@
       "source": "LankaBangla Financial Portal weekly open-end table"
     },
     {
-      "id": "atc-shariah-unit-fund",
-      "slug": "atc-shariah-unit-fund",
+      "id": "icb-seventh-unit-fund",
+      "slug": "icb-seventh-unit-fund",
       "latestNavDate": null,
       "completeness": "missing",
       "rows": 0,
@@ -475,8 +367,116 @@
       "source": "LankaBangla Financial Portal weekly open-end table"
     },
     {
-      "id": "ebl-aml-1st-unit-fund",
-      "slug": "ebl-aml-1st-unit-fund",
+      "id": "shanta-amanah-shariah-fund",
+      "slug": "shanta-amanah-shariah-fund",
+      "latestNavDate": "2026-11-11",
+      "completeness": "partial",
+      "rows": 1819,
+      "stale": false,
+      "source": "Shanta AML published NAV history (first-party)"
+    },
+    {
+      "id": "shanta-first-income-unit-fund",
+      "slug": "shanta-first-income-unit-fund",
+      "latestNavDate": "2026-11-11",
+      "completeness": "partial",
+      "rows": 2153,
+      "stale": false,
+      "source": "Shanta AML published NAV history (first-party)"
+    },
+    {
+      "id": "shanta-fixed-income-fund",
+      "slug": "shanta-fixed-income-fund",
+      "latestNavDate": "2026-11-11",
+      "completeness": "partial",
+      "rows": 891,
+      "stale": false,
+      "source": "Shanta AML published NAV history (first-party)"
+    },
+    {
+      "id": "icb-sixth-unit-fund",
+      "slug": "icb-sixth-unit-fund",
+      "latestNavDate": null,
+      "completeness": "missing",
+      "rows": 0,
+      "stale": true,
+      "source": "LankaBangla Financial Portal weekly open-end table"
+    },
+    {
+      "id": "icb-third-unit-fund",
+      "slug": "icb-third-unit-fund",
+      "latestNavDate": null,
+      "completeness": "missing",
+      "rows": 0,
+      "stale": true,
+      "source": "LankaBangla Financial Portal weekly open-end table"
+    },
+    {
+      "id": "ucb-aml-first-mutual-fund",
+      "slug": "ucb-aml-first-mutual-fund",
+      "latestNavDate": null,
+      "completeness": "missing",
+      "rows": 0,
+      "stale": true,
+      "source": "LankaBangla Financial Portal weekly open-end table"
+    },
+    {
+      "id": "ucb-taqwa-growth-fund",
+      "slug": "ucb-taqwa-growth-fund",
+      "latestNavDate": null,
+      "completeness": "missing",
+      "rows": 0,
+      "stale": true,
+      "source": "LankaBangla Financial Portal weekly open-end table"
+    },
+    {
+      "id": "vipb-accelerated-income-unit-fund",
+      "slug": "vipb-accelerated-income-unit-fund",
+      "latestNavDate": null,
+      "completeness": "missing",
+      "rows": 0,
+      "stale": true,
+      "source": "LankaBangla Financial Portal weekly open-end table"
+    },
+    {
+      "id": "vipb-balanced-fund",
+      "slug": "vipb-balanced-fund",
+      "latestNavDate": null,
+      "completeness": "missing",
+      "rows": 0,
+      "stale": true,
+      "source": "LankaBangla Financial Portal weekly open-end table"
+    },
+    {
+      "id": "vipb-fixed-income-fund",
+      "slug": "vipb-fixed-income-fund",
+      "latestNavDate": null,
+      "completeness": "missing",
+      "rows": 0,
+      "stale": true,
+      "source": "LankaBangla Financial Portal weekly open-end table"
+    },
+    {
+      "id": "vipb-growth-fund",
+      "slug": "vipb-growth-fund",
+      "latestNavDate": null,
+      "completeness": "missing",
+      "rows": 0,
+      "stale": true,
+      "source": "LankaBangla Financial Portal weekly open-end table"
+    },
+    {
+      "id": "vipb-nli-1st-unit-fund",
+      "slug": "vipb-nli-1st-unit-fund",
+      "latestNavDate": null,
+      "completeness": "missing",
+      "rows": 0,
+      "stale": true,
+      "source": "LankaBangla Financial Portal weekly open-end table"
+    },
+    {
+      "id": "vipb-sebl-1st-unit-fund",
+      "slug": "vipb-sebl-1st-unit-fund",
       "latestNavDate": null,
       "completeness": "missing",
       "rows": 0,
