@@ -5,6 +5,23 @@
     {
       "file": "dividends",
       "row": 0,
+      "reason": "LankaBangla AML funds (lankabangla-1st-balanced-unit-fund, lankabangla-al-arafah-shariah-unit-fund, lankabangla-fixed-income-fund): the lbamcl.com history endpoint returns weekly NAV but no dividend record dates, so total return for these funds is currently NAV-only and therefore understated where dividends were paid. Confirm record dates and per-unit amounts (DSE announcements or lbamcl.com fact sheets) before adding rows to data/dividends/.",
+      "raw": {
+        "funds": ["lankabangla-1st-balanced-unit-fund", "lankabangla-al-arafah-shariah-unit-fund", "lankabangla-fixed-income-fund"],
+        "source": "https://lbamcl.com/nav"
+      }
+    },
+    {
+      "file": "sources",
+      "row": 0,
+      "reason": "NAV-source discovery log (2026-11-13) for the remaining catalogue-only AMCs, to save the next pass: ucbasset.com (UCB AML) is a Next.js SPA with fund data behind the webportal.ucbasset.com login — no public NAV history found; hfsl.net (HF AML) is Cloudflare-blocked to bots (403) — needs a browser/manual export; icbamcl.gov.bd (ICB, 11 catalogue funds) serves fund pages from a CMS API (cms.icbamcl.gov.bd/api/get-req-data/*) — the NAV Performance Chart's data endpoint needs one-time identification, otherwise NAVs are PDF-only; capmbd.com (CAPM) keeps NAV behind the capmfund.com investor login; ekush/vipb/mtb/asian-tiger/ebl official domains did not resolve to fund-NAV pages from this environment (search engines also unreachable) — worth retrying from a different network or via the AMCs' investor portals.",
+      "raw": {
+        "tried": ["ekush*.com/.com.bd", "vipb*.com/.com.bd", "hfsl.net", "ucbasset.com", "ucb.com.bd", "icl*.com/.com.bd", "cwtamc.com (done)", "mtb*.com", "atc*.com", "ebl*.com", "icbamcl.gov.bd", "capmbd.com", "lbamcl.com (done)", "edgeamc.com (done)"]
+      }
+    },
+    {
+      "file": "dividends",
+      "row": 0,
       "reason": "CWT funds (cwt-community-bank-shariah-fund, cwt-emerging-bangladesh-first-growth-fund, cwt-opportunities-fund, cwt-sadharan-bima-growth-fund): cwtamc.com fund pages publish daily NAV but no dividend record dates, so total return for these funds is currently NAV-only and therefore understated where dividends were paid. Confirm each dividend's record date (DSE announcements or CWT fact sheets) and per-unit amount before adding rows to data/dividends/.",
       "raw": {
         "funds": [
